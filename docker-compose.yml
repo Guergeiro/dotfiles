@@ -5,6 +5,7 @@ services:
   ubuntu:
     build: .
     volumes:
+      # Put all folders that you want to be tracked from host machine to docker here.
       - ./Documents:/home/docker/Documents
     restart: on-failure
     tty: true
