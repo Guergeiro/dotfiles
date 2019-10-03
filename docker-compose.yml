@@ -1,0 +1,9 @@
+version: "3.7"
+
+services:
+  ubuntu:
+    build: .
+    volumes:
+      - ./Documents:/home/docker/Documents
+    restart: on-failure
+    tty: true
