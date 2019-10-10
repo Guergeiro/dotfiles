@@ -26,6 +26,10 @@ RUN useradd -m docker && echo "docker:docker" | chpasswd && adduser docker sudo
 # Create home folder for `docker` and give it correct permissions
 RUN mkdir -p /home/docker && chown -R docker:docker /home/docker
 
+# Allow user to use docker cmd without sudo
+# usermod -aG docker your-user
+RUN usermod -aG docker docker
+
 # Add bash to docker
 RUN usermod -s /bin/bash docker
 
