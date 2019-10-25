@@ -15,29 +15,36 @@ RUN apt-get install default-jdk-headless -y
 RUN apt-get install python3 -y
 # Install `bash-completion`
 RUN apt-get install bash-completion -y
+# Install `NodeJS`
+RUN apt-get install nodejs -y
+# Install `NPM`
+RUN apt-get install npm -y
+# Install `wget`
+RUN apt-get install wget -y
 
 # Clean
 RUN apt-get autoremove -y
 RUN apt-get autoclean -y
 
-# Create user `docker` with root password `docker` 
-RUN useradd -m docker && echo "docker:docker" | chpasswd && adduser docker sudo
+# Create user `breno` with root password `breno` 
+RUN useradd -m breno && echo "breno:breno" | chpasswd && adduser breno sudo
 
-# Create home folder for `docker` and give it correct permissions
-RUN mkdir -p /home/docker && chown -R docker:docker /home/docker
+# Create home folder for `breno` and give it correct permissions
+RUN mkdir -p /home/breno && chown -R breno:breno /home/breno
 
-# Allow user to use docker cmd without sudo
+# Allow user to use breno cmd without sudo
 # usermod -aG docker your-user
-RUN usermod -aG docker docker
+RUN groupadd docker
+RUN usermod -aG docker breno
 
-# Add bash to docker
-RUN usermod -s /bin/bash docker
+# Add bash to breno
+RUN usermod -s /bin/bash breno
 
-# Copies current directory to docker
-COPY . /home/docker
+# Copies current directory to breno
+COPY . /home/breno
 
 # "Login" as the newly created user
-USER docker
+USER breno
 
 # Switch do newly created directory
-WORKDIR /home/docker
+WORKDIR /home/breno
