@@ -18,7 +18,7 @@ Also, most of this steps are copy & paste from their respective installation gui
     ```
 3. Install [Vim](https://www.vim.org/)
     ```bash
-    $ sudo apt-get install vim -y
+    $ sudo apt-get install vim vim-gtk -y
     ```
 4. Copy [`.vimrc`](https://github.com/Guergeiro/ubuntu-how-to/blob/master/.vimrc) and [`.vim/`](https://github.com/Guergeiro/ubuntu-how-to/tree/master/.vim) to home (re-open vim after this)
 5. Install [Git](https://git-scm.com/)
@@ -45,7 +45,6 @@ Also, most of this steps are copy & paste from their respective installation gui
     ```
     With the following extensions:
     - [Vim](https://github.com/VSCodeVim/Vim)
-    - [Beautify](https://github.com/HookyQR/VSCodeBeautify)
     - [Live Server](https://github.com/ritwickdey/vscode-live-server)
     - [Material Icon Theme](https://github.com/PKief/vscode-material-icon-theme)
     - [Debugger for Java](https://github.com/Microsoft/vscode-java-debug)
@@ -104,4 +103,4 @@ Also, most of this steps are copy & paste from their respective installation gui
 ## Author
 Created by [Breno Salles](https://brenosalles.com).
 ## License
-This repository is licensed under [MIT License](https://github.com/Guergeiro/ubuntu-how-to/blob/master/LICENSE).
+This repository is licensed under [MIT License](./LICENSE).
