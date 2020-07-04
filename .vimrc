@@ -16,7 +16,7 @@ set wildignore+=**/node_modules/**
 set wildmenu
 
 " Setup colors
-colorscheme monokai-bold
+colorscheme codedark
 
 " Make default clipboard the OS X clipboard (and unnamedplus for Linux)
 set clipboard=unnamed,unnamedplus
