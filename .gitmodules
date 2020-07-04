@@ -10,3 +10,6 @@
 [submodule ".vim/pack/vendor/start/vim-devicons"]
 	path = .vim/pack/vendor/start/vim-devicons
 	url = git@github.com:ryanoasis/vim-devicons.git
+[submodule "nerd-fonts"]
+	path = nerd-fonts
+	url = git@github.com:ryanoasis/nerd-fonts.git

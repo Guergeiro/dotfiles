@@ -40,6 +40,7 @@ set smartcase
 " Use highlighting for search matches (:nohlsearch to clear [or :noh])
 set hlsearch
 
+" Formats stuff as I want, TAB=4spaces, but intelligent
 set autoindent
 set tabstop=8
 set softtabstop=0
@@ -59,11 +60,16 @@ inoremap [ []<Esc>i
 inoremap " ""<Esc>i
 inoremap ` ``<Esc>i
 
+" Fuzzy Finder like VSCode
+inoremap <C-p> :find 
+nnoremap <C-p> :find 
+
 " Auto starts NERDTree if `vim` is used without a file
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 " Command to open NERDTree
+inoremap <C-b> :NERDTreeToggle<CR>
 nnoremap <C-b> :NERDTreeToggle<CR>
 
 " Show hidden files by default
