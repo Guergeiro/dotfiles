@@ -11,7 +11,6 @@ set path+=**
 " Display all matching files when tab complete
 set wildmenu
 
-
 " Setup colors
 colorscheme monokai-bold
 
@@ -45,4 +44,13 @@ set shiftwidth=4
 set smarttab
 
 " Auto format code
-nnoremap ,fmt :gg=G<CR>
+nnoremap ,fmt gg=G<CR>
+
+" Auto closes curly brackets
+inoremap { {}<Esc>i
+
+" Auto closes round brackets
+inoremap ( ()<Esc>i
+
+" Auto closes square brackets
+inoremap [ []<Esc>i
