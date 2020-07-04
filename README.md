@@ -1,4 +1,4 @@
-# ubuntu-how-to
+# linux-how-to
 ## Table of Contents
 - [About and Disclaimer](#about-and-disclaimer)
 - [Steps](#steps)
@@ -7,11 +7,11 @@
 ## About and Disclaimer
 This repository is merely for personal use. It's not private since someone might find it useful and, even for me, it saves the pain of login while in a strangers computer.
 
-The purpose of this reposity is when I start a freshly Ubuntu image. If you want to use it, do it at your own risk.
+The purpose of this reposity is when I start a freshly Linux image, a bit more than just dotfiles. If you want to use it, do it at your own risk.
 
 Also, most of this steps are copy & paste from their respective installation guides.
 ## Steps
-1. Copy [`.bash_aliases`](https://github.com/Guergeiro/ubuntu-how-to/blob/master/.bash_aliases) to home (re-open terminal after this)
+1. Copy [`.bash_aliases`](./.bash_aliases) to home (re-open terminal after this)
 2. Update everything
     ```bash
     $ update
@@ -20,8 +20,17 @@ Also, most of this steps are copy & paste from their respective installation gui
     ```bash
     $ sudo apt-get install vim vim-gtk -y
     ```
-4. Copy [`.vimrc`](https://github.com/Guergeiro/ubuntu-how-to/blob/master/.vimrc) and [`.vim/`](https://github.com/Guergeiro/ubuntu-how-to/tree/master/.vim) to home (re-open vim after this)
-5. Install [Git](https://git-scm.com/)
+4. Clone this repo with submodules and move it to $HOME
+    ```bash
+    $ git clone --recurse-submodules -j8 git@github.com:Guergeiro/linux-how-to.git
+    $ cd ubuntu-how-to
+    $ mv -r * ~/
+    ```
+5. Install [Nerd Fonts](https://nerdfonts.com) (Required for VIM Plugin)
+    ```bash
+    $ nerd-fonts/install.sh
+    ```
+6. Install [Git](https://git-scm.com/)
     ```bash
     $ sudo apt-get install git -y
     ```
@@ -33,26 +42,6 @@ Also, most of this steps are copy & paste from their respective installation gui
     $ echo -e "Host github.com\n    Hostname ssh.github.com\n    IdentityFile ~/.ssh/GitHub.pub\n    Port 443 #Only if the default 22 is blocked" > ~/.ssh/config
     # Remove port option if possible
     ```
-6. Install [VisualStudioCodium](https://vscodium.com/)
-    ```bash
-    $ wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | sudo apt-key add -
-    ```
-    ```bash
-    $ echo 'deb https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/repos/debs/ vscodium main' | sudo tee --append /etc/apt/sources.list.d/vscodium.list
-    ```
-    ```bash
-    $ update && sudo apt-get install codium -y
-    ```
-    With the following extensions:
-    - [Vim](https://github.com/VSCodeVim/Vim)
-    - [Live Server](https://github.com/ritwickdey/vscode-live-server)
-    - [Material Icon Theme](https://github.com/PKief/vscode-material-icon-theme)
-    - [Debugger for Java](https://github.com/Microsoft/vscode-java-debug)
-    - [Java Dependency Viewer](https://github.com/Microsoft/vscode-java-dependency)
-    - [Java Test Runner](https://github.com/Microsoft/vscode-java-test)
-    - [Language Support for Java(TM) by Red Hat](https://github.com/redhat-developer/vscode-java)
-    - [Maven for Java](https://github.com/Microsoft/vscode-maven)
-    - [Python](https://github.com/Microsoft/vscode-python)
 7. Install [cURL](https://curl.haxx.se/)
     ```bash
     $ sudo apt-get install curl -y
@@ -100,6 +89,26 @@ Also, most of this steps are copy & paste from their respective installation gui
     ```bash
     $ sudo usermod -aG docker your-user-here
     ```
+13. Install [VisualStudioCodium](https://vscodium.com/) (If you want VSCode)
+    ```bash
+    $ wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | sudo apt-key add -
+    ```
+    ```bash
+    $ echo 'deb https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/repos/debs/ vscodium main' | sudo tee --append /etc/apt/sources.list.d/vscodium.list
+    ```
+    ```bash
+    $ update && sudo apt-get install codium -y
+    ```
+    With the following extensions:
+    - [Vim](https://github.com/VSCodeVim/Vim)
+    - [Live Server](https://github.com/ritwickdey/vscode-live-server)
+    - [Material Icon Theme](https://github.com/PKief/vscode-material-icon-theme)
+    - [Debugger for Java](https://github.com/Microsoft/vscode-java-debug)
+    - [Java Dependency Viewer](https://github.com/Microsoft/vscode-java-dependency)
+    - [Java Test Runner](https://github.com/Microsoft/vscode-java-test)
+    - [Language Support for Java(TM) by Red Hat](https://github.com/redhat-developer/vscode-java)
+    - [Maven for Java](https://github.com/Microsoft/vscode-maven)
+    - [Python](https://github.com/Microsoft/vscode-python)
 ## Author
 Created by [Breno Salles](https://brenosalles.com).
 ## License
