@@ -11,7 +11,12 @@ The purpose of this reposity is when I start a freshly Linux image, a bit more t
 
 Also, most of this steps are copy & paste from their respective installation guides.
 ## Steps
-1. Copy [`.bash_aliases`](./.bash_aliases) to home (re-open terminal after this)
+1. Clone this repo with submodules and move it to $HOME
+    ```bash
+    $ git clone --recurse-submodules -j8 git@github.com:Guergeiro/linux-how-to.git
+    $ cd ubuntu-how-to
+    $ mv -r * ~/
+    ```
 2. Update everything
     ```bash
     $ update
@@ -20,17 +25,11 @@ Also, most of this steps are copy & paste from their respective installation gui
     ```bash
     $ sudo apt-get install vim vim-gtk -y
     ```
-4. Clone this repo with submodules and move it to $HOME
-    ```bash
-    $ git clone --recurse-submodules -j8 git@github.com:Guergeiro/linux-how-to.git
-    $ cd ubuntu-how-to
-    $ mv -r * ~/
-    ```
-5. Install [Nerd Fonts](https://nerdfonts.com) (Required for VIM Plugin)
+4. Install [Nerd Fonts](https://nerdfonts.com) (Required for VIM Plugin)
     ```bash
     $ nerd-fonts/install.sh
     ```
-6. Install [Git](https://git-scm.com/)
+5. Install [Git](https://git-scm.com/)
     ```bash
     $ sudo apt-get install git -y
     ```
@@ -42,30 +41,30 @@ Also, most of this steps are copy & paste from their respective installation gui
     $ echo -e "Host github.com\n    Hostname ssh.github.com\n    IdentityFile ~/.ssh/GitHub.pub\n    Port 443 #Only if the default 22 is blocked" > ~/.ssh/config
     # Remove port option if possible
     ```
-7. Install [cURL](https://curl.haxx.se/)
+6. Install [cURL](https://curl.haxx.se/)
     ```bash
     $ sudo apt-get install curl -y
     ```
-8. Install [Node](https://nodejs.org/) (change **Y** to current LTS)
+7. Install [Node](https://nodejs.org/) (change **Y** to current LTS)
     ```bash
     $ curl -sL https://deb.nodesource.com/setup_Y.x | sudo -E bash -
     ```
     ```bash
     $ update && sudo apt-get install nodejs -y
     ```
-9. Install [TypeScript](https://www.typescriptlang.org/)
+8. Install [TypeScript](https://www.typescriptlang.org/)
     ```bash
     $ sudo npm install -g typescript
     ```
-10. Install [Python](https://www.python.org/) (version 3)
+9. Install [Python](https://www.python.org/) (version 3)
     ```bash
     $ sudo apt-get install python3 -y
     ```
-11. Install [OpenJDK](http://openjdk.java.net/)
+10. Install [OpenJDK](http://openjdk.java.net/)
     ```bash
     $ sudo apt-get install default-jdk-headless -y
     ```
-12. Install [Docker](https://www.docker.com/)
+11. Install [Docker](https://www.docker.com/)
     ```bash
     $ sudo apt-get install \
     apt-transport-https \
@@ -89,7 +88,7 @@ Also, most of this steps are copy & paste from their respective installation gui
     ```bash
     $ sudo usermod -aG docker your-user-here
     ```
-13. Install [VisualStudioCodium](https://vscodium.com/) (If you want VSCode)
+12. Install [VisualStudioCodium](https://vscodium.com/) (If you want VSCode)
     ```bash
     $ wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | sudo apt-key add -
     ```
