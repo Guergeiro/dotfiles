@@ -1,5 +1,6 @@
 " Enter current millenium
 set nocompatible
+set encoding=UTF-8
 
 " Enable syntax highlighting and plugins
 syntax on
@@ -64,6 +65,9 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 " Command to open NERDTree
 nnoremap <C-b> :NERDTreeToggle<CR>
+
+" Show hidden files by default
+let NERDTreeShowHidden=1
 
 " Close NERDTree with `:q` if it is the only thing open
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif

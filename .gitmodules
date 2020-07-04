@@ -4,3 +4,9 @@
 [submodule ".vim/pack/vendor/start/nerdtree"]
 	path = .vim/pack/vendor/start/nerdtree
 	url = git@github.com:preservim/nerdtree.git
+[submodule ".vim/pack/vendor/start/nerdtree-git-plugin"]
+	path = .vim/pack/vendor/start/nerdtree-git-plugin
+	url = git@github.com:Xuyuanp/nerdtree-git-plugin.git
+[submodule ".vim/pack/vendor/start/vim-devicons"]
+	path = .vim/pack/vendor/start/vim-devicons
+	url = git@github.com:ryanoasis/vim-devicons.git
