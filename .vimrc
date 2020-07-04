@@ -58,10 +58,12 @@ inoremap [ []<Esc>i
 inoremap " ""<Esc>i
 inoremap ` ``<Esc>i
 
-" File browser
-let g:netrw_banner=0        " disable annoying banner
-let g:netrw_browse_split=4  " open in prior window
-let g:netrw_altv=1          " open splits to the right
-let g:netrw_liststyle=3     " tree view
-let g:netrw_list_hide=netrw_gitignore#Hide()
-let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
+" Auto starts NERDTree if `vim` is used without a file
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+" Command to open NERDTree
+nnoremap <C-b> :NERDTreeToggle<CR>
+
+" Close NERDTree with `:q` if it is the only thing open
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
