@@ -66,9 +66,19 @@ inoremap [ []<Esc>i
 inoremap " ""<Esc>i
 inoremap ` ``<Esc>i
 
-" Fuzzy Finder like VSCode
-inoremap <C-p> :find 
-nnoremap <C-p> :find 
+" Fuzzy Finder like VSCode in a new tab
+inoremap <C-p> :tabfind 
+nnoremap <C-p> :tabfind 
+
+" Close current tab
+inoremap <C-w> :tabclose <CR>
+nnoremap <C-w> :tabclose <CR>
+
+" Move between tabs using CTRL+Left and CTRL+Right keys
+inoremap <C-Right> gt
+nnoremap <C-Right> gt
+inoremap <C-Left> gT
+nnoremap <C-Left> gT
 
 " Searchs for selection
 vnoremap <C-f> y/<C-R>=escape(@",'/\')<CR><CR>
