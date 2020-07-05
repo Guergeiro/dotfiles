@@ -13,3 +13,6 @@
 [submodule "nerd-fonts"]
 	path = nerd-fonts
 	url = git@github.com:ryanoasis/nerd-fonts.git
+[submodule ".vim/pack/vendor/start/vim-prettier"]
+	path = .vim/pack/vendor/start/vim-prettier
+	url = git@github.com:prettier/vim-prettier.git

@@ -52,7 +52,10 @@ set smarttab
 packloadall
 
 " Auto format code
-nnoremap ,fmt gg=G<CR>
+nnoremap ,fmt :PrettierAsync
+
+" Auto format without prettier pragma
+let g:prettier#autoformat_require_pragma = 0
 
 " Format on write
 autocmd BufWritePost * normal ,fmt
