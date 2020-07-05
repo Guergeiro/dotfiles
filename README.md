@@ -28,7 +28,10 @@ Also, most of this steps are copy & paste from their respective installation gui
     $ git clone --recurse-submodules -j8 git@github.com:Guergeiro/linux-how-to.git
     ```
     ```
-    $ cp -r linux-how-to/.vim $HOME/
+    $ cd linux-how-to
+    ```
+    ```
+    $ cp -r .vim/ $HOME/
     $ cp .bash_aliases $HOME/
     $ cp .vimrc $HOME/
     ```
@@ -69,15 +72,19 @@ Also, most of this steps are copy & paste from their respective installation gui
     ```
     $ sudo npm install -g typescript
     ```
-10. Install [Python](https://www.python.org/) (version 3)
+10. Install [Prettier](https://prettier.io/)
+    ```
+    $ sudo npm install -g prettier
+    ```
+11. Install [Python](https://www.python.org/) (version 3)
     ```
     $ sudo apt-get install python3 -y
     ```
-11. Install [OpenJDK](http://openjdk.java.net/)
+12. Install [OpenJDK](http://openjdk.java.net/)
     ```
     $ sudo apt-get install default-jdk-headless -y
     ```
-12. Install [Docker](https://www.docker.com/)
+13. Install [Docker](https://www.docker.com/)
     ```
     $ sudo apt-get install \
     apt-transport-https \
@@ -104,7 +111,7 @@ Also, most of this steps are copy & paste from their respective installation gui
     ```
     $ sudo usermod -aG docker your-user-here
     ```
-13. Install [VisualStudioCodium](https://vscodium.com/) (If you want VSCode)
+14. Install [VisualStudioCodium](https://vscodium.com/) (If you want VSCode)
     ```
     $ wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | sudo apt-key add -
     ```
