@@ -11,28 +11,7 @@ The purpose of this reposity is when I start a freshly Linux image, a bit more t
 
 Also, most of this steps are copy & paste from their respective installation guides.
 ## Steps
-1. Clone this repo with submodules and move it to $HOME
-    ```
-    $ git clone --recurse-submodules -j8 git@github.com:Guergeiro/linux-how-to.git
-    ```
-    ```
-    $ cp -r linux-how-to/.vim $HOME/
-    $ cp .bash_aliases $HOME/
-    $ cp .vimrc $HOME/
-    ```
-2. Update everything
-    ```
-    $ update
-    ```
-3. Install [Vim](https://www.vim.org/)
-    ```
-    $ sudo apt-get install vim vim-gtk -y
-    ```
-4. Install [Nerd Fonts](https://nerdfonts.com) (Required for VIM Plugin)
-    ```
-    $ linux-how-to/nerd-fonts/install.sh
-    ```
-5. Install [Git](https://git-scm.com/)
+1. Install [Git](https://git-scm.com/)
     ```
     $ sudo apt-get install git -y
     ```
@@ -43,6 +22,27 @@ Also, most of this steps are copy & paste from their respective installation gui
     ```
     $ echo -e "Host github.com\n    Hostname ssh.github.com\n    IdentityFile ~/.ssh/GitHub.pub\n    Port 443 #Only if the default 22 is blocked" > ~/.ssh/config
     # Remove port option if possible
+    ```
+2. Clone this repo with submodules and move it to $HOME
+    ```
+    $ git clone --recurse-submodules -j8 git@github.com:Guergeiro/linux-how-to.git
+    ```
+    ```
+    $ cp -r linux-how-to/.vim $HOME/
+    $ cp .bash_aliases $HOME/
+    $ cp .vimrc $HOME/
+    ```
+3. Update everything
+    ```
+    $ update
+    ```
+4. Install [Vim](https://www.vim.org/)
+    ```
+    $ sudo apt-get install vim vim-gtk -y
+    ```
+5. Install [Nerd Fonts](https://nerdfonts.com) (Required for VIM Plugin)
+    ```
+    $ linux-how-to/nerd-fonts/install.sh
     ```
 6. Install [cURL](https://curl.haxx.se/)
     ```
