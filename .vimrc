@@ -64,6 +64,12 @@ inoremap ` ``<Esc>i
 inoremap <C-p> :find 
 nnoremap <C-p> :find 
 
+" Searchs for selection
+vnoremap <C-f> y/<C-R>=escape(@",'/\')<CR><CR>
+
+" Finds and Replaces selection
+vnoremap <C-r> y:%s/<C-R>=escape(@",'/\')<CR>//g
+
 " Auto starts NERDTree if `vim` is used without a file
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
