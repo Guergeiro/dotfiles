@@ -10,7 +10,7 @@ filetype plugin on
 set path+=**
 
 " Ignores stuff from fuzzy search
-set wildignore+=**/node_modules/**
+set wildignore+=*/node_modules/*,*/__pycache__/
 
 " Display all matching files when tab complete
 set wildmenu
@@ -48,8 +48,14 @@ set expandtab
 set shiftwidth=4
 set smarttab
 
+" Loads all packs
+packloadall
+
 " Auto format code
 nnoremap ,fmt gg=G<CR>
+
+" Format on write
+autocmd BufWritePost * normal ,fmt
 
 " Auto closes brackets
 inoremap { {}<Esc>i
