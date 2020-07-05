@@ -67,17 +67,17 @@ inoremap " ""<Esc>i
 inoremap ` ``<Esc>i
 
 " Fuzzy Finder like VSCode in a new tab
-inoremap <C-p> :tabfind 
+inoremap <C-p> <Esc>:tabfind 
 nnoremap <C-p> :tabfind 
 
 " Close current tab
-inoremap <C-w> :tabclose <CR>
-nnoremap <C-w> :tabclose <CR>
+inoremap <C-w> <Esc>:tabclose<CR>
+nnoremap <C-w> :tabclose<CR>
 
 " Move between tabs using CTRL+Left and CTRL+Right keys
-inoremap <C-Right> gt
+inoremap <C-Right> <Esc>gt
 nnoremap <C-Right> gt
-inoremap <C-Left> gT
+inoremap <C-Left> <Esc>gT
 nnoremap <C-Left> gT
 
 " Searchs for selection
@@ -91,7 +91,7 @@ autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 " Command to open NERDTree
-inoremap <C-b> :NERDTreeToggle<CR>
+inoremap <C-b> <Esc>:NERDTreeToggle<CR>
 nnoremap <C-b> :NERDTreeToggle<CR>
 
 " Show hidden files by default
