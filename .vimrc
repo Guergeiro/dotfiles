@@ -13,7 +13,7 @@ set backspace=indent,eol,start
 syntax on
 filetype plugin on
 
-" Sets backup folder to undodir 
+" Sets backup folder to undodir
 set nobackup
 set undodir=$HOME/.vim/undodir
 set undofile
@@ -70,6 +70,9 @@ set smarttab
 " Loads all packs
 packloadall
 
+" Add branch to status line
+set statusline+=fugitive#statusline()
+
 " Auto format code
 nnoremap ,fmt :PrettierAsync<CR>
 
@@ -89,8 +92,8 @@ inoremap " ""<Esc>i
 inoremap ` ``<Esc>i
 
 " Fuzzy Finder like VSCode in a new tab
-inoremap <C-p> <Esc>:tabfind 
-nnoremap <C-p> :tabfind 
+inoremap <C-p> <Esc>:tabfind
+nnoremap <C-p> :tabfind
 
 " Close current tab
 inoremap <C-w> <Esc>:tabclose<CR>
@@ -170,7 +173,7 @@ inoremap <silent><expr> <Tab>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<Tab>" :
       \ coc#refresh()
-      
+
 " Use <Tab> and <S-Tab> to navigate the completion list
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
