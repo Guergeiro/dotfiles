@@ -2,21 +2,23 @@ name: bumper
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: "0 0 * * *"
 
 jobs:
   update-submodules:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Update submodules
-      run: |
-        git pull --recurse-submodules
-        git submodule update --remote --recursive
+      - name: Update submodules
+        run: |
+          git pull --recurse-submodules
+          git submodule update --remote --recursive
 
-    - name: Commit and Push changes
-      run: |
-        git commit -m "Updated submodules"
-        git push
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "Guergeiro"
+          git config --global user.email "business@brenosalles.com"
+          git commit -m "Updated submodules"
+          git push
