@@ -15,8 +15,11 @@ filetype plugin on
 
 " Sets backup folder to undodir 
 set nobackup
-set undodir=~/.vim/undodir
+set undodir=$HOME/.vim/undodir
 set undofile
+
+" Move swp files to the same directory
+set set directory=$HOME/.vim/swapfiles//
 
 " Disable error bells
 set noerrorbells
