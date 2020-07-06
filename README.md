@@ -76,15 +76,20 @@ Also, most of this steps are copy & paste from their respective installation gui
     ```
     $ sudo npm install -g prettier
     ```
-11. Install [Python](https://www.python.org/) (version 3)
+11. Install [CoC](https://github.com/neoclide/coc.nvim)
+    ```
+    $ cd .vim/pack/vendor/start/
+    $ curl --fail -L https://github.com/neoclide/coc.nvim/archive/release.tar.gz|tar xzfv -
+    ```
+12. Install [Python](https://www.python.org/) (version 3)
     ```
     $ sudo apt-get install python3 -y
     ```
-12. Install [OpenJDK](http://openjdk.java.net/)
+13. Install [OpenJDK](http://openjdk.java.net/)
     ```
     $ sudo apt-get install default-jdk-headless -y
     ```
-13. Install [Docker](https://www.docker.com/)
+14. Install [Docker](https://www.docker.com/)
     ```
     $ sudo apt-get install \
     apt-transport-https \
@@ -111,29 +116,6 @@ Also, most of this steps are copy & paste from their respective installation gui
     ```
     $ sudo usermod -aG docker your-user-here
     ```
-14. Install [VisualStudioCodium](https://vscodium.com/) (If you want VSCode)
-    ```
-    $ wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | sudo apt-key add -
-    ```
-    ```
-    $ echo 'deb https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/repos/debs/ vscodium main' | sudo tee --append /etc/apt/sources.list.d/vscodium.list
-    ```
-    ```
-    $ update
-    ```
-    ```
-    $ sudo apt-get install codium -y
-    ```
-    With the following extensions:
-    - [Vim](https://github.com/VSCodeVim/Vim)
-    - [Live Server](https://github.com/ritwickdey/vscode-live-server)
-    - [Material Icon Theme](https://github.com/PKief/vscode-material-icon-theme)
-    - [Debugger for Java](https://github.com/Microsoft/vscode-java-debug)
-    - [Java Dependency Viewer](https://github.com/Microsoft/vscode-java-dependency)
-    - [Java Test Runner](https://github.com/Microsoft/vscode-java-test)
-    - [Language Support for Java(TM) by Red Hat](https://github.com/redhat-developer/vscode-java)
-    - [Maven for Java](https://github.com/Microsoft/vscode-maven)
-    - [Python](https://github.com/Microsoft/vscode-python)
 ## Author
 Created by [Breno Salles](https://brenosalles.com).
 ## License
