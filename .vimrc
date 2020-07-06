@@ -6,6 +6,11 @@ set encoding=UTF-8
 syntax on
 filetype plugin on
 
+" Sets backup folder to undodir 
+set nobackup
+set undodir=~/.vim/undodir
+set undofile
+
 " Allow vim's own fuzzy find to work
 set path+=**
 
