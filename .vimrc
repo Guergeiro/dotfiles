@@ -42,6 +42,7 @@ set clipboard=unnamed,unnamedplus
 " Enable line numbers
 set number
 set numberwidth=1
+set relativenumber
 
 " Highlight matching pairs as you type: (), [], {}
 set showmatch
@@ -75,7 +76,7 @@ nnoremap ,fmt :PrettierAsync<CR>
 " Auto format without prettier pragma
 let g:prettier#autoformat_require_pragma = 0
 
-" Format on write
+" Format on save
 autocmd BufWritePost * normal ,fmt
 
 " Auto closes brackets
@@ -107,6 +108,14 @@ vnoremap <C-f> y/<C-R>=escape(@",'/\')<CR><CR>
 " Finds and Replaces selection
 vnoremap <C-r> y:%s/<C-R>=escape(@",'/\')<CR>//g
 
+" Remove extra white spaces on save
+fun! TrimWhitespace()
+    let l:save = winsaveview()
+    keeppatterns %s/\s\+$//e
+    call winrestview(l:save)
+endfun
+autocmd BufWritePre * :call TrimWhitespace()
+
 " NERDTree Configs Start
 " Auto starts NERDTree if `vim` is used without a file
 autocmd StdinReadPre * let s:std_in=1
@@ -135,4 +144,43 @@ set updatetime=300
 
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
+
+" Auto organizes import
+nnoremap ,or :CocCommand editor.action.organizeImport<CR>
+
+" Auto organizes import on save
+autocmd BufWritePost * normal ,or
+
+" GoTo code navigation.
+nnoremap <silent> gd <Plug>(coc-definition)
+nnoremap <silent> gy <Plug>(coc-type-definition)
+nnoremap <silent> gi <Plug>(coc-implementation)
+nnoremap <silent> gr <Plug>(coc-references)
+
+" Remap for rename current word
+nnoremap <F2> <Plug>(coc-rename)
+
+" Auto Complete VSCode like
+" use <tab> for trigger completion and navigate to the next complete item
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+inoremap <silent><expr> <Tab>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<Tab>" :
+      \ coc#refresh()
+      
+" Use <Tab> and <S-Tab> to navigate the completion list
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" Use <cr> to confirm completion
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Use <c-space>for trigger completion
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" Close the preview window when completion is done.
+autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 " CoC Configs End
