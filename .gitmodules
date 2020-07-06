@@ -16,3 +16,6 @@
 [submodule ".vim/pack/vendor/start/vim-prettier"]
 	path = .vim/pack/vendor/start/vim-prettier
 	url = git@github.com:prettier/vim-prettier.git
+[submodule ".vim/pack/vendor/start/vim-airline"]
+	path = .vim/pack/vendor/start/vim-airline
+	url = git@github.com:vim-airline/vim-airline.git
