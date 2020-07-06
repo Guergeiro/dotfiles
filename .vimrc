@@ -19,7 +19,7 @@ set undodir=$HOME/.vim/undodir
 set undofile
 
 " Move swp files to the same directory
-set set directory=$HOME/.vim/swapfiles//
+set directory=$HOME/.vim/swapfiles//
 
 " Disable error bells
 set noerrorbells
