@@ -2,6 +2,13 @@
 set nocompatible
 set encoding=UTF-8
 
+" Changes weird behaviour with VIM starting in REPLACE Mode (only happens on
+" WSL for me)
+set ambw=double
+
+" Sets backspace to work in case it doesn't
+set backspace=indent,eol,start
+
 " Enable syntax highlighting and plugins
 syntax on
 filetype plugin on
@@ -11,11 +18,14 @@ set nobackup
 set undodir=~/.vim/undodir
 set undofile
 
+" Disable error bells
+set noerrorbells
+
 " Allow vim's own fuzzy find to work
 set path+=**
 
 " Ignores stuff from fuzzy search
-set wildignore+=*/node_modules/*,*/__pycache__/
+set wildignore+=*/node_modules/*,*/__pycache__/*
 
 " Display all matching files when tab complete
 set wildmenu
@@ -57,7 +67,7 @@ set smarttab
 packloadall
 
 " Auto format code
-nnoremap ,fmt :PrettierAsync
+nnoremap ,fmt :PrettierAsync<CR>
 
 " Auto format without prettier pragma
 let g:prettier#autoformat_require_pragma = 0
@@ -83,10 +93,10 @@ inoremap <C-w> <Esc>:tabclose<CR>
 nnoremap <C-w> :tabclose<CR>
 
 " Move between tabs using CTRL+Left and CTRL+Right keys
-inoremap <C-Right> <Esc>gt
-nnoremap <C-Right> gt
-inoremap <C-Left> <Esc>gT
-nnoremap <C-Left> gT
+inoremap <C-l> <Esc>gt
+nnoremap <C-l> gt
+inoremap <C-h> <Esc>gT
+nnoremap <C-h> gT
 
 " Searchs for selection
 vnoremap <C-f> y/<C-R>=escape(@",'/\')<CR><CR>
@@ -94,6 +104,7 @@ vnoremap <C-f> y/<C-R>=escape(@",'/\')<CR><CR>
 " Finds and Replaces selection
 vnoremap <C-r> y:%s/<C-R>=escape(@",'/\')<CR>//g
 
+" NERDTree Configs Start
 " Auto starts NERDTree if `vim` is used without a file
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
@@ -107,3 +118,18 @@ let NERDTreeShowHidden=1
 
 " Close NERDTree with `:q` if it is the only thing open
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" NERDTree Configs End
+
+" CoC Configs Start
+" TextEdit might fail if hidden is not set.
+set hidden
+
+" Give more space for displaying messages.
+set cmdheight=2
+
+" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable delays and poor user experience.
+set updatetime=300
+
+" Don't pass messages to |ins-completion-menu|.
+set shortmess+=c
+" CoC Configs End
