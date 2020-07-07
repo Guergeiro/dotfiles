@@ -80,7 +80,7 @@ nnoremap ,fmt :PrettierAsync<CR>
 let g:prettier#autoformat_require_pragma = 0
 
 " Format on save
-autocmd BufWritePost * normal ,fmt
+autocmd BufWritePre * normal ,fmt
 
 " Auto closes brackets
 inoremap { {}<Esc>i
@@ -99,7 +99,7 @@ nnoremap <C-p> :tabfind<Space>
 inoremap <C-w> <Esc>:tabclose<CR>
 nnoremap <C-w> :tabclose<CR>
 
-" Move between tabs using CTRL+Left and CTRL+Right keys
+" Move between tabs using CTRL+h and CTRL+l keys
 inoremap <C-l> <Esc>gt
 nnoremap <C-l> gt
 inoremap <C-h> <Esc>gT
@@ -124,7 +124,7 @@ autocmd BufWritePre * :call TrimWhitespace()
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
-" Command to open NERDTree
+" Command to open NERDTree and Refresh it
 inoremap <C-b> <Esc>:NERDTreeToggle<bar>:NERDTreeRefreshRoot<CR>
 nnoremap <C-b> :NERDTreeToggle<bar>:NERDTreeRefreshRoot<CR>
 
@@ -152,7 +152,7 @@ set shortmess+=c
 nnoremap ,or :CocCommand editor.action.organizeImport<CR>
 
 " Auto organizes import on save
-autocmd BufWritePost * normal ,or
+autocmd BufWritePre * normal ,or
 
 " GoTo code navigation.
 nnoremap <silent> gd <Plug>(coc-definition)
