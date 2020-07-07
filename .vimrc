@@ -181,13 +181,26 @@ nnoremap ,or :CocCommand editor.action.organizeImport<CR>
 autocmd BufWritePre * normal ,or
 
 " GoTo code navigation.
-nnoremap <silent> gd <Plug>(coc-definition)
-nnoremap <silent> gy <Plug>(coc-type-definition)
-nnoremap <silent> gi <Plug>(coc-implementation)
-nnoremap <silent> gr <Plug>(coc-references)
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
 
 " Remap for rename current word
-nnoremap <F2> <Plug>(coc-rename)
+nmap <F2> <Plug>(coc-rename)
+
+" Use K to show documentation in preview window.
+function! s:show_documentation()
+    if (index(['vim','help'], &filetype) >= 0)
+        execute 'h '.expand('<cword>')
+    else
+        call CocAction('doHover')
+    endif
+endfunction
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+" Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Auto Complete VSCode like
 " use <tab> for trigger completion and navigate to the next complete item
