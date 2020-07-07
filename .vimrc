@@ -125,8 +125,8 @@ autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 " Command to open NERDTree
-inoremap <C-b> <Esc>:NERDTreeToggle<CR>
-nnoremap <C-b> :NERDTreeToggle<CR>
+inoremap <C-b> <Esc>:NERDTreeToggle<bar>:NERDTreeRefreshRoot<CR>
+nnoremap <C-b> :NERDTreeToggle<bar>:NERDTreeRefreshRoot<CR>
 
 " Show hidden files by default
 let NERDTreeShowHidden=1
