@@ -67,21 +67,6 @@ set expandtab
 set shiftwidth=4
 set smarttab
 
-" Loads all packs
-packloadall
-
-" Add branch to status line
-set statusline+=fugitive#statusline()
-
-" Auto format code
-nnoremap ,fmt :PrettierAsync<CR>
-
-" Auto format without prettier pragma
-let g:prettier#autoformat_require_pragma = 0
-
-" Format on save
-autocmd BufWritePre * normal ,fmt
-
 " Auto closes brackets
 inoremap { {}<Esc>i
 inoremap ( ()<Esc>i
@@ -119,6 +104,23 @@ fun! TrimWhitespace()
 endfun
 autocmd BufWritePre * :call TrimWhitespace()
 
+" Loads all packs
+packloadall
+
+" Prettier Config Starts
+" Add branch to status line
+set statusline+=fugitive#statusline()
+
+" Auto format code
+nnoremap ,fmt :PrettierAsync<CR>
+
+" Auto format without prettier pragma
+let g:prettier#autoformat_require_pragma = 0
+
+" Format on save
+autocmd BufWritePre * normal ,fmt
+" Prettier Config Ends
+
 " NERDTree Configs Start
 " Auto starts NERDTree if `vim` is used without a file
 autocmd StdinReadPre * let s:std_in=1
@@ -128,8 +130,32 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 inoremap <C-b> <Esc>:NERDTreeToggle<bar>:NERDTreeRefreshRoot<CR>
 nnoremap <C-b> :NERDTreeToggle<bar>:NERDTreeRefreshRoot<CR>
 
+" Refresh NERDTree on file save
+autocmd BufWritePre * normal :NERDTreeRefreshRoot<CR>
+
+" sync open file with NERDTree
+" " Check if NERDTree is open or active
+function! IsNERDTreeOpen()
+    return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
+endfunction
+
+" Call NERDTreeFind iff NERDTree is active, current window contains a
+" modifiable
+" " file, and we're not in vimdiff
+function! SyncTree()
+    if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
+        NERDTreeFind
+        wincmd p
+    endif
+endfunction
+
+" Highlight currently open buffer in NERDTree
+autocmd BufEnter * call SyncTree()
+
+let g:NERDTreeGitStatusWithFlags = 1
+
 " Show hidden files by default
-let NERDTreeShowHidden=1
+let g:NERDTreeShowHidden=1
 
 " Close NERDTree with `:q` if it is the only thing open
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
@@ -166,8 +192,8 @@ nnoremap <F2> <Plug>(coc-rename)
 " Auto Complete VSCode like
 " use <tab> for trigger completion and navigate to the next complete item
 function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
 inoremap <silent><expr> <Tab>
       \ pumvisible() ? "\<C-n>" :
