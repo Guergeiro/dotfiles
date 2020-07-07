@@ -92,8 +92,8 @@ inoremap " ""<Esc>i
 inoremap ` ``<Esc>i
 
 " Fuzzy Finder like VSCode in a new tab
-inoremap <C-p> <Esc>:tabfind
-nnoremap <C-p> :tabfind
+inoremap <C-p> <Esc>:tabfind<Space>
+nnoremap <C-p> :tabfind<Space>
 
 " Close current tab
 inoremap <C-w> <Esc>:tabclose<CR>
