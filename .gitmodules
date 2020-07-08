@@ -22,3 +22,6 @@
 [submodule ".vim/pack/vendor/start/vim-fugitive"]
 	path = .vim/pack/vendor/start/vim-fugitive
 	url = https://github.com/tpope/vim-fugitive.git
+[submodule ".vim/pack/vendor/start/coc.nvim"]
+	path = .vim/pack/vendor/start/coc.nvim
+	url = https://github.com/neoclide/coc.nvim.git
