@@ -67,6 +67,30 @@ set expandtab
 set shiftwidth=4
 set smarttab
 
+" Fuzzy Finder in CTRL+p
+inoremap <C-p> <Esc>:find<Space>
+nnoremap <C-p> :find<Space>
+
+" Open a new 'tab' (buffer) with CTRL+t
+inoremap <C-t> <Esc>:enew<CR>
+nnoremap <C-t> :enew<CR>
+
+" Close current 'tab' (buffer) with CTRL+w
+inoremap <C-w> <Esc>:bd<CR>
+nnoremap <C-w> :bd<CR>
+
+" Move between 'tabs' using CTRL+h and CTRL+l keys
+inoremap <C-h> <Esc>:bprev<CR>
+nnoremap <C-h> :bprev<CR>
+inoremap <C-l> <Esc>:bnext<CR>
+nnoremap <C-l> :bnext<CR>
+
+" Scrolls up/down but keeps cursor position
+inoremap <C-j> <Esc><C-D>
+nnoremap <C-j> <C-D>
+inoremap <C-k> <Esc><C-U>
+nnoremap <C-k> <C-U>
+
 " Auto closes brackets
 inoremap { {}<Esc>i
 inoremap ( ()<Esc>i
@@ -75,20 +99,6 @@ inoremap [ []<Esc>i
 " Auto closes marks
 inoremap " ""<Esc>i
 inoremap ` ``<Esc>i
-
-" Fuzzy Finder like VSCode in a new tab
-inoremap <C-p> <Esc>:tabfind<Space>
-nnoremap <C-p> :tabfind<Space>
-
-" Close current tab
-inoremap <C-w> <Esc>:tabclose<CR>
-nnoremap <C-w> :tabclose<CR>
-
-" Move between tabs using CTRL+h and CTRL+l keys
-inoremap <C-l> <Esc>gt
-nnoremap <C-l> gt
-inoremap <C-h> <Esc>gT
-nnoremap <C-h> gT
 
 " Searchs for selection
 vnoremap <C-f> y/<C-R>=escape(@",'/\')<CR><CR>
@@ -226,3 +236,8 @@ inoremap <silent><expr> <c-space> coc#refresh()
 " Close the preview window when completion is done.
 autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 " CoC Configs End
+
+" Airline Configs Start
+" Enable the list of buffers
+let g:airline#extensions#tabline#enabled = 1
+" Airline Configs End
