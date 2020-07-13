@@ -1,16 +1,22 @@
 # linux-how-to
+
 ## Table of Contents
-- [About and Disclaimer](#about-and-disclaimer)
-- [Steps](#steps)
-- [Author](#author)
-- [License](#license)
+
+-   [About and Disclaimer](#about-and-disclaimer)
+-   [Steps](#steps)
+-   [Author](#author)
+-   [License](#license)
+
 ## About and Disclaimer
+
 This repository is merely for personal use. It's not private since someone might find it useful and, even for me, it saves the pain of login while in a strangers computer.
 
 The purpose of this reposity is when I start a freshly Linux image, a bit more than just dotfiles. If you want to use it, do it at your own risk.
 
 Also, most of this steps are copy & paste from their respective installation guides.
+
 ## Steps
+
 1. Install [Git](https://git-scm.com/)
     ```
     $ sudo apt-get install git -y
@@ -23,7 +29,7 @@ Also, most of this steps are copy & paste from their respective installation gui
     $ echo -e "Host github.com\n    Hostname ssh.github.com\n    IdentityFile ~/.ssh/GitHub.pub\n    Port 443 #Only if the default 22 is blocked" > ~/.ssh/config
     # Remove port option if possible
     ```
-2. Clone this repo with submodules and move it to $HOME
+2. Clone this repo with submodules and move it to \$HOME
     ```
     $ git clone --recurse-submodules -j8 git@github.com:Guergeiro/linux-how-to.git
     ```
@@ -76,20 +82,15 @@ Also, most of this steps are copy & paste from their respective installation gui
     ```
     $ sudo npm install -g prettier
     ```
-11. Install [CoC](https://github.com/neoclide/coc.nvim)
-    ```
-    $ cd .vim/pack/vendor/start/
-    $ curl --fail -L https://github.com/neoclide/coc.nvim/archive/release.tar.gz|tar xzfv -
-    ```
-12. Install [Python](https://www.python.org/) (version 3)
+11. Install [Python](https://www.python.org/) (version 3)
     ```
     $ sudo apt-get install python3 -y
     ```
-13. Install [OpenJDK](http://openjdk.java.net/)
+12. Install [OpenJDK](http://openjdk.java.net/)
     ```
     $ sudo apt-get install default-jdk-headless -y
     ```
-14. Install [Docker](https://www.docker.com/)
+13. Install [Docker](https://www.docker.com/)
     ```
     $ sudo apt-get install \
     apt-transport-https \
@@ -116,7 +117,11 @@ Also, most of this steps are copy & paste from their respective installation gui
     ```
     $ sudo usermod -aG docker your-user-here
     ```
+
 ## Author
+
 Created by [Breno Salles](https://brenosalles.com).
+
 ## License
+
 This repository is licensed under [MIT License](./LICENSE).

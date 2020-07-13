@@ -118,10 +118,12 @@ autocmd BufWritePre * :call <SID>TrimWhitespace()
 " Loads all packs
 packloadall
 
-" Prettier Config Starts
+" VIM Fugitive Config Starts
 " Add branch to status line
 set statusline+=fugitive#statusline()
+" VIM Fugitive Config Ends
 
+" Prettier Config Starts
 " Auto format code
 nnoremap ,fmt :PrettierAsync<CR>
 
@@ -152,6 +154,9 @@ let g:NERDTreeGitStatusWithFlags = 1
 
 " Show hidden files by default
 let g:NERDTreeShowHidden=1
+
+" Auto deletes opened buffer when deleting a file
+let g:NERDTreeAutoDeleteBuffer=1
 " NERDTree Configs End
 
 " CoC Configs Start
