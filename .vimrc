@@ -104,7 +104,7 @@ inoremap ` ``<Esc>i
 vnoremap <C-f> y/<C-R>=escape(@",'/\')<CR><CR>
 
 " Finds and Replaces selection
-vnoremap <C-r> y:%s/<C-R>=escape(@",'/\')<CR>//g
+vnoremap <C-r> y:%s/<C-R>=escape(@",'/\')<CR>//g<Left><Left><Left>
 
 " Remove extra white spaces on save
 fun! <SID>TrimWhitespace()
