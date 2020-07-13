@@ -28,7 +28,7 @@ set noerrorbells
 set path+=**
 
 " Ignores stuff from fuzzy search
-set wildignore+=*/node_modules/*,*/__pycache__/*
+set wildignore+=**/node_modules/**,**/__pycache__/**
 
 " Display all matching files when tab complete
 set wildmenu
@@ -75,9 +75,9 @@ nnoremap <C-p> :find<Space>
 inoremap <C-t> <Esc>:enew<CR>
 nnoremap <C-t> :enew<CR>
 
-" Close current 'tab' (buffer) with CTRL+w
-inoremap <C-w> <Esc>:bd<CR>
-nnoremap <C-w> :bd<CR>
+" Close current 'tab' (buffer) with CTRL+w (with fix to work with NERDTree)
+inoremap <C-w> <Esc>:bp<Bar>bd #<CR>
+nnoremap <C-w> :bp<Bar>bd #<CR>
 
 " Move between 'tabs' using CTRL+h and CTRL+l keys
 inoremap <C-h> <Esc>:bprev<CR>
@@ -107,12 +107,13 @@ vnoremap <C-f> y/<C-R>=escape(@",'/\')<CR><CR>
 vnoremap <C-r> y:%s/<C-R>=escape(@",'/\')<CR>//g
 
 " Remove extra white spaces on save
-fun! TrimWhitespace()
-    let l:save = winsaveview()
-    keeppatterns %s/\s\+$//e
-    call winrestview(l:save)
+fun! <SID>TrimWhitespace()
+    let l = line(".")
+    let c = col(".")
+    keepp %s/\s\+$//e
+    call cursor(l, c)
 endfun
-autocmd BufWritePre * :call TrimWhitespace()
+autocmd BufWritePre * :call <SID>TrimWhitespace()
 
 " Loads all packs
 packloadall
@@ -132,43 +133,25 @@ autocmd BufWritePre * normal ,fmt
 " Prettier Config Ends
 
 " NERDTree Configs Start
-" Auto starts NERDTree if `vim` is used without a file
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-
 " Command to open NERDTree and Refresh it
-inoremap <C-b> <Esc>:NERDTreeToggle<bar>:NERDTreeRefreshRoot<CR>
-nnoremap <C-b> :NERDTreeToggle<bar>:NERDTreeRefreshRoot<CR>
+inoremap <C-b> <Esc>:wincmd p<bar>:NERDTreeRefreshRoot<CR>
+nnoremap <C-b> :wincmd p<bar>:NERDTreeRefreshRoot<CR>
+
+" Open a NERDTree automatically when vim starts up
+autocmd VimEnter * NERDTree | wincmd p
+
+" Prevent from opening a new buffer if it already exists
+autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
+                      \ exe "normal g'\"" | endif
 
 " Refresh NERDTree on file save
 autocmd BufWritePre * normal :NERDTreeRefreshRoot<CR>
 
-" sync open file with NERDTree
-" " Check if NERDTree is open or active
-function! IsNERDTreeOpen()
-    return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
-endfunction
-
-" Call NERDTreeFind iff NERDTree is active, current window contains a
-" modifiable
-" " file, and we're not in vimdiff
-function! SyncTree()
-    if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
-        NERDTreeFind
-        wincmd p
-    endif
-endfunction
-
-" Highlight currently open buffer in NERDTree
-autocmd BufEnter * call SyncTree()
-
+" Show git status
 let g:NERDTreeGitStatusWithFlags = 1
 
 " Show hidden files by default
 let g:NERDTreeShowHidden=1
-
-" Close NERDTree with `:q` if it is the only thing open
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 " NERDTree Configs End
 
 " CoC Configs Start
