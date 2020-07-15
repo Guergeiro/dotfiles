@@ -61,8 +61,8 @@ set hlsearch
 
 " Formats stuff as I want, TAB=4spaces, but intelligent
 set autoindent
-set tabstop=8
-set softtabstop=0
+set tabstop=4
+set softtabstop=4
 set expandtab
 set shiftwidth=4
 set smarttab
@@ -154,6 +154,9 @@ let g:NERDTreeGitStatusWithFlags = 1
 
 " Show hidden files by default
 let g:NERDTreeShowHidden=1
+
+" Ignore based on wildignore (still shows the folders but not it's content)
+let g:NERDTreeRespectWildIgnore=1
 
 " Auto deletes opened buffer when deleting a file
 let g:NERDTreeAutoDeleteBuffer=1
