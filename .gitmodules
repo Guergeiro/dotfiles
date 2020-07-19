@@ -25,3 +25,6 @@
 [submodule ".vim/pack/vendor/start/coc.nvim"]
 	path = .vim/pack/vendor/start/coc.nvim
 	url = https://github.com/neoclide/coc.nvim.git
+[submodule "vim"]
+	path = vim
+	url = https://github.com/vim/vim.git

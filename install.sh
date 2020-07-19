@@ -1,16 +1,26 @@
 #!/bin/bash
 
 echo "Updating/Cleaning Packages"
+    sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
+    sudo sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
     sudo apt-get update; sudo apt-get upgrade -y; sudo apt-get dist-upgrade -y; sudo apt-get autoremove -y; sudo apt-get autoclean -y;
+    sudo apt-get install build-dep vim -y
 
 echo "Installing Git"
 
     sudo apt-get install git -y
 
+echo "Cloning Git Repo"
 
-echo "Installing Vim and extras"
+    git clone --recurse-submodules -j8 https://github.com/Guergeiro/linux-how-to.git
 
-    sudo apt-get install vim vim-gtk -y
+echo "Building Vim from source"
+
+    sudo make install -C linux-how-to/vim
+
+echo "Installing Vim extras"
+
+    sudo apt-get install vim-gtk -y
 
 
 echo "Installing Deno"
@@ -59,12 +69,6 @@ echo "Installing Docker"
     sudo apt-get install docker-ce docker-ce-cli containerd.io -y
     sudo usermod -aG docker $USER
 
-
-echo "Cloning Git Repo"
-
-    git clone --recurse-submodules -j8 https://github.com/Guergeiro/linux-how-to.git
-
-
 echo "Copying Vim/Bash Configs"
 
     cd linux-how-to/
@@ -73,13 +77,11 @@ echo "Copying Vim/Bash Configs"
     cp .vimrc $HOME/
     cd ..
 
-
 echo "Installing NerdFonts"
 
     cd linux-how-to/
     nerd-fonts/install.sh
     cd ..
-
 
 echo "Configuring CoC Vim"
 
