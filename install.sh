@@ -1,9 +1,7 @@
 #!/bin/bash
 
 echo "Updating/Cleaning Packages"
-{
-    sudo apt-get update; sudo apt-get upgrade -y; sudo apt-get dist-upgrade -y; sudo apt-get autoremove -y; sudo apt-get autoclean -y;
-} &> /dev/null
+sudo apt-get update; sudo apt-get upgrade -y; sudo apt-get dist-upgrade -y; sudo apt-get autoremove -y; sudo apt-get autoclean -y;
 
 echo "Installing Git"
 {
