@@ -102,6 +102,7 @@ inoremap ` ``<Esc>i
 
 " Auto starts docs block using snippets
 inoremap /** <Esc>:-1read $HOME/.vim/snippets/.skeleton-docs<CR>jA
+nnoremap ,doc :-1read $HOME/.vim/snippets/.skeleton-docs<CR>jA
 
 " Searchs for selection
 vnoremap <C-f> y/<C-R>=escape(@",'/\')<CR><CR>
