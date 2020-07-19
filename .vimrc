@@ -100,11 +100,14 @@ inoremap [ []<Esc>i
 inoremap " ""<Esc>i
 inoremap ` ``<Esc>i
 
+" Auto starts docs block using snippets
+inoremap /** <Esc>:-1read $HOME/.vim/snippets/.skeleton-docs<CR>jA
+
 " Searchs for selection
 vnoremap <C-f> y/<C-R>=escape(@",'/\')<CR><CR>
 
 " Finds and Replaces selection
-vnoremap <C-r> y:%s/<C-R>=escape(@",'/\')<CR>//g<Left><Left>
+vnoremap <C-r> y:%s/\<\><Left><Left><C-R>=escape(@",'/\')<CR><C-Right>//gc<Left><Left><Left>
 
 " Remove extra white spaces on save
 fun! <SID>TrimWhitespace()
