@@ -4,7 +4,7 @@ echo "Updating/Cleaning Packages"
     sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
     sudo sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
     sudo apt-get update; sudo apt-get upgrade -y; sudo apt-get dist-upgrade -y; sudo apt-get autoremove -y; sudo apt-get autoclean -y;
-    sudo apt-get install build-dep vim -y
+    sudo apt-get build-dep vim -y
 
 echo "Installing Git"
 
