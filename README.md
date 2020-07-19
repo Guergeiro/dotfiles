@@ -32,7 +32,7 @@ Also, most of this steps are copy & paste from their respective installation gui
 3. Run install script (Will take a while)
 
     ```
-    $ curl -fsSL https://raw.githubusercontent.com/Guergeiro/linux-how-to/master/install.sh | sh
+    $ curl -s https://raw.githubusercontent.com/Guergeiro/linux-how-to/master/install.sh | sh
     ```
 
 4. Create ssh key for your git provider (GitHub in this example)

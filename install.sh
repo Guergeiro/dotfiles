@@ -1,58 +1,58 @@
 #!/bin/bash
 
-echo -e "\nUpdating/Cleaning Packages"
+echo "Updating/Cleaning Packages"
 {
     sudo apt-get update; sudo apt-get upgrade -y; sudo apt-get dist-upgrade -y; sudo apt-get autoremove -y; sudo apt-get autoclean -y;
 } &> /dev/null
 
-echo -e "\nInstalling Git"
+echo "Installing Git"
 {
     sudo apt-get install git -y
 } &> /dev/null
 
-echo -e "\nInstalling Vim and extras"
+echo "Installing Vim and extras"
 {
     sudo apt-get install vim vim-gtk -y
 } &> /dev/null
 
-echo -e "\nInstalling Deno"
+echo "Installing Deno"
 {
     curl -fsSL https://deno.land/x/install/install.sh | sh
     sudo mv $HOME/.deno/bin/deno /usr/bin/
 } &> /dev/null
 
-echo -e "\nInstalling NodeJS (LTS)"
+echo "Installing NodeJS (LTS)"
 {
     curl -sL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
     sudo apt-get install -y nodejs
 } &> /dev/null
 
-echo -e "\bInstalling Python3"
+echo "Installing Python3"
 {
     sudo apt-get install python3 -y
 } &> /dev/null
 
-echo -e "\nInstalling OpenJDK (Headless)"
+echo "Installing OpenJDK (Headless)"
 {
     sudo apt-get install default-jdk-headless -y
 } &> /dev/null
 
-echo -e "\nInstalling Yarn"
+echo "Installing Yarn"
 {
     sudo npm install -g yarn
 } &> /dev/null
 
-echo -e "\nInstalling TypeScript"
+echo "Installing TypeScript"
 {
     sudo npm install -g typescript
 } &> /dev/null
 
-echo -e "\nInstalling Prettier"
+echo "Installing Prettier"
 {
     sudo npm install -g prettier
 } &> /dev/null
 
-echo -e "\nInstalling Docker"
+echo "Installing Docker"
 {
     sudo apt-get install apt-transport-https ca-certificates gnupg-agent software-properties-common -y
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -62,12 +62,12 @@ echo -e "\nInstalling Docker"
     sudo usermod -aG docker $USER
 } &> /dev/null
 
-echo -e "\nCloning Git Repo"
+echo "Cloning Git Repo"
 {
     git clone --recurse-submodules -j8 https://github.com/Guergeiro/linux-how-to.git
 } &> /dev/null
 
-echo -e "\nCopying Vim/Bash Configs"
+echo "Copying Vim/Bash Configs"
 {
     cd linux-how-to/
     cp -r .vim/ $HOME/
@@ -76,14 +76,14 @@ echo -e "\nCopying Vim/Bash Configs"
     cd ..
 } &> /dev/null
 
-echo -e "\nInstalling NerdFonts"
+echo "Installing NerdFonts"
 {
     cd linux-how-to/
     nerd-fonts/install.sh
     cd ..
 } &> /dev/null
 
-echo -e "\nConfiguring CoC Vim"
+echo "Configuring CoC Vim"
 {
     cd $HOME/.vim/pack/vendor/start/coc.nvim
     yarn
