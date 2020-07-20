@@ -1,6 +1,6 @@
 #!/bin/bash
 
-green=`tput setaf 3`
+yellow=`tput setaf 3`
 reset=`tput sgr0`
 
 echo "${yellow}Updating/Cleaning Packages${reset}"
