@@ -89,7 +89,7 @@ echo "${yellow}Installing NerdFonts${reset}"
 
 echo "${yellow}Removing extra files${reset}"
 
-    rm -rf linux-how-to/
+    sudo rm -rf linux-how-to/
 
 echo "${yellow}Configuring CoC Vim${reset}"
 
