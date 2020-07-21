@@ -36,7 +36,7 @@ echo "${yellow}Installing Deno${reset}"
 echo "${yellow}Installing NodeJS (LTS)${reset}"
 
     curl -sL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-    sudo apt-get install -y nodejs
+    sudo apt-get install nodejs -y
 
 
 echo "${yellow}Installing Python3${reset}"
@@ -86,6 +86,10 @@ echo "${yellow}Installing NerdFonts${reset}"
     cd linux-how-to/
     nerd-fonts/install.sh
     cd ..
+
+echo "${yellow}Removing extra files${reset}"
+
+    rm -rf linux-how-to/
 
 echo "${yellow}Configuring CoC Vim${reset}"
 
