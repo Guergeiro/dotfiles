@@ -13,7 +13,7 @@ echo "${yellow}Installing Git${reset}"
 
     sudo apt-get install git -y
 
-echo "${yellow}Cloning Git Repo"
+echo "${yellow}Cloning Git Repo${reset}"
 
     git clone --recurse-submodules -j8 https://github.com/Guergeiro/linux-how-to.git
 
