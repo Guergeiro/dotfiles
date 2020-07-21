@@ -19,6 +19,7 @@ echo "${yellow}Cloning Git Repo${reset}"
 
 echo "${yellow}Building Vim from source${reset}"
 
+    linux-how-to/vim/configure
     sudo make install -C linux-how-to/vim
 
 echo "${yellow}Installing Vim extras${reset}"
