@@ -110,14 +110,13 @@ vnoremap <C-f> y/<C-R>=escape(@",'/\')<CR><CR>
 " Finds and Replaces selection
 vnoremap <C-r> y:%s/<C-R>=escape(@",'/\')<CR>//gc<Left><Left><Left>
 
-" Remove extra white spaces on save
+" Remove extra white spaces
 fun! <SID>TrimWhitespace()
     let l = line(".")
     let c = col(".")
     keepp %s/\s\+$//e
     call cursor(l, c)
 endfun
-autocmd BufWritePre * :call <SID>TrimWhitespace()
 
 " Loads all packs
 packloadall
@@ -134,24 +133,12 @@ nnoremap ,fmt :PrettierAsync<CR>
 " Auto format without prettier pragma
 let g:prettier#autoformat_require_pragma = 0
 
-" Format on save
-autocmd BufWritePre * normal ,fmt
 " Prettier Config Ends
 
 " NERDTree Configs Start
 " Command to open NERDTree and Refresh it
 inoremap <C-b> <Esc>:wincmd p<bar>:NERDTreeRefreshRoot<CR>
 nnoremap <C-b> :wincmd p<bar>:NERDTreeRefreshRoot<CR>
-
-" Open a NERDTree automatically when vim starts up
-autocmd VimEnter * NERDTree | wincmd p
-
-" Prevent from opening a new buffer if it already exists
-autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
-                      \ exe "normal g'\"" | endif
-
-" Refresh NERDTree on file save
-autocmd BufWritePre * normal :NERDTreeRefreshRoot<CR>
 
 " Show git status
 let g:NERDTreeGitStatusWithFlags = 1
@@ -191,9 +178,6 @@ endif
 " Auto organizes import
 nnoremap ,or :CocCommand editor.action.organizeImport<CR>
 
-" Auto organizes import on save
-autocmd BufWritePre * normal ,or
-
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
@@ -212,9 +196,6 @@ function! s:show_documentation()
     endif
 endfunction
 nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-" Highlight symbol under cursor on CursorHold
-autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Auto Complete VSCode like
 " use <tab> for trigger completion and navigate to the next complete item
@@ -236,12 +217,45 @@ inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " Use <c-space>for trigger completion
 inoremap <silent><expr> <c-space> coc#refresh()
-
-" Close the preview window when completion is done.
-autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 " CoC Configs End
 
 " Airline Configs Start
 " Enable the list of buffers
 let g:airline#extensions#tabline#enabled = 1
 " Airline Configs End
+
+" AutoCommands
+augroup NERDTree
+    autocmd!
+    
+    " Open a NERDTree automatically when vim starts up
+    autocmd VimEnter * NERDTree | wincmd p
+
+    " Prevent from opening a new buffer if it already exists
+    autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
+                          \ exe "normal g'\"" | endif
+
+    " Refresh NERDTree on file save
+    autocmd BufWritePre * normal :NERDTreeRefreshRoot<CR>
+augroup END
+
+augroup Prettier
+    autocmd!
+    
+    " Remove whitespaces on save
+    autocmd BufWritePre * :call <SID>TrimWhitespace()
+    
+    " Format on save
+    autocmd BufWritePre * normal ,fmt
+augroup END
+
+augroup CoC
+    autocmd!
+
+    " Auto organizes import on save
+    autocmd BufWritePre * normal ,or
+    
+
+    " Close the preview window when completion is done.
+    autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+augroup END
