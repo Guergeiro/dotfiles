@@ -44,6 +44,9 @@ set number
 set numberwidth=1
 set relativenumber
 
+" Enable mouse support
+set mouse=a
+
 " Highlight matching pairs as you type: (), [], {}
 set showmatch
 
@@ -225,9 +228,16 @@ let g:airline#extensions#tabline#enabled = 1
 " Airline Configs End
 
 " AutoCommands
-augroup NERDTree
+if system("uname -r") =~ "microsoft"
+    augroup Yank
+        autocmd!
+        autocmd TextYankPost * :call system('clip.exe ',@")
+    augroup END
+endif
+
+augroup General
     autocmd!
-    
+
     " Open a NERDTree automatically when vim starts up
     autocmd VimEnter * NERDTree | wincmd p
 
@@ -237,24 +247,16 @@ augroup NERDTree
 
     " Refresh NERDTree on file save
     autocmd BufWritePre * normal :NERDTreeRefreshRoot<CR>
-augroup END
 
-augroup Prettier
-    autocmd!
-    
     " Remove whitespaces on save
     autocmd BufWritePre * :call <SID>TrimWhitespace()
-    
+
     " Format on save
     autocmd BufWritePre * normal ,fmt
-augroup END
-
-augroup CoC
-    autocmd!
 
     " Auto organizes import on save
     autocmd BufWritePre * normal ,or
-    
+
 
     " Close the preview window when completion is done.
     autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
