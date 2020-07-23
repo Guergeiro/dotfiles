@@ -228,15 +228,14 @@ let g:airline#extensions#tabline#enabled = 1
 " Airline Configs End
 
 " AutoCommands
-if system("uname -r") =~ "microsoft"
-    augroup Yank
-        autocmd!
-        autocmd TextYankPost * :call system('clip.exe ',@")
-    augroup END
-endif
 
 augroup General
     autocmd!
+
+    " Copy to Windows Clipboard
+    if system("uname -r") =~ "microsoft"
+            autocmd TextYankPost * :call system('clip.exe ',@")
+    endif
 
     " Open a NERDTree automatically when vim starts up
     autocmd VimEnter * NERDTree | wincmd p
