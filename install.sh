@@ -26,52 +26,35 @@ echo "${yellow}Installing Vim extras${reset}"
 
     sudo apt-get install vim-gtk -y
 
-
 echo "${yellow}Installing Deno${reset}"
 
     curl -fsSL https://deno.land/x/install/install.sh | sh
     sudo mv $HOME/.deno/bin/deno /usr/bin/
-
 
 echo "${yellow}Installing NodeJS (LTS)${reset}"
 
     curl -sL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
     sudo apt-get install nodejs -y
 
-
 echo "${yellow}Installing Python3${reset}"
 
     sudo apt-get install python3 -y
-
 
 echo "${yellow}Installing OpenJDK (Headless)${reset}"
 
     sudo apt-get install default-jdk-headless -y
 
-
 echo "${yellow}Installing Yarn${reset}"
 
     sudo npm install -g yarn
-
 
 echo "${yellow}Installing TypeScript${reset}"
 
     sudo npm install -g typescript
 
-
 echo "${yellow}Installing Prettier${reset}"
 
     sudo npm install -g prettier
-
-
-echo "${yellow}Installing Docker${reset}"
-
-    sudo apt-get install apt-transport-https ca-certificates gnupg-agent software-properties-common -y
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-    sudo apt-get update
-    sudo apt-get install docker-ce docker-ce-cli containerd.io -y
-    sudo usermod -aG docker $USER
 
 echo "${yellow}Copying Vim/Bash Configs${reset}"
 
