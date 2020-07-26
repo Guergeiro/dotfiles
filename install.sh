@@ -19,8 +19,9 @@ echo "${yellow}Cloning Git Repo${reset}"
 
 echo "${yellow}Building Vim from source${reset}"
 
-    linux-how-to/vim/configure
-    sudo make install -C linux-how-to/vim
+    cd linux-how-to/vim/
+    ./configure
+    sudo make install
 
 echo "${yellow}Installing Vim extras${reset}"
 
@@ -43,7 +44,7 @@ echo "${yellow}Installing Python3${reset}"
 echo "${yellow}Installing OpenJDK (Headless)${reset}"
 
     sudo apt-get install default-jdk-headless -y
-    
+
 echo "${yellow}Installing RipGrep${reset}"
 
     sudo apt-get install ripgrep -y

@@ -121,9 +121,11 @@ endfun
 " Loads all packs
 packloadall
 
-" Setup colors
-colorsheme gruvbox
+" Gruvbox colorscheme
+colorscheme gruvbox
 set background=dark
+let g:gruvbox_contrast_dark=hard
+let g:gruvbox_number_column=red
 
 " VIM Fugitive Config Starts
 " Add branch to status line
