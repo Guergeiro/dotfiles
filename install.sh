@@ -15,13 +15,18 @@ echo "${yellow}Installing Git${reset}"
 
 echo "${yellow}Cloning Git Repo${reset}"
 
-    git clone --recurse-submodules -j8 https://github.com/Guergeiro/linux-how-to.git
+    if [ "$1" == "-with-fonts" ]; then
+        git clone --recurse-submodules -j8 https://github.com/Guergeiro/linux-how-to.git
+    else
+        git clone --recurse-submodules=.vim/* --recurse-submodules=vim -j8 https://github.com/Guergeiro/linux-how-to.git
+    fi
 
 echo "${yellow}Building Vim from source${reset}"
 
     cd linux-how-to/vim/
     ./configure
     sudo make install
+    cd ../../
 
 echo "${yellow}Installing Vim extras${reset}"
 
@@ -69,11 +74,13 @@ echo "${yellow}Copying Vim/Bash Configs${reset}"
     cp .vimrc $HOME/
     cd ..
 
-echo "${yellow}Installing NerdFonts${reset}"
+if [ "$1" == "-with-fonts" ]; then
+    echo "${yellow}Installing NerdFonts${reset}"
 
-    cd linux-how-to/
-    nerd-fonts/install.sh
-    cd ..
+        cd linux-how-to/
+        nerd-fonts/install.sh
+        cd ..
+fi
 
 echo "${yellow}Removing extra files${reset}"
 

@@ -13,8 +13,6 @@ This repository is merely for personal use. It's not private since someone might
 
 The purpose of this reposity is when I start a freshly Linux image, a bit more than just dotfiles. If you want to use it, do it at your own risk.
 
-Also, most of this steps are copy & paste from their respective installation guides.
-
 ## Steps
 
 1. Install [cURL](https://curl.haxx.se/)
@@ -32,7 +30,7 @@ Also, most of this steps are copy & paste from their respective installation gui
 3. Run install script (Will take a while)
 
     ```
-    $ curl -sL https://raw.githubusercontent.com/Guergeiro/linux-how-to/master/install.sh | sh
+    $ curl -sL https://raw.githubusercontent.com/Guergeiro/linux-how-to/master/install.sh | sh [-with-fonts]
     ```
 
 4. Create ssh key for your git provider (GitHub in this example)
