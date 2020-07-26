@@ -43,6 +43,10 @@ echo "${yellow}Installing Python3${reset}"
 echo "${yellow}Installing OpenJDK (Headless)${reset}"
 
     sudo apt-get install default-jdk-headless -y
+    
+echo "${yellow}Installing RipGrep${reset}"
+
+    sudo apt-get install ripgrep -y
 
 echo "${yellow}Installing Yarn${reset}"
 
