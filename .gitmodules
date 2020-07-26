@@ -28,3 +28,6 @@
 [submodule "vim"]
 	path = vim
 	url = https://github.com/vim/vim.git
+[submodule ".vim/pack/vendor/start/gruvbox"]
+	path = .vim/pack/vendor/start/gruvbox
+	url = https://github.com/morhetz/gruvbox.git

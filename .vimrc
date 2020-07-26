@@ -33,9 +33,6 @@ set wildignore+=**/node_modules/**,**/__pycache__/**
 " Display all matching files when tab complete
 set wildmenu
 
-" Setup colors
-colorscheme codedark
-
 " Make default clipboard the OS X clipboard (and unnamedplus for Linux)
 set clipboard=unnamed,unnamedplus
 
@@ -123,6 +120,10 @@ endfun
 
 " Loads all packs
 packloadall
+
+" Setup colors
+colorsheme gruvbox
+set background=dark
 
 " VIM Fugitive Config Starts
 " Add branch to status line
