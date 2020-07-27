@@ -18,7 +18,7 @@ echo "${yellow}Cloning Git Repo${reset}"
     if [ "$1" == "-with-fonts" ]; then
         git clone --recurse-submodules -j8 https://github.com/Guergeiro/linux-how-to.git
     else
-        git clone --recurse-submodules=.vim/* --recurse-submodules=vim -j8 https://github.com/Guergeiro/linux-how-to.git
+        git clone --recurse-submodules=vim -j8 https://github.com/Guergeiro/linux-how-to.git
     fi
 
 echo "${yellow}Building Vim from source${reset}"
