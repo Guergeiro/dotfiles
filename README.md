@@ -41,7 +41,7 @@ The purpose of this reposity is when I start a freshly Linux image, a bit more t
     ```
 
     ```
-    $ echo -e "Host github.com\n    Hostname ssh.github.com\n    IdentityFile ~/.ssh/GitHub.pub\n    Port 443 #Only if the default 22 is blocked" > ~/.ssh/config
+    $ echo -e "Host github.com\n    Hostname ssh.github.com\n    IdentityFile ~/.ssh/GitHub\n    Port 443 #Only if the default 22 is blocked" > ~/.ssh/config
     # Remove port option if possible
     ```
 
