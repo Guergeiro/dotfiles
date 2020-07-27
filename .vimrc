@@ -143,8 +143,8 @@ packloadall
 " Gruvbox Config Starts
 colorscheme gruvbox
 set background=dark
-let g:gruvbox_contrast_dark=hard
-let g:gruvbox_number_column=red
+let g:gruvbox_contrast_dark = "hard"
+let g:gruvbox_number_column = "red"
 " Gruvbox Config Ends
 
 " VIM Fugitive Config Starts
