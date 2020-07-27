@@ -13,7 +13,6 @@ call plug#begin('~/.vim/plugged')
     Plug 'Xuyuanp/nerdtree-git-plugin'
     Plug 'ryanoasis/vim-devicons'
     Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
-    Plug 'jremmen/vim-ripgrep'
     Plug 'vim-airline/vim-airline'
     Plug 'gruvbox-community/gruvbox'
 call plug#end()
@@ -37,7 +36,7 @@ filetype plugin on
 
 " Sets backup folder to undodir
 set nobackup
-set undodir=$HOME/.vim/undodir
+set undodir=$HOME/.vim/undodir//
 set undofile
 
 " Move swp files to the same directory
@@ -89,6 +88,12 @@ set expandtab
 set shiftwidth=4
 set smarttab
 
+" RipGrep to the rescue!
+if executable('rg')
+    set grepprg=rg\ --vimgrep\ --hidden\ --glob\ '!.git'
+    set grepformat=%f:%l:%c:%m
+endif
+
 " Fuzzy Finder in CTRL+p
 inoremap <C-p> <Esc>:find<Space>
 nnoremap <C-p> :find<Space>
@@ -133,20 +138,15 @@ vnoremap <C-f> y/<C-R>=escape(@",'/\')<CR><CR>
 vnoremap <C-r> y:%s/<C-R>=escape(@",'/\')<CR>//gc<Left><Left><Left>
 
 " Remove extra white spaces
-fun! <SID>TrimWhitespace()
+function! <SID>TrimWhitespace()
     let l = line(".")
     let c = col(".")
     keepp %s/\s\+$//e
     call cursor(l, c)
-endfun
+endfunction
 
 " Loads all packs
 packloadall
-
-" RipGrep Config Starts
-let g:rg_command = "g:rg_binary --vimgrep -S"
-let g:rg_highlight = 1
-" RipGrep Config Ends
 
 " Gruvbox Config Starts
 colorscheme gruvbox
@@ -220,6 +220,11 @@ nmap <silent> gr <Plug>(coc-references)
 
 " Remap for rename current word
 nmap <F2> <Plug>(coc-rename)
+
+" Search for word in all cwd
+inoremap <C-F> <Esc>:CocSearch<Space>
+nnoremap <C-F> :CocSearch<Space>
+vnoremap <C-F> y:CocSearch<Space><C-R>=escape(@", '/\')<CR><CR>
 
 " Use K to show documentation in preview window.
 function! s:show_documentation()
