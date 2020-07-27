@@ -137,6 +137,12 @@ fun! <SID>TrimWhitespace()
     call cursor(l, c)
 endfun
 
+" RipGrep Baby
+if executable('rg')
+    set grepprg=rg\ --vimgrep\ --hidden\ -glob '!.git'
+endif
+set grepformat^=%f:%l:%c:%m
+
 " Loads all packs
 packloadall
 
