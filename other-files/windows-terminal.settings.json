@@ -291,6 +291,10 @@
                 "direction": "up"
             },
             "keys": "alt+k"
+        },
+        {
+            "command": "unbound",
+            "keys": "ctrl+shift+f"
         }
     ]
 }
