@@ -1,10 +1,29 @@
+" Install VimPlug automatically
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+" Let's load plugins
+call plug#begin('~/.vim/plugged')
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
+    Plug 'tpope/vim-fugitive'
+    Plug 'preservim/nerdtree'
+    Plug 'ryanoasis/vim-devicons'
+    Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+    Plug 'gruvbox-community/gruvbox'
+call plug#end()
+
 " Enter current millenium
 set nocompatible
 set encoding=UTF-8
 
 " Changes weird behaviour with VIM starting in REPLACE Mode (only happens on
 " WSL for me)
-set ambw=double
+if system("uname -r") =~ "microsoft"
+    set ambw=double
+endif
 
 " Sets backspace to work in case it doesn't
 set backspace=indent,eol,start
@@ -121,11 +140,12 @@ endfun
 " Loads all packs
 packloadall
 
-" Gruvbox colorscheme
+" Gruvbox Config Starts
 colorscheme gruvbox
 set background=dark
 let g:gruvbox_contrast_dark=hard
 let g:gruvbox_number_column=red
+" Gruvbox Config Ends
 
 " VIM Fugitive Config Starts
 " Add branch to status line
@@ -231,7 +251,6 @@ let g:airline#extensions#tabline#enabled = 1
 " Airline Configs End
 
 " AutoCommands
-
 augroup General
     autocmd!
 
@@ -258,7 +277,6 @@ augroup General
 
     " Auto organizes import on save
     autocmd BufWritePre * normal ,or
-
 
     " Close the preview window when completion is done.
     autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif

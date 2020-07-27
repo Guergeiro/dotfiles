@@ -85,9 +85,3 @@ fi
 echo "${yellow}Removing extra files${reset}"
 
     sudo rm -rf linux-how-to/
-
-echo "${yellow}Configuring CoC Vim${reset}"
-
-    cd $HOME/.vim/pack/vendor/start/coc.nvim
-    yarn
-    cd $HOME
