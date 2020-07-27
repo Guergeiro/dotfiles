@@ -10,6 +10,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'tpope/vim-fugitive'
     Plug 'preservim/nerdtree'
+    Plug 'Xuyuanp/nerdtree-git-plugin'
     Plug 'ryanoasis/vim-devicons'
     Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
     Plug 'jremmen/vim-ripgrep'
