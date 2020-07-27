@@ -12,6 +12,8 @@ call plug#begin('~/.vim/plugged')
     Plug 'preservim/nerdtree'
     Plug 'ryanoasis/vim-devicons'
     Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+    Plug 'jremmen/vim-ripgrep'
+    Plug 'vim-airline/vim-airline'
     Plug 'gruvbox-community/gruvbox'
 call plug#end()
 
@@ -137,14 +139,13 @@ fun! <SID>TrimWhitespace()
     call cursor(l, c)
 endfun
 
-" RipGrep Baby
-if executable('rg')
-    set grepprg=rg\ --vimgrep\ --hidden\ -glob '!.git'
-endif
-set grepformat^=%f:%l:%c:%m
-
 " Loads all packs
 packloadall
+
+" RipGrep Config Starts
+let g:rg_command = "g:rg_binary --vimgrep -S"
+let g:rg_highlight = 1
+" RipGrep Config Ends
 
 " Gruvbox Config Starts
 colorscheme gruvbox
