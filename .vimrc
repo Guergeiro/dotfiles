@@ -90,7 +90,7 @@ set smarttab
 
 " RipGrep to the rescue!
 if executable('rg')
-    set grepprg=rg\ --vimgrep\ --hidden\ --glob\ '!.git'
+    set grepprg=rg\ --color=auto\ --vimgrep\ --hidden\ --glob\ '!.git'
     set grepformat=%f:%l:%c:%m
 endif
 
