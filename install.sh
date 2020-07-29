@@ -54,6 +54,10 @@ echo "${yellow}Installing RipGrep${reset}"
 
     sudo apt-get install ripgrep -y
 
+echo "${yellow}Installing Trash CLI${reset}"
+
+    sudo apt-get install trash-cli -y
+
 echo "${yellow}Installing Yarn${reset}"
 
     sudo npm install -g yarn
@@ -70,6 +74,7 @@ echo "${yellow}Copying Vim/Bash Configs${reset}"
 
     cd linux-how-to/
     cp -r .vim/ $HOME/
+    cp .bashrc $HOME/
     cp .bash_aliases $HOME/
     cp .vimrc $HOME/
     cd ..
@@ -84,4 +89,4 @@ fi
 
 echo "${yellow}Removing extra files${reset}"
 
-    sudo rm -rf linux-how-to/
+    sudo /usr/bin/rm -rf linux-how-to/
