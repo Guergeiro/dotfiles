@@ -17,6 +17,23 @@ call plug#begin('~/.vim/plugged')
     Plug 'gruvbox-community/gruvbox'
 call plug#end()
 
+if !isdirectory($HOME . "/.config/coc/extensions")
+    call mkdir($HOME . "/.config/coc/extensions", "p")
+    autocmd VimEnter * CocInstall
+                \ coc-css
+                \ coc-html
+                \ coc-java
+                \ coc-json
+                \ coc-markdownlint
+                \ coc-phpls
+                \ coc-python
+                \ coc-sh
+                \ coc-tsserver
+                \ coc-vimlsp
+                \ coc-yaml
+                \--sync | source $MYVIMRC
+endif
+
 " Enter current millenium
 set nocompatible
 set encoding=UTF-8
@@ -36,11 +53,22 @@ filetype plugin on
 
 " Sets backup folder to undodir
 set nobackup
-set undodir=$HOME/.vim/undodir//
+set noautowrite
 set undofile
-
-" Move swp files to the same directory
+set undodir=$HOME/.vim/undodir//
 set directory=$HOME/.vim/swapfiles//
+set backupdir=$HOME/.vim/backup//
+
+" Make those folders automatically if they don't already exist.
+if !isdirectory(expand(&undodir))
+    call mkdir(expand(&undodir), "p")
+endif
+if !isdirectory(expand(&backupdir))
+    call mkdir(expand(&backupdir), "p")
+endif
+if !isdirectory(expand(&directory))
+    call mkdir(expand(&directory), "p")
+endif
 
 " Disable error bells
 set noerrorbells
@@ -171,8 +199,8 @@ let g:prettier#autoformat_require_pragma = 0
 
 " NERDTree Configs Start
 " Command to open NERDTree and Refresh it
-inoremap <C-b> <Esc>:wincmd p<bar>:NERDTreeRefreshRoot<CR>
-nnoremap <C-b> :wincmd p<bar>:NERDTreeRefreshRoot<CR>
+inoremap <C-b> <Esc>:NERDTreeToggle<bar>:NERDTreeRefreshRoot<CR>
+nnoremap <C-b> :NERDTreeToggle<bar>:NERDTreeRefreshRoot<CR>
 
 " Show git status
 let g:NERDTreeGitStatusWithFlags = 1
@@ -185,6 +213,22 @@ let g:NERDTreeRespectWildIgnore=1
 
 " Auto deletes opened buffer when deleting a file
 let g:NERDTreeAutoDeleteBuffer=1
+
+" Close on file open
+let g:NERDTreeQuitOnOpen=1
+
+" Check if NERDTree is open or active
+function! IsNERDTreeOpen()
+    return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
+endfunction
+
+" Call NERDTreeFind iff NERDTree is active, current window contains a modifiable  file, and we're not in vimdiff
+function! SyncTree()
+    if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
+        NERDTreeFind
+        wincmd p
+    endif
+endfunction
 " NERDTree Configs End
 
 " CoC Configs Start
@@ -224,7 +268,6 @@ nmap <F2> <Plug>(coc-rename)
 " Search for word in all cwd
 inoremap <C-F> <Esc>:CocSearch<Space>
 nnoremap <C-F> :CocSearch<Space>
-vnoremap <C-F> y:CocSearch<Space><C-R>=escape(@", '/\')<CR><CR>
 
 " Use K to show documentation in preview window.
 function! s:show_documentation()
@@ -272,12 +315,12 @@ augroup General
             autocmd TextYankPost * :call system('clip.exe ',@")
     endif
 
-    " Open a NERDTree automatically when vim starts up
-    autocmd VimEnter * NERDTree | wincmd p
-
     " Prevent from opening a new buffer if it already exists
     autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
                           \ exe "normal g'\"" | endif
+
+    " Highlight currently open buffer in NERDTree
+    autocmd BufRead * call SyncTree()
 
     " Refresh NERDTree on file save
     autocmd BufWritePre * normal :NERDTreeRefreshRoot<CR>
