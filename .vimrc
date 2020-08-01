@@ -19,7 +19,7 @@ call plug#end()
 
 if !isdirectory($HOME . "/.config/coc/extensions")
     call mkdir($HOME . "/.config/coc/extensions", "p")
-    autocmd VimEnter * CocInstall
+    autocmd VimEnter * CocInstall --sync
                 \ coc-css
                 \ coc-html
                 \ coc-java
@@ -31,7 +31,6 @@ if !isdirectory($HOME . "/.config/coc/extensions")
                 \ coc-tsserver
                 \ coc-vimlsp
                 \ coc-yaml
-                \--sync | source $MYVIMRC
 endif
 
 " Enter current millenium
