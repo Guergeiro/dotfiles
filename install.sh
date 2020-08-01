@@ -73,7 +73,6 @@ echo "${yellow}Installing Prettier${reset}"
 echo "${yellow}Copying Vim/Bash Configs${reset}"
 
     cd linux-how-to/
-    cp -r .vim/ $HOME/
     cp .bashrc $HOME/
     cp .bash_aliases $HOME/
     cp .vimrc $HOME/
