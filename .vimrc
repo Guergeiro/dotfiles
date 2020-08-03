@@ -15,11 +15,12 @@ call plug#begin('~/.vim/plugged')
     Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
     Plug 'vim-airline/vim-airline'
     Plug 'gruvbox-community/gruvbox'
+    Plug 'octref/RootIgnore'
 call plug#end()
 
 if !isdirectory($HOME . "/.config/coc/extensions")
     call mkdir($HOME . "/.config/coc/extensions", "p")
-    autocmd VimEnter * CocInstall --sync
+    autocmd VimEnter * CocInstall
                 \ coc-css
                 \ coc-html
                 \ coc-java
@@ -31,6 +32,7 @@ if !isdirectory($HOME . "/.config/coc/extensions")
                 \ coc-tsserver
                 \ coc-vimlsp
                 \ coc-yaml
+                \ --sync | source $MYVIMRC
 endif
 
 " Enter current millenium
@@ -117,9 +119,20 @@ set smarttab
 
 " RipGrep to the rescue!
 if executable('rg')
-    set grepprg=rg\ --color=auto\ --vimgrep\ --hidden\ --glob\ '!.git'
+    set grepprg=rg\ --vimgrep\ --hidden
     set grepformat=%f:%l:%c:%m
 endif
+function! Grep(...)
+	return system(join([&grepprg] + [expandcmd(join(a:000, ' '))], ' '))
+endfunction
+
+" Original author here: https://gist.github.com/romainl/56f0c28ef953ffc157f36cc495947ab3
+command! -nargs=+ -complete=file_in_path -bar Grep  cgetexpr Grep(<f-args>)
+command! -nargs=+ -complete=file_in_path -bar LGrep lgetexpr Grep(<f-args>)
+
+cnoreabbrev <expr> grep  (getcmdtype() ==# ':' && getcmdline() ==# 'grep')  ? 'Grep'  : 'grep'
+cnoreabbrev <expr> lgrep (getcmdtype() ==# ':' && getcmdline() ==# 'lgrep') ? 'LGrep' : 'lgrep'
+
 
 " Fuzzy Finder in CTRL+p
 inoremap <C-p> <Esc>:find<Space>
@@ -179,7 +192,6 @@ packloadall
 colorscheme gruvbox
 set background=dark
 let g:gruvbox_contrast_dark = "hard"
-let g:gruvbox_number_column = "red"
 " Gruvbox Config Ends
 
 " VIM Fugitive Config Starts
@@ -308,7 +320,6 @@ let g:airline#extensions#tabline#enabled = 1
 " AutoCommands
 augroup General
     autocmd!
-
     " Copy to Windows Clipboard
     if system("uname -r") =~ "microsoft"
             autocmd TextYankPost * :call system('clip.exe ',@")
@@ -318,12 +329,19 @@ augroup General
     autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
                           \ exe "normal g'\"" | endif
 
+    " Close the preview window when completion is done.
+    autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
+augroup END
+augroup NERDTree
+    autocmd!
     " Highlight currently open buffer in NERDTree
     autocmd BufRead * call SyncTree()
 
     " Refresh NERDTree on file save
     autocmd BufWritePre * normal :NERDTreeRefreshRoot<CR>
-
+augroup END
+augroup Format
+    autocmd!
     " Remove whitespaces on save
     autocmd BufWritePre * :call <SID>TrimWhitespace()
 
@@ -332,7 +350,9 @@ augroup General
 
     " Auto organizes import on save
     autocmd BufWritePre * normal ,or
-
-    " Close the preview window when completion is done.
-    autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+augroup END
+augroup GrepQuickfix
+	autocmd!
+	autocmd QuickFixCmdPost cgetexpr cwindow
+	autocmd QuickFixCmdPost lgetexpr lwindow
 augroup END
