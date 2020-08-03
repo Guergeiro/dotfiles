@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 yellow=`tput setaf 3`
 reset=`tput sgr0`
@@ -15,7 +15,7 @@ echo "${yellow}Installing Git${reset}"
 
 echo "${yellow}Cloning Git Repo${reset}"
 
-    if [ "$1" == "-with-fonts" ]; then
+    if [ "$1" = "-with-fonts" ]; then
         git clone --recurse-submodules -j8 https://github.com/Guergeiro/linux-how-to.git
     else
         git clone --recurse-submodules=vim -j8 https://github.com/Guergeiro/linux-how-to.git
@@ -78,7 +78,7 @@ echo "${yellow}Copying Vim/Bash Configs${reset}"
     cp .vimrc $HOME/
     cd ..
 
-if [ "$1" == "-with-fonts" ]; then
+if [ "$1" = "-with-fonts" ]; then
     echo "${yellow}Installing NerdFonts${reset}"
 
         cd linux-how-to/
