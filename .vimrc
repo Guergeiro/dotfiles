@@ -15,7 +15,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
     Plug 'vim-airline/vim-airline'
     Plug 'gruvbox-community/gruvbox'
-    Plug 'octref/RootIgnore'
+    Plug 'Guergeiro/clean-path.vim'
 call plug#end()
 
 if !isdirectory($HOME . "/.config/coc/extensions")
@@ -74,12 +74,6 @@ endif
 " Disable error bells
 set noerrorbells
 
-" Allow vim's own fuzzy find to work
-set path+=**
-
-" Ignores stuff from fuzzy search
-set wildignore+=**/node_modules/**,**/__pycache__/**
-
 " Display all matching files when tab complete
 set wildmenu
 
@@ -88,8 +82,8 @@ set clipboard=unnamed,unnamedplus
 
 " Enable line numbers
 set number
-set numberwidth=1
 set relativenumber
+set numberwidth=1
 
 " Enable mouse support
 set mouse=a
@@ -122,17 +116,20 @@ if executable('rg')
     set grepprg=rg\ --vimgrep\ --hidden
     set grepformat=%f:%l:%c:%m
 endif
+
+" Instant grep + quickfix https://gist.github.com/romainl/56f0c28ef953ffc157f36cc495947ab3
 function! Grep(...)
 	return system(join([&grepprg] + [expandcmd(join(a:000, ' '))], ' '))
 endfunction
 
-" Original author here: https://gist.github.com/romainl/56f0c28ef953ffc157f36cc495947ab3
 command! -nargs=+ -complete=file_in_path -bar Grep  cgetexpr Grep(<f-args>)
 command! -nargs=+ -complete=file_in_path -bar LGrep lgetexpr Grep(<f-args>)
 
 cnoreabbrev <expr> grep  (getcmdtype() ==# ':' && getcmdline() ==# 'grep')  ? 'Grep'  : 'grep'
 cnoreabbrev <expr> lgrep (getcmdtype() ==# ':' && getcmdline() ==# 'lgrep') ? 'LGrep' : 'lgrep'
 
+" Super cheap git blame https://gist.github.com/romainl/5b827f4aafa7ee29bdc70282ecc31640
+command! -range GB echo join(systemlist("git -C " . shellescape(expand('%:p:h')) . " blame -L <line1>,<line2> " . expand('%:t')), "\n")
 
 " Fuzzy Finder in CTRL+p
 inoremap <C-p> <Esc>:find<Space>
@@ -142,7 +139,7 @@ nnoremap <C-p> :find<Space>
 inoremap <C-t> <Esc>:enew<CR>
 nnoremap <C-t> :enew<CR>
 
-" Close current 'tab' (buffer) with CTRL+w (with fix to work with NERDTree)
+" Close current 'tab' (buffer) with CTRL+w
 inoremap <C-w> <Esc>:bp<Bar>bd #<CR>
 nnoremap <C-w> :bp<Bar>bd #<CR>
 
@@ -166,10 +163,6 @@ inoremap [ []<Esc>i
 " Auto closes marks
 inoremap " ""<Esc>i
 inoremap ` ``<Esc>i
-
-" Auto starts docs block using snippets
-inoremap /** <Esc>:-1read $HOME/.vim/snippets/.skeleton-docs<CR>jA
-nnoremap ,doc :-1read $HOME/.vim/snippets/.skeleton-docs<CR>jA
 
 " Searchs for selection
 vnoremap <C-f> y/<C-R>=escape(@",'/\')<CR><CR>
@@ -275,10 +268,6 @@ nmap <silent> gr <Plug>(coc-references)
 
 " Remap for rename current word
 nmap <F2> <Plug>(coc-rename)
-
-" Search for word in all cwd
-inoremap <C-F> <Esc>:CocSearch<Space>
-nnoremap <C-F> :CocSearch<Space>
 
 " Use K to show documentation in preview window.
 function! s:show_documentation()
