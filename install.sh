@@ -43,6 +43,7 @@ echo "${yellow}Installing Vim extras${reset}"
 
 echo "${yellow}Installing Deno${reset}"
 
+    sudo apt-get install zip -y
     curl -fsSL https://deno.land/x/install/install.sh | sh
     sudo mv $HOME/.deno/bin/deno /usr/bin/
 
