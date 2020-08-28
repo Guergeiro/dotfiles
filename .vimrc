@@ -1,21 +1,21 @@
 " Install VimPlug automatically
 if empty(glob('~/.vim/autoload/plug.vim'))
     silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+                \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 " Let's load plugins
 call plug#begin('~/.vim/plugged')
-    Plug 'neoclide/coc.nvim', {'branch': 'release'}
-    Plug 'tpope/vim-fugitive'
-    Plug 'preservim/nerdtree'
-    Plug 'Xuyuanp/nerdtree-git-plugin'
-    Plug 'ryanoasis/vim-devicons'
-    Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
-    Plug 'vim-airline/vim-airline'
-    Plug 'gruvbox-community/gruvbox'
-    Plug 'Guergeiro/clean-path.vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'tpope/vim-fugitive'
+Plug 'preservim/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'ryanoasis/vim-devicons'
+Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+Plug 'vim-airline/vim-airline'
+Plug 'gruvbox-community/gruvbox'
+Plug 'Guergeiro/clean-path.vim'
 call plug#end()
 
 if !isdirectory($HOME . "/.config/coc/extensions")
@@ -47,6 +47,9 @@ endif
 
 " Sets backspace to work in case it doesn't
 set backspace=indent,eol,start
+
+" Maps Leader key
+let g:mapleader = "\\"
 
 " Enable syntax highlighting and plugins
 syntax on
@@ -119,7 +122,7 @@ endif
 
 " Instant grep + quickfix https://gist.github.com/romainl/56f0c28ef953ffc157f36cc495947ab3
 function! Grep(...)
-	return system(join([&grepprg] + [expandcmd(join(a:000, ' '))], ' '))
+    return system(join([&grepprg] + [expandcmd(join(a:000, ' '))], ' '))
 endfunction
 
 command! -nargs=+ -complete=file_in_path -bar Grep  cgetexpr Grep(<f-args>)
@@ -129,25 +132,54 @@ cnoreabbrev <expr> grep  (getcmdtype() ==# ':' && getcmdline() ==# 'grep')  ? 'G
 cnoreabbrev <expr> lgrep (getcmdtype() ==# ':' && getcmdline() ==# 'lgrep') ? 'LGrep' : 'lgrep'
 
 " Super cheap git blame https://gist.github.com/romainl/5b827f4aafa7ee29bdc70282ecc31640
+" GitBlame Range
+" :7,13GB
+" :,+5GB
+" :?foo?,$GB
+" :'<,'>GB
+" GitBlame Buffer
+" :%GB
+" GitBlame CurrentLine
+" :GB
 command! -range GB echo join(systemlist("git -C " . shellescape(expand('%:p:h')) . " blame -L <line1>,<line2> " . expand('%:t')), "\n")
+inoremap <Leader>gb <Esc>:GB<Left><Left>
+nnoremap <Leader>gb :GB<Left><Left>
+
+" Super cheap Snippet reader based on filetype
+function! ReadSnippet(type) abort
+    let l:file = $HOME . "/.vim/snippets/" . &filetype . "/" . a:type
+    if empty(glob(l:file))
+        return
+    endif
+
+    return execute("-1read " . l:file)
+endfunction
+
+" Snippets Keybinds
+inoremap <silent> fn<Tab> <Esc>:call ReadSnippet("function")<CR>f(i
+inoremap <silent> if<Tab> <Esc>:call ReadSnippet("if")<CR>f(a
+
+" Find next occurence of <++>, remove it and edit in it's place
+inoremap <silent> <Leader><Leader> <Esc>/<++><CR>4xi
+nnoremap <silent> <Leader><Leader> /<++><CR>4xi
 
 " Fuzzy Finder in CTRL+p
 inoremap <C-p> <Esc>:find<Space>
 nnoremap <C-p> :find<Space>
 
 " Open a new 'tab' (buffer) with CTRL+t
-inoremap <C-t> <Esc>:enew<CR>
-nnoremap <C-t> :enew<CR>
+inoremap <silent> <C-t> <Esc>:enew<CR>
+nnoremap <silent> <C-t> :enew<CR>
 
 " Close current 'tab' (buffer) with CTRL+w
-inoremap <C-w> <Esc>:bp<Bar>bd #<CR>
-nnoremap <C-w> :bp<Bar>bd #<CR>
+inoremap <silent> <C-w> <Esc>:bp<Bar>bd #<CR>
+nnoremap <silent> <C-w> :bp<Bar>bd #<CR>
 
 " Move between 'tabs' using CTRL+h and CTRL+l keys
-inoremap <C-h> <Esc>:bprev<CR>
-nnoremap <C-h> :bprev<CR>
-inoremap <C-l> <Esc>:bnext<CR>
-nnoremap <C-l> :bnext<CR>
+inoremap <silent> <C-h> <Esc>:bprev<CR>
+nnoremap <silent> <C-h> :bprev<CR>
+inoremap <silent> <C-l> <Esc>:bnext<CR>
+nnoremap <silent> <C-l> :bnext<CR>
 
 " Scrolls up/down but keeps cursor position
 inoremap <C-j> <Esc><C-D>
@@ -203,8 +235,8 @@ let g:prettier#autoformat_require_pragma = 0
 
 " NERDTree Configs Start
 " Command to open NERDTree and Refresh it
-inoremap <C-b> <Esc>:NERDTreeToggle<bar>:NERDTreeRefreshRoot<CR>
-nnoremap <C-b> :NERDTreeToggle<bar>:NERDTreeRefreshRoot<CR>
+inoremap <silent> <C-b> <Esc>:NERDTreeToggle<bar>:NERDTreeRefreshRoot<CR>
+nnoremap <silent> <C-b> :NERDTreeToggle<bar>:NERDTreeRefreshRoot<CR>
 
 " Show git status
 let g:NERDTreeGitStatusWithFlags = 1
@@ -220,19 +252,6 @@ let g:NERDTreeAutoDeleteBuffer=1
 
 " Close on file open
 let g:NERDTreeQuitOnOpen=1
-
-" Check if NERDTree is open or active
-function! IsNERDTreeOpen()
-    return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
-endfunction
-
-" Call NERDTreeFind iff NERDTree is active, current window contains a modifiable  file, and we're not in vimdiff
-function! SyncTree()
-    if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
-        NERDTreeFind
-        wincmd p
-    endif
-endfunction
 " NERDTree Configs End
 
 " CoC Configs Start
@@ -286,9 +305,9 @@ function! s:check_back_space() abort
     return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
 inoremap <silent><expr> <Tab>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<Tab>" :
-      \ coc#refresh()
+            \ pumvisible() ? "\<C-n>" :
+            \ <SID>check_back_space() ? "\<Tab>" :
+            \ coc#refresh()
 
 " Use <Tab> and <S-Tab> to navigate the completion list
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
@@ -311,28 +330,25 @@ augroup General
     autocmd!
     " Copy to Windows Clipboard
     if system("uname -r") =~ "microsoft"
-            autocmd TextYankPost * :call system('clip.exe ',@")
+        autocmd TextYankPost * :call system('clip.exe ',@")
     endif
 
     " Prevent from opening a new buffer if it already exists
     autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
-                          \ exe "normal g'\"" | endif
+                \ exe "normal g'\"" | endif
 
     " Close the preview window when completion is done.
     autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
 augroup END
 augroup NERDTree
     autocmd!
-    " Highlight currently open buffer in NERDTree
-    autocmd BufRead * call SyncTree()
-
     " Refresh NERDTree on file save
     autocmd BufWritePre * normal :NERDTreeRefreshRoot<CR>
 augroup END
 augroup Format
     autocmd!
     " Remove whitespaces on save
-    autocmd BufWritePre * :call <SID>TrimWhitespace()
+    autocmd BufWritePre * call <SID>TrimWhitespace()
 
     " Format on save
     autocmd BufWritePre * normal ,fmt
@@ -341,7 +357,7 @@ augroup Format
     autocmd BufWritePre * normal ,or
 augroup END
 augroup GrepQuickfix
-	autocmd!
-	autocmd QuickFixCmdPost cgetexpr cwindow
-	autocmd QuickFixCmdPost lgetexpr lwindow
+    autocmd!
+    autocmd QuickFixCmdPost cgetexpr cwindow
+    autocmd QuickFixCmdPost lgetexpr lwindow
 augroup END

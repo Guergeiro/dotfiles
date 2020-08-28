@@ -32,7 +32,7 @@ echo "${yellow}Building Vim from source${reset}"
 
     # Checkout latest tag
     git checkout $latestTag
-    
+
     ./configure
     sudo make install
     cd ../../
@@ -41,9 +41,12 @@ echo "${yellow}Installing Vim extras${reset}"
 
     sudo apt-get install vim-gtk -y
 
-echo "${yellow}Installing Deno${reset}"
+echo "${yellow}Installing Zip${reset}"
 
     sudo apt-get install zip -y
+
+echo "${yellow}Installing Deno${reset}"
+
     curl -fsSL https://deno.land/x/install/install.sh | sh
     sudo mv $HOME/.deno/bin/deno /usr/bin/
 
@@ -86,6 +89,7 @@ echo "${yellow}Copying Vim/Bash Configs${reset}"
     cp .bashrc $HOME/
     cp .bash_aliases $HOME/
     cp .vimrc $HOME/
+    cp -r .vim/ $HOME/
     cd ..
 
 if [ "$1" = "-with-fonts" ]; then
