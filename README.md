@@ -1,4 +1,4 @@
-# linux-how-to
+# dotfiles
 
 ## Table of Contents
 
@@ -30,7 +30,7 @@ The purpose of this reposity is when I start a freshly Linux image, a bit more t
 3. Run install script (Will take a while)
 
     ```
-    $ curl -sL https://raw.githubusercontent.com/Guergeiro/linux-how-to/master/install.sh | sh [-s -- -with-fonts]
+    $ curl -sL https://raw.githubusercontent.com/Guergeiro/dotfiles/master/install.sh | sh [-s -- -with-fonts]
     ```
 
 4. Create ssh key for your git provider (GitHub in this example)

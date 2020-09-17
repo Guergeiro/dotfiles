@@ -1,2 +1,2 @@
-function! (<++>) abort
+function! <++>(<++>) abort
 endfunction

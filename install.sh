@@ -16,14 +16,14 @@ echo "${yellow}Installing Git${reset}"
 echo "${yellow}Cloning Git Repo${reset}"
 
     if [ "$1" = "-with-fonts" ]; then
-        git clone --recurse-submodules -j8 https://github.com/Guergeiro/linux-how-to.git
+        git clone --recurse-submodules -j8 https://github.com/Guergeiro/dotfiles.git
     else
-        git clone --recurse-submodules=vim -j8 https://github.com/Guergeiro/linux-how-to.git
+        git clone --recurse-submodules=vim -j8 https://github.com/Guergeiro/dotfiles.git
     fi
 
 echo "${yellow}Building Vim from source${reset}"
 
-    cd linux-how-to/vim/
+    cd dotfiles/vim/
     # Get new tags from remote
     git fetch --tags
 
@@ -85,7 +85,7 @@ echo "${yellow}Installing Prettier${reset}"
 
 echo "${yellow}Copying Vim/Bash Configs${reset}"
 
-    cd linux-how-to/
+    cd dotfiles/
     cp .bashrc $HOME/
     cp .bash_aliases $HOME/
     cp .vimrc $HOME/
@@ -95,11 +95,11 @@ echo "${yellow}Copying Vim/Bash Configs${reset}"
 if [ "$1" = "-with-fonts" ]; then
     echo "${yellow}Installing NerdFonts${reset}"
 
-        cd linux-how-to/
+        cd dotfiles/
         nerd-fonts/install.sh
         cd ..
 fi
 
 echo "${yellow}Removing extra files${reset}"
 
-    sudo /usr/bin/rm -rf linux-how-to/
+    sudo /usr/bin/rm -rf dotfiles/
