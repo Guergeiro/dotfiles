@@ -6,17 +6,18 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 " Let's load plugins
 call plug#begin('~/.vim/plugged')
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'preservim/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'ryanoasis/vim-devicons'
-Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+Plug 'fcpg/vim-altscreen'
+Plug 'gruvbox-community/gruvbox'
+Plug 'Guergeiro/clean-path.vim'
+Plug 'honza/vim-snippets'
 Plug 'itchyny/vim-gitbranch'
 Plug 'itchyny/lightline.vim'
-Plug 'Guergeiro/clean-path.vim'
-Plug 'fcpg/vim-altscreen'
 Plug 'mbbill/undotree'
-Plug 'gruvbox-community/gruvbox'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'preservim/nerdtree'
+Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+Plug 'ryanoasis/vim-devicons'
+Plug 'Xuyuanp/nerdtree-git-plugin'
 call plug#end()
 if !isdirectory($HOME . "/.config/coc/extensions")
     call mkdir($HOME . "/.config/coc/extensions", "p")
@@ -29,6 +30,7 @@ if !isdirectory($HOME . "/.config/coc/extensions")
                 \ coc-phpls
                 \ coc-python
                 \ coc-sh
+                \ coc-snippets
                 \ coc-tsserver
                 \ coc-vimlsp
                 \ coc-yaml
@@ -272,20 +274,22 @@ nmap <silent> gi <plug>(coc-implementation)
 nmap <silent> gr <plug>(coc-references)
 " Remap for rename current word
 nmap <f2> <plug>(coc-rename)
-" Auto Complete VSCode like use <tab> for trigger completion and navigate to the next complete item
+" Make <tab> used for trigger completion, completion confirm, snippet expand and jump like VSCode
 function! s:check_back_space() abort
     let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~ '\s'
+    return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
-inoremap <silent><expr> <tab>
-            \ pumvisible() ? "\<c-n>" :
-            \ <sid>check_back_space() ? "\<tab>" :
+inoremap <silent><expr> <TAB>
+            \ pumvisible() ? coc#_select_confirm() :
+            \ coc#expandableOrJumpable() ? "\<c-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<cr>" :
+            \ <SID>check_back_space() ? "\<tab>" :
             \ coc#refresh()
+let g:coc_snippet_next = "<leader><leader>"
 " Use <tab> and <S-Tab> to navigate the completion list
 inoremap <expr> <tab> pumvisible() ? "\<c-n>" : "\<tab>"
 inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
 " Use <cr> to confirm completion
-inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<C-g>u\<cr>"
+inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
 " Use <c-space>for trigger completion
 inoremap <silent><expr> <c-space> coc#refresh()
 "" Airline Configs Start
