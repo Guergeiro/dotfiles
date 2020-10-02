@@ -7,13 +7,14 @@ endif
 " Let's load plugins
 call plug#begin('~/.vim/plugged')
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'tpope/vim-fugitive'
 Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'ryanoasis/vim-devicons'
 Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
-Plug 'vim-airline/vim-airline'
+Plug 'itchyny/vim-gitbranch'
+Plug 'itchyny/lightline.vim'
 Plug 'Guergeiro/clean-path.vim'
+Plug 'fcpg/vim-altscreen'
 Plug 'mbbill/undotree'
 Plug 'gruvbox-community/gruvbox'
 call plug#end()
@@ -72,12 +73,17 @@ endif
 " Sets backspace to work in case it doesn't
 set backspace=indent,eol,start
 let g:mapleader = "\\"
+let loaded_netrwPlugin=1
 " Enable syntax highlighting
 syntax on
 filetype plugin on
-set cursorline
+if (has("syntax"))
+    set cursorline
+endif
 " Make default clipboard the OS X clipboard (and unnamedplus for Linux)
-set clipboard=unnamed,unnamedplus
+if (has("clipboard"))
+    set clipboard=unnamed,unnamedplus
+endif
 " Formats stuff as I want, TAB=4spaces, but intelligent
 set autoindent
 set tabstop=4
@@ -85,10 +91,9 @@ set softtabstop=4
 set expandtab
 set shiftwidth=4
 set smarttab
-" Sets autoindent
 set autoindent
-" Start scrolling 3 lines before the end
-set scrolloff=3
+" Start scrolling 5 lines before the end
+set scrolloff=5
 " Folding
 if (has("folding"))
     set foldmethod=indent
@@ -132,6 +137,11 @@ endif
 if (has("mouse"))
     set mouse=a
 endif
+" Enable statusline
+if (has("statusline"))
+    set laststatus=2
+endif
+
 " Highlight matching pairs as you type: (), [], {}
 set showmatch
 " Search-as-you-type
@@ -143,66 +153,56 @@ set smartcase
 " Use highlighting for search matches (:nohlsearch to clear [or :noh])
 set hlsearch
 " RipGrep to the rescue!
-if executable('rg')
+if (executable("rg"))
     set grepprg=rg\ --smart-case\ --vimgrep\ --hidden
     set grepformat=%f:%l:%c:%m
 endif
 " Instant grep + quickfix https://gist.github.com/romainl/56f0c28ef953ffc157f36cc495947ab3
-function! <SID>Grep(...)
+function! <sid>Grep(...)
     return system(join([&grepprg] + [expandcmd(join(a:000, ' '))], ' '))
 endfunction
-command! -nargs=+ -complete=file_in_path -bar Grep  cgetexpr <SID>Grep(<f-args>)
-command! -nargs=+ -complete=file_in_path -bar LGrep lgetexpr <SID>Grep(<f-args>)
+command! -nargs=+ -complete=file_in_path -bar Grep  cgetexpr <sid>Grep(<f-args>)
+command! -nargs=+ -complete=file_in_path -bar LGrep lgetexpr <sid>Grep(<f-args>)
 cnoreabbrev <expr> grep  (getcmdtype() ==# ':' && getcmdline() ==# 'grep')  ? 'Grep'  : 'grep'
 cnoreabbrev <expr> lgrep (getcmdtype() ==# ':' && getcmdline() ==# 'lgrep') ? 'LGrep' : 'lgrep'
 " Super cheap git blame https://gist.github.com/romainl/5b827f4aafa7ee29bdc70282ecc31640
 command! -range GB echo join(systemlist("git -C " . shellescape(expand('%:p:h')) . " blame -L <line1>,<line2> " . expand('%:t')), "\n")
-inoremap <Leader>gb <Esc>:GB<Left><Left>
-nnoremap <Leader>gb :GB<Left><Left>
-" Super cheap Snippet reader based on filetype
-function! ReadSnippet(type) abort
-    let l:file = $HOME . "/.vim/snippets/" . &filetype . "/" . a:type
-    if empty(glob(l:file))
-        return
-    endif
-    return execute("-1read " . l:file)
+inoremap <leader>gb <esc>:GB<left><left>
+nnoremap <leader>gb :GB<left><left>
+" Closes all buffers but the current one ands asks for save/discard for the closed ones
+function! <sid>BufferWipeout() abort
+    return execute("confirm %bd|e#|bd#")
 endfunction
-inoremap <silent> fn<Tab> <Esc>:call ReadSnippet("function")<CR>
-inoremap <silent> if<Tab> <Esc>:call ReadSnippet("if")<CR>
-" Buffer deleter
-function! <SID>BufferWipeout() abort
-    execute "confirm %bd|e#|bd#"
-endfunction
-command! Bwipeout call <SID>BufferWipeout()
-nmap <c-w>o :call <SID>BufferWipeout()<cr>
+command! Bwipeout call <sid>BufferWipeout()<cr>
+nmap <silent><c-w>o :call <sid>BufferWipeout()<cr>
 " Find next occurence of <++>, remove it and edit in it's place
-inoremap <silent> <Leader><Leader> <Esc>/<++><CR>4xi
-nnoremap <silent> <Leader><Leader> /<++><CR>4xi
+inoremap <silent> <leader><leader> <esc>/<++><cr>4xi
+nnoremap <silent> <leader><leader> /<++><cr>4xi
 " Y yanks to the end of the line
 nnoremap Y y$
 " Fuzzy Finder in CTRL+p
-inoremap <C-p> <Esc>:sfind<Space>
-nnoremap <C-p> :sfind<Space>
+inoremap <c-p> <esc>:sfind<space>
+nnoremap <c-p> :sfind<space>
 " Scrolls up/down but keeps cursor position
 nnoremap J <C-D>
 nnoremap K <C-U>
 " Auto closes brackets
-inoremap { {}<Esc>i
-inoremap ( ()<Esc>i
-inoremap [ []<Esc>i
+inoremap { {}<esc>i
+inoremap ( ()<esc>i
+inoremap [ []<esc>i
 " Auto closes marks
-inoremap " ""<Esc>i
-inoremap ` ``<Esc>i
+inoremap " ""<esc>i
+inoremap ` ``<esc>i
 " Finds and Replaces selection
-vnoremap <C-r> y:%s/<C-R>=escape(@",'/\')<CR>//gc<Left><Left><Left>
+vnoremap <c-r> y:%s/<c-r>=escape(@",'/\')<cr>//gc<left><left><left>
 " Remove extra white spaces
-function! <SID>TrimWhitespace() abort
+function! <sid>TrimWhitespace() abort
     let l = line(".")
     let c = col(".")
     keepp %s/\s\+$//e
     call cursor(l, c)
 endfunction
-function! <SID>Formatter() abort
+function! <sid>Formatter() abort
     let l:formatter = "Prettier"
     if (v:version >= 800)
         let l:formatter.="Async"
@@ -215,20 +215,26 @@ colorscheme gruvbox
 set background=dark
 "" Clean-path Config Starts
 let g:clean_path_wildignore = 1
-"" VIM Fugitive Config Starts
-" Add branch to status line
-if (has("statusline"))
-    set statusline+=fugitive#statusline()
-endif
+"" Lightline Config Starts
+let g:lightline = {
+            \ 'colorscheme': 'seoul256',
+            \ 'active': {
+            \   'left': [ [ 'mode', 'paste' ],
+            \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+            \ },
+            \ 'component_function': {
+            \   'gitbranch': 'gitbranch#name'
+            \ },
+            \ }
 "" Prettier Config Starts
 " Auto format code
-nnoremap ,fmt :call <SID>Formatter()<CR>
+nnoremap ,fmt :call <sid>Formatter()<cr>
 " Auto format without prettier pragma
 let g:prettier#autoformat_require_pragma = 0
 "" NERDTree Configs Start
 " Command to open NERDTree and Refresh it
-inoremap <silent> <C-b> <Esc>:NERDTreeToggle<bar>:NERDTreeRefreshRoot<CR>
-nnoremap <silent> <C-b> :NERDTreeToggle<bar>:NERDTreeRefreshRoot<CR>
+inoremap <silent> <c-b> <esc>:NERDTreeToggle<bar>:NERDTreeRefreshRoot<cr>
+nnoremap <silent> <c-b> :NERDTreeToggle<bar>:NERDTreeRefreshRoot<cr>
 " Show git status
 let g:NERDTreeGitStatusWithFlags = 1
 " Show hidden files by default
@@ -258,62 +264,71 @@ else
     set signcolumn=yes
 endif
 " Auto organizes import
-nnoremap ,or :CocCommand editor.action.organizeImport<CR>
+nnoremap ,or :CocCommand editor.action.organizeImport<cr>
 " GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+nmap <silent> gd <plug>(coc-definition)
+nmap <silent> gy <plug>(coc-type-definition)
+nmap <silent> gi <plug>(coc-implementation)
+nmap <silent> gr <plug>(coc-references)
 " Remap for rename current word
-nmap <F2> <Plug>(coc-rename)
+nmap <f2> <plug>(coc-rename)
 " Auto Complete VSCode like use <tab> for trigger completion and navigate to the next complete item
 function! s:check_back_space() abort
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
-inoremap <silent><expr> <Tab>
-            \ pumvisible() ? "\<C-n>" :
-            \ <SID>check_back_space() ? "\<Tab>" :
+inoremap <silent><expr> <tab>
+            \ pumvisible() ? "\<c-n>" :
+            \ <sid>check_back_space() ? "\<tab>" :
             \ coc#refresh()
-" Use <Tab> and <S-Tab> to navigate the completion list
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" Use <tab> and <S-Tab> to navigate the completion list
+inoremap <expr> <tab> pumvisible() ? "\<c-n>" : "\<tab>"
+inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
 " Use <cr> to confirm completion
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<C-g>u\<cr>"
 " Use <c-space>for trigger completion
 inoremap <silent><expr> <c-space> coc#refresh()
 "" Airline Configs Start
 " Enable the list of buffers
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#coc#enabled = 1
 "" Undotree Configs Start
-inoremap <silent> <leader>u <Esc>:UndotreeToggle<CR>
-nnoremap <silent> <leader>u :UndotreeToggle<CR>
+inoremap <silent> <leader>u <esc>:UndotreeToggle<cr>
+nnoremap <silent> <leader>u :UndotreeToggle<cr>
 " AutoCommands
 augroup General
     autocmd!
     " Copy to Windows Clipboard
     if system("uname -r") =~ "microsoft"
-        autocmd TextYankPost * :call system('clip.exe ',@")
+        if (executable("clip.exe"))
+            autocmd TextYankPost * if v:event.operator ==# "y" | call system("clip.exe", @0) | endif
+        endif
     endif
-    " Prevent from opening a new buffer if it already exists
-    autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
-                \ exe "normal g'\"" | endif
+    " Better focus on windows
+    if (has("syntax"))
+        autocmd BufEnter,FocusGained,VimEnter,WinEnter * setlocal cursorline
+        autocmd FocusLost,WinLeave * setlocal nocursorline
+    endif
+    if (exists("&relativenumber"))
+        autocmd BufEnter,FocusGained,VimEnter,WinEnter * setlocal relativenumber
+        autocmd FocusLost,WinLeave * setlocal norelativenumber
+    endif
     " Close the coc preview window when completion is done.
     autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
 augroup END
 augroup NERDTree
     autocmd!
     " Refresh NERDTree on file save
-    autocmd BufWritePre * normal :NERDTreeRefreshRoot<CR>
+    autocmd BufWritePre * normal :NERDTreeRefreshRoot<cr>
     " If more than one window and previous buffer was NERDTree, go back to it.
     autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" && winnr('$') > 1 | b# | endif
 augroup END
 augroup Format
     autocmd!
     " Remove whitespaces on save
-    autocmd BufWritePre * :call <SID>TrimWhitespace()
+    autocmd BufWritePre * :call <sid>TrimWhitespace()
     " Format on save
-    autocmd BufWritePre * :call <SID>Formatter()
+    autocmd BufWritePre * :call <sid>Formatter()
     " Auto organizes import on save
     autocmd BufWritePre * :CocCommand editor.action.organizeImport
 augroup END
