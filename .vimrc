@@ -14,20 +14,17 @@ Plug 'itchyny/vim-gitbranch'
 Plug 'itchyny/lightline.vim'
 Plug 'mbbill/undotree'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'preservim/nerdtree'
-Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
-Plug 'ryanoasis/vim-devicons'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-call plug#end()
 if !isdirectory($HOME . "/.config/coc/extensions")
     call mkdir($HOME . "/.config/coc/extensions", "p")
     autocmd VimEnter * CocInstall
                 \ coc-css
+                \ coc-explorer
                 \ coc-html
                 \ coc-java
                 \ coc-json
                 \ coc-markdownlint
                 \ coc-phpls
+                \ coc-prettier
                 \ coc-python
                 \ coc-sh
                 \ coc-snippets
@@ -36,6 +33,7 @@ if !isdirectory($HOME . "/.config/coc/extensions")
                 \ coc-yaml
                 \ --sync | source $MYVIMRC
 endif
+call plug#end()
 " Enter current millenium
 set nocompatible
 set encoding=utf-8
@@ -204,13 +202,6 @@ function! <sid>TrimWhitespace() abort
     keepp %s/\s\+$//e
     call cursor(l, c)
 endfunction
-function! <sid>Formatter() abort
-    let l:formatter = "Prettier"
-    if (v:version >= 800)
-        let l:formatter.="Async"
-    endif
-    let l:message = execute(l:formatter)
-endfunction
 "" Gruvbox Config Starts
 let g:gruvbox_contrast_dark = "hard"
 colorscheme gruvbox
@@ -228,27 +219,6 @@ let g:lightline = {
             \   'gitbranch': 'gitbranch#name'
             \ },
             \ }
-"" Prettier Config Starts
-" Auto format code
-nnoremap ,fmt :call <sid>Formatter()<cr>
-" Auto format without prettier pragma
-let g:prettier#autoformat_require_pragma = 0
-"" NERDTree Configs Start
-" Command to open NERDTree and Refresh it
-inoremap <silent> <c-b> <esc>:NERDTreeToggle<bar>:NERDTreeRefreshRoot<cr>
-nnoremap <silent> <c-b> :NERDTreeToggle<bar>:NERDTreeRefreshRoot<cr>
-" Show git status
-let g:NERDTreeGitStatusWithFlags = 1
-" Show hidden files by default
-let g:NERDTreeShowHidden=1
-" Ignore based on wildignore (still shows the folders but not it's content)
-let g:NERDTreeRespectWildIgnore=1
-" Auto deletes opened buffer when deleting a file
-let g:NERDTreeAutoDeleteBuffer=1
-" Close on file open
-let g:NERDTreeQuitOnOpen=1
-" avoid crashes when calling vim-plug functions while the cursor is on the NERDTree window
-let g:plug_window = 'noautocmd vertical topleft new'
 "" CoC Configs Start
 " TextEdit might fail if hidden is not set.
 set hidden
@@ -265,8 +235,6 @@ if has("patch-8.1.1564")
 else
     set signcolumn=yes
 endif
-" Auto organizes import
-nnoremap ,or :CocCommand editor.action.organizeImport<cr>
 " GoTo code navigation.
 nmap <silent> gd <plug>(coc-definition)
 nmap <silent> gy <plug>(coc-type-definition)
@@ -292,10 +260,14 @@ inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
 inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
 " Use <c-space>for trigger completion
 inoremap <silent><expr> <c-space> coc#refresh()
-"" Airline Configs Start
-" Enable the list of buffers
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#coc#enabled = 1
+" coc-prettier
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+nnoremap ,fmt :call <sid>TrimWhitespace()<bar>:Prettier<cr>
+" Auto organizes import
+nnoremap ,or :CocCommand editor.action.organizeImport<cr>
+" coc-explorer
+inoremap <silent> <c-b> <esc>:CocCommand explorer<cr>
+nnoremap <silent> <c-b> :CocCommand explorer<cr>
 "" Undotree Configs Start
 inoremap <silent> <leader>u <esc>:UndotreeToggle<cr>
 nnoremap <silent> <leader>u :UndotreeToggle<cr>
@@ -317,24 +289,13 @@ augroup General
         autocmd BufEnter,FocusGained,VimEnter,WinEnter * setlocal relativenumber
         autocmd FocusLost,WinLeave * setlocal norelativenumber
     endif
+augroup END
+augroup CoC
+    autocmd!
+    " Close coc-explorer when it's last buffer
+    autocmd BufEnter * if (winnr("$") == 1 && &filetype == 'coc-explorer') | q | endif
     " Close the coc preview window when completion is done.
     autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
-augroup END
-augroup NERDTree
-    autocmd!
-    " Refresh NERDTree on file save
-    autocmd BufWritePre * normal :NERDTreeRefreshRoot<cr>
-    " If more than one window and previous buffer was NERDTree, go back to it.
-    autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" && winnr('$') > 1 | b# | endif
-augroup END
-augroup Format
-    autocmd!
-    " Remove whitespaces on save
-    autocmd BufWritePre * :call <sid>TrimWhitespace()
-    " Format on save
-    autocmd BufWritePre * :call <sid>Formatter()
-    " Auto organizes import on save
-    autocmd BufWritePre * :CocCommand editor.action.organizeImport
 augroup END
 augroup GrepQuickfix
     autocmd!
