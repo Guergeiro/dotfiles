@@ -1,11 +1,11 @@
 " Install VimPlug automatically
-if empty(glob('~/.vim/autoload/plug.vim'))
+if empty(glob("~/.vim/autoload/plug.vim"))
     silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
                 \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 " Let's load plugins
-call plug#begin('~/.vim/plugged')
+call plug#begin("~/.vim/plugged")
 Plug 'fcpg/vim-altscreen'
 Plug 'gruvbox-community/gruvbox'
 Plug 'Guergeiro/clean-path.vim'
@@ -14,6 +14,8 @@ Plug 'itchyny/vim-gitbranch'
 Plug 'itchyny/lightline.vim'
 Plug 'mbbill/undotree'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-surround'
 if !isdirectory($HOME . "/.config/coc/extensions")
     call mkdir($HOME . "/.config/coc/extensions", "p")
     autocmd VimEnter * CocInstall
@@ -73,7 +75,9 @@ endif
 " Sets backspace to work in case it doesn't
 set backspace=indent,eol,start
 let g:mapleader = "\\"
-let loaded_netrwPlugin=1
+let g:loaded_netrwPlugin=1
+" Removes /usr/include from path
+set path-=/usr/include
 " Enable syntax highlighting
 syntax on
 filetype plugin on
@@ -115,6 +119,7 @@ endif
 " Pretty terminal
 if (has("termguicolors"))
     set termguicolors
+    set t_Co=256
 endif
 " Allow cursor to move where there is no text in visual block mode
 if (has("virtualedit"))
@@ -175,9 +180,6 @@ function! <sid>BufferWipeout() abort
 endfunction
 command! Bwipeout call <sid>BufferWipeout()<cr>
 nmap <silent><c-w>o :call <sid>BufferWipeout()<cr>
-" Find next occurence of <++>, remove it and edit in it's place
-inoremap <silent> <leader><leader> <esc>/<++><cr>4xi
-nnoremap <silent> <leader><leader> /<++><cr>4xi
 " Y yanks to the end of the line
 nnoremap Y y$
 " Fuzzy Finder in CTRL+p
@@ -191,6 +193,7 @@ inoremap { {}<esc>i
 inoremap ( ()<esc>i
 inoremap [ []<esc>i
 " Auto closes marks
+inoremap ' ''<esc>i
 inoremap " ""<esc>i
 inoremap ` ``<esc>i
 " Finds and Replaces selection
@@ -243,14 +246,14 @@ nmap <silent> gr <plug>(coc-references)
 " Remap for rename current word
 nmap <f2> <plug>(coc-rename)
 " Make <tab> used for trigger completion, completion confirm, snippet expand and jump like VSCode
-function! s:check_back_space() abort
+function! <sid>check_back_space() abort
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 inoremap <silent><expr> <TAB>
             \ pumvisible() ? coc#_select_confirm() :
             \ coc#expandableOrJumpable() ? "\<c-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<cr>" :
-            \ <SID>check_back_space() ? "\<tab>" :
+            \ <sid>check_back_space() ? "\<tab>" :
             \ coc#refresh()
 let g:coc_snippet_next = "<leader><leader>"
 " Use <tab> and <S-Tab> to navigate the completion list
@@ -268,6 +271,16 @@ nnoremap ,or :CocCommand editor.action.organizeImport<cr>
 " coc-explorer
 inoremap <silent> <c-b> <esc>:CocCommand explorer<cr>
 nnoremap <silent> <c-b> :CocCommand explorer<cr>
+" Show documentation
+function! <sid>show_documentation()
+    if (index(['vim','help'], &filetype) >= 0)
+        execute 'h '.expand('<cword>')
+    else
+        call CocActionAsync('doHover')
+    endif
+endfunction
+inoremap <silent> <leader>k <esc>:call <sid>show_documentation()<cr>
+nnoremap <silent> <leader>k :call <sid>show_documentation()<cr>
 "" Undotree Configs Start
 inoremap <silent> <leader>u <esc>:UndotreeToggle<cr>
 nnoremap <silent> <leader>u :UndotreeToggle<cr>
@@ -282,8 +295,8 @@ augroup General
     endif
     " Better focus on windows
     if (has("syntax"))
-        autocmd BufEnter,FocusGained,VimEnter,WinEnter * setlocal cursorline
-        autocmd FocusLost,WinLeave * setlocal nocursorline
+        autocmd BufEnter,FocusGained,VimEnter,WinEnter * setlocal cursorline syntax=on
+        autocmd FocusLost,WinLeave * setlocal nocursorline syntax=off
     endif
     if (exists("&relativenumber"))
         autocmd BufEnter,FocusGained,VimEnter,WinEnter * setlocal relativenumber
@@ -293,9 +306,11 @@ augroup END
 augroup CoC
     autocmd!
     " Close coc-explorer when it's last buffer
-    autocmd BufEnter * if (winnr("$") == 1 && &filetype == 'coc-explorer') | q | endif
+    autocmd BufEnter * if (winnr("$") == 1 && &filetype == "coc-explorer") | q | endif
     " Close the coc preview window when completion is done.
     autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
+    " Highlight the symbol and its references when holding the cursor.
+    autocmd CursorHold * silent call CocActionAsync("highlight")
 augroup END
 augroup GrepQuickfix
     autocmd!
