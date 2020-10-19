@@ -16,25 +16,6 @@ Plug 'mbbill/undotree'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-surround'
-if !isdirectory($HOME . "/.config/coc/extensions")
-    call mkdir($HOME . "/.config/coc/extensions", "p")
-    autocmd VimEnter * CocInstall
-                \ coc-css
-                \ coc-explorer
-                \ coc-html
-                \ coc-java
-                \ coc-json
-                \ coc-markdownlint
-                \ coc-phpls
-                \ coc-prettier
-                \ coc-python
-                \ coc-sh
-                \ coc-snippets
-                \ coc-tsserver
-                \ coc-vimlsp
-                \ coc-yaml
-                \ --sync | source $MYVIMRC
-endif
 call plug#end()
 " Enter current millenium
 set nocompatible
