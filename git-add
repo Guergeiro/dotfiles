@@ -1,0 +1,30 @@
+#!/bin/sh
+
+
+for var in "$@"; do
+    if [ "$var" = "-cached" ]; then
+        git add $(git ls-files --cached)
+    fi
+    if [ "$var" = "-deleted" ]; then
+        git add $(git ls-files --deleted)
+    fi
+    if [ "$var" = "-killed" ]; then
+        git add $(git ls-files --killed)
+    fi
+    if [ "$var" = "-modified" ]; then
+        git add $(git ls-files --modified)
+    fi
+    if [ "$var" = "-unmerged" ]; then
+        git add $(git ls-files --unmerged)
+    fi
+    if [ "$var" = "-help" ]; then
+        echo "Automatically stages files based on type."
+        echo "Possible ones are:"
+        echo "\t-cached"
+        echo "\t-deleted"
+        echo "\t-killed"
+        echo "\t-modified"
+        echo "\t-unmerged"
+        echo "\t-help"
+    fi
+done

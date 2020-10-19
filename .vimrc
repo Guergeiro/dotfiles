@@ -306,6 +306,8 @@ augroup CoC
     autocmd BufEnter * if (winnr("$") == 1 && &filetype == "coc-explorer") | q | endif
     " Open coc-explorer when no buffer is active
     autocmd VimEnter * if @% == "" | call execute("CocCommand explorer") | endif
+    " Removes statusline from coc-explorer buffer
+    autocmd User CocExplorerOpenPost setlocal statusline=
     " Close the coc preview window when completion is done.
     autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
     " Highlight the symbol and its references when holding the cursor.

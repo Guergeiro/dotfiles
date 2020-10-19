@@ -88,6 +88,7 @@ echo "${yellow}Copying Vim/Bash Configs${reset}"
     cd dotfiles/
     cp .bashrc $HOME/
     cp .bash_aliases $HOME/
+    cp git-add /usr/bin
     cp .vimrc $HOME/
     cp -r .vim/ $HOME/
     cd ..
