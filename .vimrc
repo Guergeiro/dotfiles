@@ -223,6 +223,22 @@ let g:lightline = {
             \ },
             \ }
 "" CoC Configs Start
+" Extensions list
+let g:coc_global_extensions = [
+                \ "coc-css",
+                \ "coc-explorer",
+                \ "coc-html",
+                \ "coc-java",
+                \ "coc-json",
+                \ "coc-markdownlint",
+                \ "coc-prettier",
+                \ "coc-python",
+                \ "coc-sh",
+                \ "coc-snippets",
+                \ "coc-tsserver",
+                \ "coc-vimlsp",
+                \ "coc-yaml"
+                \ ]
 " TextEdit might fail if hidden is not set.
 set hidden
 " Give more space for displaying messages.
@@ -307,6 +323,8 @@ augroup CoC
     autocmd!
     " Close coc-explorer when it's last buffer
     autocmd BufEnter * if (winnr("$") == 1 && &filetype == "coc-explorer") | q | endif
+    " Open coc-explorer when no buffer is active
+    autocmd VimEnter * if @% == "" | call execute("CocCommand explorer") | endif
     " Close the coc preview window when completion is done.
     autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
     " Highlight the symbol and its references when holding the cursor.
