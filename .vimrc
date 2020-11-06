@@ -9,6 +9,7 @@ call plug#begin("~/.vim/plugged")
 Plug 'fcpg/vim-altscreen'
 Plug 'gruvbox-community/gruvbox'
 Plug 'Guergeiro/clean-path.vim'
+Plug 'habamax/vim-select'
 Plug 'honza/vim-snippets'
 Plug 'itchyny/vim-gitbranch'
 Plug 'itchyny/lightline.vim'
@@ -49,9 +50,10 @@ if (has("persistent_undo"))
         endif
     endif
 endif
-" Changes weird behaviour with VIM starting in REPLACE Mode (only happens on WSL for me)
+" WSL compatibility shit...
 if system("uname -r") =~ "microsoft"
     set ambw=double
+    noremap "+p :execute('norm a'.system('powershell.exe -Command Get-Clipboard'))<CR>
 endif
 " Sets backspace to work in case it doesn't
 set backspace=indent,eol,start
@@ -127,7 +129,6 @@ endif
 if (has("statusline"))
     set laststatus=2
 endif
-
 " Highlight matching pairs as you type: (), [], {}
 set showmatch
 " Search-as-you-type
@@ -145,14 +146,14 @@ if (executable("rg"))
 endif
 " Instant grep + quickfix https://gist.github.com/romainl/56f0c28ef953ffc157f36cc495947ab3
 function! <sid>Grep(...)
-    return system(join([&grepprg] + [expandcmd(join(a:000, ' '))], ' '))
+    return system(join([&grepprg] + [expandcmd(join(a:000, " "))], " "))
 endfunction
 command! -nargs=+ -complete=file_in_path -bar Grep  cgetexpr <sid>Grep(<f-args>)
 command! -nargs=+ -complete=file_in_path -bar LGrep lgetexpr <sid>Grep(<f-args>)
 cnoreabbrev <expr> grep  (getcmdtype() ==# ':' && getcmdline() ==# 'grep')  ? 'Grep'  : 'grep'
 cnoreabbrev <expr> lgrep (getcmdtype() ==# ':' && getcmdline() ==# 'lgrep') ? 'LGrep' : 'lgrep'
 " Super cheap git blame https://gist.github.com/romainl/5b827f4aafa7ee29bdc70282ecc31640
-command! -range GB echo join(systemlist("git -C " . shellescape(expand('%:p:h')) . " blame -L <line1>,<line2> " . expand('%:t')), "\n")
+command! -range GB echo join(systemlist("git -C " . shellescape(expand("%:p:h")) . " blame -L <line1>,<line2> " . expand("%:t")), "\n")
 inoremap <leader>gb <esc>:GB<left><left>
 nnoremap <leader>gb :GB<left><left>
 " Closes all buffers but the current one ands asks for save/discard for the closed ones
@@ -163,9 +164,6 @@ command! Bwipeout call <sid>BufferWipeout()<cr>
 nmap <silent><c-w>o :call <sid>BufferWipeout()<cr>
 " Y yanks to the end of the line
 nnoremap Y y$
-" Fuzzy Finder in CTRL+p
-inoremap <c-p> <esc>:sfind<space>
-nnoremap <c-p> :sfind<space>
 " Scrolls up/down but keeps cursor position
 nnoremap J <C-D>
 nnoremap K <C-U>
@@ -194,32 +192,32 @@ set background=dark
 let g:clean_path_wildignore = 1
 "" Lightline Config Starts
 let g:lightline = {
-            \ 'colorscheme': 'seoul256',
-            \ 'active': {
-            \   'left': [ [ 'mode', 'paste' ],
-            \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+            \ "colorscheme": "seoul256",
+            \ "active": {
+            \   "left": [ [ "mode", "paste" ],
+            \             [ "gitbranch", "readonly", "filename", "modified" ] ]
             \ },
-            \ 'component_function': {
-            \   'gitbranch': 'gitbranch#name'
+            \ "component_function": {
+            \   "gitbranch": "gitbranch#name"
             \ },
             \ }
 "" CoC Configs Start
 " Extensions list
 let g:coc_global_extensions = [
-                \ "coc-css",
-                \ "coc-explorer",
-                \ "coc-html",
-                \ "coc-java",
-                \ "coc-json",
-                \ "coc-markdownlint",
-                \ "coc-prettier",
-                \ "coc-python",
-                \ "coc-sh",
-                \ "coc-snippets",
-                \ "coc-tsserver",
-                \ "coc-vimlsp",
-                \ "coc-yaml"
-                \ ]
+            \ "coc-css",
+            \ "coc-explorer",
+            \ "coc-html",
+            \ "coc-java",
+            \ "coc-json",
+            \ "coc-markdownlint",
+            \ "coc-prettier",
+            \ "coc-python",
+            \ "coc-sh",
+            \ "coc-snippets",
+            \ "coc-tsserver",
+            \ "coc-vimlsp",
+            \ "coc-yaml"
+            \ ]
 " TextEdit might fail if hidden is not set.
 set hidden
 " Give more space for displaying messages.
@@ -244,8 +242,8 @@ nmap <silent> gr <plug>(coc-references)
 nmap <f2> <plug>(coc-rename)
 " Make <tab> used for trigger completion, completion confirm, snippet expand and jump like VSCode
 function! <sid>check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~# '\s'
+    let col = col(".") - 1
+    return !col || getline(".")[col - 1]  =~# "\s"
 endfunction
 inoremap <silent><expr> <TAB>
             \ pumvisible() ? coc#_select_confirm() :
@@ -270,10 +268,10 @@ inoremap <silent> <c-b> <esc>:CocCommand explorer<cr>
 nnoremap <silent> <c-b> :CocCommand explorer<cr>
 " Show documentation
 function! <sid>show_documentation()
-    if (index(['vim','help'], &filetype) >= 0)
-        execute 'h '.expand('<cword>')
+    if (index(["vim","help"], &filetype) >= 0)
+        execute "h ".expand("<cword>")
     else
-        call CocActionAsync('doHover')
+        call CocActionAsync("doHover")
     endif
 endfunction
 inoremap <silent> <leader>k <esc>:call <sid>show_documentation()<cr>
@@ -281,6 +279,16 @@ nnoremap <silent> <leader>k :call <sid>show_documentation()<cr>
 "" Undotree Configs Start
 inoremap <silent> <leader>u <esc>:UndotreeToggle<cr>
 nnoremap <silent> <leader>u :UndotreeToggle<cr>
+"" Vim-select Config Start
+" A bunch of fuzzy
+inoremap <silent><c-p> <esc>:Select projectfile<cr>
+nnoremap <silent><c-p> :Select projectfile<cr>
+inoremap <silent><leader>b <esc>:Select buffer<cr>
+nnoremap <silent><leader>b :Select buffer<cr>
+inoremap <silent><leader>h <esc>:Select help<cr>
+nnoremap <silent><leader>h :Select help<cr>
+inoremap <silent><leader>/ <esc>:Select bufline<cr>
+nnoremap <silent><leader>/ :Select bufline<cr>
 " AutoCommands
 augroup General
     autocmd!

@@ -1,3 +1,4 @@
+#!/bin/bash
 # Just update/clean everything
 alias update="sudo apt-get update; sudo apt-get upgrade -y; sudo apt-get dist-upgrade -y; sudo apt-get autoremove -y; sudo apt-get autoclean -y;";
 # You remember Vi? It"s just faster to type
@@ -28,3 +29,4 @@ if [ -x /usr/bin/dircolors ]; then
     alias fgrep="rg -F --color=auto"
     alias egrep="rg -E --color=auto"
 fi
+alias screenkey="screenkey --position fixed --geometry 70%x5%+15%-7";
