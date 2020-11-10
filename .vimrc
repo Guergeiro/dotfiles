@@ -162,6 +162,8 @@ function! <sid>BufferWipeout() abort
 endfunction
 command! Bwipeout call <sid>BufferWipeout()<cr>
 nmap <silent><c-w>o :call <sid>BufferWipeout()<cr>
+" Write readonly file
+command! SWrite w !sudo tee %
 " Y yanks to the end of the line
 nnoremap Y y$
 " Scrolls up/down but keeps cursor position

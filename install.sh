@@ -4,26 +4,32 @@ yellow=`tput setaf 3`
 reset=`tput sgr0`
 
 echo "${yellow}Updating/Cleaning Packages${reset}"
-    sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
-    sudo sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
-    sudo apt-get update; sudo apt-get upgrade -y; sudo apt-get dist-upgrade -y; sudo apt-get autoremove -y; sudo apt-get autoclean -y;
-    sudo apt-get build-dep vim -y
+    sudo apt-get update
+    sudo apt-get upgrade -y
+    sudo apt-get dist-upgrade -y
+    sudo apt-get autoremove -y
+    sudo apt-get autoclean -y
 
 echo "${yellow}Installing Git${reset}"
-
     sudo apt-get install git -y
 
-echo "${yellow}Cloning Git Repo${reset}"
-
+echo "${yellow}Cloning Git Repos${reset}"
+    git clone https://github.com/Guergeiro/dotfiles.git
+    git clone https://github.com/vim/vim.git
     if [ "$1" = "-with-fonts" ]; then
-        git clone --recurse-submodules -j8 https://github.com/Guergeiro/dotfiles.git
-    else
-        git clone --recurse-submodules=vim -j8 https://github.com/Guergeiro/dotfiles.git
+        git clone https://github.com/ryanoasis/nerd-fonts.git
     fi
 
-echo "${yellow}Building Vim from source${reset}"
+echo "${yellow}Installing extra packages${reset}"
+    # https://github.com/ycm-core/YouCompleteMe/wiki/Building-Vim-from-source
+    sudo apt-get install libncurses5-dev libgtk2.0-dev libatk1.0-dev \
+        libcairo2-dev libx11-dev libxpm-dev libxt-dev python2-dev \
+        python3-dev ruby-dev lua5.2 liblua5.2-dev libperl-dev checkinstall -y
 
-    cd dotfiles/vim/
+    sudo apt-get purge vim vim-runtime gvim -y
+
+echo "${yellow}Building Vim from source${reset}"
+    cd vim/
     # Get new tags from remote
     git fetch --tags
 
@@ -34,73 +40,62 @@ echo "${yellow}Building Vim from source${reset}"
     git checkout $latestTag
 
     ./configure
-    sudo make install
-    cd ../../
-
-echo "${yellow}Installing Vim extras${reset}"
-
-    sudo apt-get install vim-gtk -y
+    sudo checkinstall
+    cd ..
 
 echo "${yellow}Installing Zip${reset}"
-
     sudo apt-get install zip -y
 
 echo "${yellow}Installing Deno${reset}"
-
     curl -fsSL https://deno.land/x/install/install.sh | sh
     sudo mv $HOME/.deno/bin/deno /usr/bin/
 
 echo "${yellow}Installing NodeJS (LTS)${reset}"
-
     curl -sL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
     sudo apt-get install nodejs -y
 
 echo "${yellow}Installing Python3${reset}"
-
     sudo apt-get install python3 -y
 
 echo "${yellow}Installing OpenJDK (Headless)${reset}"
-
     sudo apt-get install default-jdk-headless -y
 
 echo "${yellow}Installing RipGrep${reset}"
-
     sudo apt-get install ripgrep -y
 
 echo "${yellow}Installing Trash CLI${reset}"
-
     sudo apt-get install trash-cli -y
 
 echo "${yellow}Installing Yarn${reset}"
-
     sudo npm install -g yarn
 
 echo "${yellow}Installing TypeScript${reset}"
-
     sudo npm install -g typescript
 
 echo "${yellow}Installing Prettier${reset}"
-
     sudo npm install -g prettier
 
 echo "${yellow}Copying Vim/Bash Configs${reset}"
-
     cd dotfiles/
     cp .bashrc $HOME/
     cp .bash_aliases $HOME/
-    cp git-add /usr/bin
+    cp .bash_functions $HOME/
     cp .vimrc $HOME/
     cp -r .vim/ $HOME/
     cd ..
 
+echo "${yellow}General configs${reset}"
+    git config --global core.editor vim
+    git config --global user.name Breno Salles
+    git config --global user.email git@brenosalles.com
+    sudo update-alternatives --install /usr/bin/editor editor /usr/local/bin/vim 1
+    sudo update-alternatives --set editor /usr/local/bin/vim
+    sudo update-alternatives --install /usr/bin/vi vi /usr/local/bin/vim 1
+    sudo update-alternatives --set vi /usr/local/bin/vim
+
 if [ "$1" = "-with-fonts" ]; then
     echo "${yellow}Installing NerdFonts${reset}"
-
-        cd dotfiles/
-        nerd-fonts/install.sh
+        cd nerdfonts/
+        ./install.sh
         cd ..
 fi
-
-echo "${yellow}Removing extra files${reset}"
-
-    sudo /usr/bin/rm -rf dotfiles/

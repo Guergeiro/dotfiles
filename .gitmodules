@@ -1,6 +1,0 @@
-[submodule "nerd-fonts"]
-	path = nerd-fonts
-	url = https://github.com/ryanoasis/nerd-fonts.git
-[submodule "vim"]
-	path = vim
-	url = https://github.com/vim/vim.git
