@@ -6,16 +6,20 @@ if empty(glob("~/.vim/autoload/plug.vim"))
 endif
 " Let's load plugins
 call plug#begin("~/.vim/plugged")
-Plug 'fcpg/vim-altscreen'
+" Colorschemes 
 Plug 'gruvbox-community/gruvbox'
+Plug 'tomasiser/vim-code-dark'
+" Syntax Plugins
+Plug 'sheerun/vim-polyglot'
+" Other
+Plug 'fcpg/vim-altscreen'
 Plug 'Guergeiro/clean-path.vim'
 Plug 'habamax/vim-select'
-Plug 'honza/vim-snippets'
 Plug 'itchyny/vim-gitbranch'
 Plug 'itchyny/lightline.vim'
+Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'tpope/vim-sleuth'
+Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': 'yarn install'}
 Plug 'tpope/vim-surround'
 call plug#end()
 " Enter current millenium
@@ -156,14 +160,6 @@ cnoreabbrev <expr> lgrep (getcmdtype() ==# ':' && getcmdline() ==# 'lgrep') ? 'L
 command! -range GB echo join(systemlist("git -C " . shellescape(expand("%:p:h")) . " blame -L <line1>,<line2> " . expand("%:t")), "\n")
 inoremap <leader>gb <esc>:GB<left><left>
 nnoremap <leader>gb :GB<left><left>
-" Closes all buffers but the current one ands asks for save/discard for the closed ones
-function! <sid>BufferWipeout() abort
-    return execute("confirm %bd|e#|bd#")
-endfunction
-command! Bwipeout call <sid>BufferWipeout()<cr>
-nmap <silent><c-w>o :call <sid>BufferWipeout()<cr>
-" Write readonly file
-command! SWrite w !sudo tee %
 " Y yanks to the end of the line
 nnoremap Y y$
 " Scrolls up/down but keeps cursor position
@@ -174,7 +170,6 @@ inoremap { {}<esc>i
 inoremap ( ()<esc>i
 inoremap [ []<esc>i
 " Auto closes marks
-inoremap ' ''<esc>i
 inoremap " ""<esc>i
 inoremap ` ``<esc>i
 " Finds and Replaces selection
@@ -203,7 +198,7 @@ let g:lightline = {
             \   "gitbranch": "gitbranch#name"
             \ },
             \ }
-"" CoC Configs Start
+"" CoC Config Start
 " Extensions list
 let g:coc_global_extensions = [
             \ "coc-css",
@@ -278,7 +273,7 @@ function! <sid>show_documentation()
 endfunction
 inoremap <silent> <leader>k <esc>:call <sid>show_documentation()<cr>
 nnoremap <silent> <leader>k :call <sid>show_documentation()<cr>
-"" Undotree Configs Start
+"" Undotree Config Start
 inoremap <silent> <leader>u <esc>:UndotreeToggle<cr>
 nnoremap <silent> <leader>u :UndotreeToggle<cr>
 "" Vim-select Config Start

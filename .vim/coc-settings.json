@@ -1,15 +1,18 @@
 {
   "explorer.keyMappingMode": "none",
-  "explorer.keyMappings": {
+  "explorer.keyMappings.global": {
     "i": false,
     "<cr>": ["expandable?", ["expanded?", "collapse", "expand"], "open"],
-    "<2-LeftMouse>": ["expandable?", ["expanded?", "collapse", "expand"], "open"],
+    "<2-LeftMouse>": [
+      "expandable?",
+      ["expanded?", "collapse", "expand"],
+      "open"
+    ],
     "m": "actionMenu"
   },
   "explorer.quitOnOpen": true,
   "explorer.previewAction.onHover": false,
   "explorer.openAction.strategy": "split:intelligent",
   "explorer.icon.enableNerdfont": true,
-  "explorer.file.showHiddenFiles": true,
-  "explorer.file.column.git.showIgnored": true
+  "explorer.file.showHiddenFiles": true
 }
