@@ -6,7 +6,7 @@ if empty(glob("~/.vim/autoload/plug.vim"))
 endif
 " Let's load plugins
 call plug#begin("~/.vim/plugged")
-" Colorschemes 
+" Colorschemes
 Plug 'gruvbox-community/gruvbox'
 Plug 'tomasiser/vim-code-dark'
 " Syntax Plugins
@@ -20,6 +20,7 @@ Plug 'itchyny/lightline.vim'
 Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree'
 Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': 'yarn install'}
+Plug 'romainl/vim-cool'
 Plug 'tpope/vim-surround'
 call plug#end()
 " Enter current millenium
@@ -187,6 +188,8 @@ colorscheme gruvbox
 set background=dark
 "" Clean-path Config Starts
 let g:clean_path_wildignore = 1
+"" vim-cool Config Starts
+let g:CoolTotalMatches = 1
 "" Lightline Config Starts
 let g:lightline = {
             \ "colorscheme": "seoul256",
@@ -195,12 +198,13 @@ let g:lightline = {
             \             [ "gitbranch", "readonly", "filename", "modified" ] ]
             \ },
             \ "component_function": {
-            \   "gitbranch": "gitbranch#name"
+            \   "gitbranch": "gitbranch#name",
             \ },
             \ }
 "" CoC Config Start
 " Extensions list
 let g:coc_global_extensions = [
+            \ "coc-angular",
             \ "coc-css",
             \ "coc-explorer",
             \ "coc-html",
@@ -254,7 +258,7 @@ inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
 " Use <cr> to confirm completion
 inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
 " Use <c-space>for trigger completion
-inoremap <silent><expr> <c-space> coc#refresh()
+inoremap <silent><expr> <c-@> coc#refresh()
 " coc-prettier
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
 nnoremap ,fmt :call <sid>TrimWhitespace()<bar>:Prettier<cr>
@@ -277,6 +281,7 @@ nnoremap <silent> <leader>k :call <sid>show_documentation()<cr>
 inoremap <silent> <leader>u <esc>:UndotreeToggle<cr>
 nnoremap <silent> <leader>u :UndotreeToggle<cr>
 "" Vim-select Config Start
+let g:select_no_ignore_vcs = 0
 " A bunch of fuzzy
 inoremap <silent><c-p> <esc>:Select projectfile<cr>
 nnoremap <silent><c-p> :Select projectfile<cr>
@@ -312,7 +317,7 @@ augroup CoC
     " Open coc-explorer when no buffer is active
     autocmd VimEnter * if @% == "" | call execute("CocCommand explorer") | endif
     " Removes statusline from coc-explorer buffer
-    autocmd User CocExplorerOpenPost setlocal statusline=
+    autocmd User CocExplorerOpenPost setlocal statusline=Explorer\ \-\ %{getcwd()}
     " Close the coc preview window when completion is done.
     autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
     " Highlight the symbol and its references when holding the cursor.
