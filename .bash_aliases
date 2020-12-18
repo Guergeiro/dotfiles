@@ -3,6 +3,7 @@
 alias update="sudo apt-get update; sudo apt-get upgrade -y; sudo apt-get dist-upgrade -y; sudo apt-get autoremove -y; sudo apt-get autoclean -y;";
 # You remember Vi? It"s just faster to type
 alias vi="vim";
+alias :q="exit";
 # Fuck Python2... Sorry :(
 alias python="python3";
 alias pip="pip3";

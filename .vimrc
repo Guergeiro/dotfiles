@@ -21,6 +21,7 @@ Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree'
 Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': 'yarn install'}
 Plug 'romainl/vim-cool'
+Plug 'TaDaa/vimade'
 Plug 'tpope/vim-surround'
 call plug#end()
 " Enter current millenium
@@ -78,10 +79,10 @@ if (has("clipboard"))
 endif
 " Formats stuff as I want, TAB=4spaces, but intelligent
 set autoindent
-set tabstop=4
-set softtabstop=4
+set tabstop=2
+set softtabstop=2
 set expandtab
-set shiftwidth=4
+set shiftwidth=2
 set smarttab
 set autoindent
 " Start scrolling 5 lines before the end
@@ -277,6 +278,11 @@ function! <sid>show_documentation()
 endfunction
 inoremap <silent> <leader>k <esc>:call <sid>show_documentation()<cr>
 nnoremap <silent> <leader>k :call <sid>show_documentation()<cr>
+"" Vimade Config Start
+let g:vimade = {
+      \ "fadelevel": 0.2,
+      \ "usecursorhold": 1
+      \ }
 "" Undotree Config Start
 inoremap <silent> <leader>u <esc>:UndotreeToggle<cr>
 nnoremap <silent> <leader>u :UndotreeToggle<cr>
@@ -300,15 +306,9 @@ augroup General
             autocmd TextYankPost * if v:event.operator ==# "y" | call system("clip.exe", @0) | endif
         endif
     endif
-    " Better focus on windows
-    if (has("syntax"))
-        autocmd BufEnter,FocusGained,VimEnter,WinEnter * setlocal cursorline syntax=on
-        autocmd FocusLost,WinLeave * setlocal nocursorline syntax=off
-    endif
-    if (exists("&relativenumber"))
-        autocmd BufEnter,FocusGained,VimEnter,WinEnter * setlocal relativenumber
-        autocmd FocusLost,WinLeave * setlocal norelativenumber
-    endif
+    " Add GrepQuickfix window
+    autocmd QuickFixCmdPost cgetexpr cwindow
+    autocmd QuickFixCmdPost lgetexpr lwindow
 augroup END
 augroup CoC
     autocmd!
@@ -316,16 +316,8 @@ augroup CoC
     autocmd BufEnter * if (winnr("$") == 1 && &filetype == "coc-explorer") | q | endif
     " Open coc-explorer when no buffer is active
     autocmd VimEnter * if @% == "" | call execute("CocCommand explorer") | endif
-    " Removes statusline from coc-explorer buffer
-    autocmd User CocExplorerOpenPost setlocal statusline=Explorer\ \-\ %{getcwd()}
     " Close the coc preview window when completion is done.
     autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
     " Highlight the symbol and its references when holding the cursor.
     autocmd CursorHold * silent call CocActionAsync("highlight")
-augroup END
-augroup GrepQuickfix
-    autocmd!
-    " Add GrepQuickfix window
-    autocmd QuickFixCmdPost cgetexpr cwindow
-    autocmd QuickFixCmdPost lgetexpr lwindow
 augroup END
