@@ -1,14 +1,13 @@
 " Install VimPlug automatically
 if empty(glob("~/.vim/autoload/plug.vim"))
-    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-                \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 " Let's load plugins
 call plug#begin("~/.vim/plugged")
 " Colorschemes
-Plug 'gruvbox-community/gruvbox'
-Plug 'tomasiser/vim-code-dark'
+Plug 'morhetz/gruvbox'
+Plug 'srcery-colors/srcery-vim'
 " Syntax Plugins
 Plug 'sheerun/vim-polyglot'
 " Other
@@ -29,37 +28,37 @@ set nocompatible
 set encoding=utf-8
 " Backups and stuff
 if (exists("$SUDO_USER"))
-    set nobackup
-    set nowritebackup
+  set nobackup
+  set nowritebackup
 else
-    set backupdir=$HOME/.vim/backup//
-    if !isdirectory(expand(&backupdir))
-        call mkdir(expand(&backupdir), "p")
-    endif
+  set backupdir=$HOME/.vim/backup//
+  if !isdirectory(expand(&backupdir))
+    call mkdir(expand(&backupdir), "p")
+  endif
 endif
 if (exists("$SUDO_USER"))
-    set noswapfile
+  set noswapfile
 else
-    set directory=$HOME/.vim/swapfiles//
-    if !isdirectory(expand(&directory))
-        call mkdir(expand(&directory), "p")
-    endif
+  set directory=$HOME/.vim/swapfiles//
+  if !isdirectory(expand(&directory))
+    call mkdir(expand(&directory), "p")
+  endif
 endif
 if (has("persistent_undo"))
-    if (exists("$SUDO_USER"))
-        set noundofile
-    else
-        set undofile
-        set undodir=$HOME/.vim/undodir//
-        if !isdirectory(expand(&undodir))
-            call mkdir(expand(&undodir), "p")
-        endif
+  if (exists("$SUDO_USER"))
+    set noundofile
+  else
+    set undofile
+    set undodir=$HOME/.vim/undodir//
+    if !isdirectory(expand(&undodir))
+      call mkdir(expand(&undodir), "p")
     endif
+  endif
 endif
 " WSL compatibility shit...
 if system("uname -r") =~ "microsoft"
-    set ambw=double
-    noremap "+p :execute('norm a'.system('powershell.exe -Command Get-Clipboard'))<CR>
+  set ambw=double
+  noremap "+p :execute('norm a'.system('powershell.exe -Command Get-Clipboard'))<CR>
 endif
 " Sets backspace to work in case it doesn't
 set backspace=indent,eol,start
@@ -71,13 +70,13 @@ set path-=/usr/include
 syntax on
 filetype plugin on
 if (has("syntax"))
-    set cursorline
+  set cursorline
 endif
 " Make default clipboard the OS X clipboard (and unnamedplus for Linux)
 if (has("clipboard"))
-    set clipboard=unnamed,unnamedplus
+  set clipboard=unnamed,unnamedplus
 endif
-" Formats stuff as I want, TAB=4spaces, but intelligent
+" Formats stuff as I want, TAB=2spaces, but intelligent
 set autoindent
 set tabstop=2
 set softtabstop=2
@@ -89,8 +88,8 @@ set autoindent
 set scrolloff=5
 " Folding
 if (has("folding"))
-    set foldmethod=indent
-    set foldlevelstart=3
+  set foldmethod=indent
+  set foldlevelstart=3
 endif
 " Highlight current line number
 set highlight+=N:DiffText
@@ -100,40 +99,40 @@ set listchars=nbsp:⦸
 set listchars+=trail:⋅
 " Split stuff
 if (has("windows"))
-    set splitbelow
+  set splitbelow
 endif
 if (has("vertsplit"))
-    set splitright
+  set splitright
 endif
 " Pretty terminal
 if (has("termguicolors"))
-    set termguicolors
-    set t_Co=256
+  set termguicolors
+  set t_Co=256
 endif
 " Allow cursor to move where there is no text in visual block mode
 if (has("virtualedit"))
-    set virtualedit=block
+  set virtualedit=block
 endif
 " Disable error bells
 if (exists("&noerrorbells"))
-    set noerrorbells
+  set noerrorbells
 endif
 " Display all matching files when tab complete
 if (has("wildmenu"))
-    set wildmenu
+  set wildmenu
 endif
 " Enable line numbers
 set number
 if (exists("&relativenumber"))
-    set relativenumber
+  set relativenumber
 endif
 " Enable mouse support
 if (has("mouse"))
-    set mouse=a
+  set mouse=a
 endif
 " Enable statusline
 if (has("statusline"))
-    set laststatus=2
+  set laststatus=2
 endif
 " Highlight matching pairs as you type: (), [], {}
 set showmatch
@@ -147,12 +146,12 @@ set smartcase
 set hlsearch
 " RipGrep to the rescue!
 if (executable("rg"))
-    set grepprg=rg\ --smart-case\ --vimgrep\ --hidden
-    set grepformat=%f:%l:%c:%m
+  set grepprg=rg\ --smart-case\ --vimgrep\ --hidden
+  set grepformat=%f:%l:%c:%m
 endif
 " Instant grep + quickfix https://gist.github.com/romainl/56f0c28ef953ffc157f36cc495947ab3
 function! <sid>Grep(...)
-    return system(join([&grepprg] + [expandcmd(join(a:000, " "))], " "))
+  return system(join([&grepprg] + [expandcmd(join(a:000, " "))], " "))
 endfunction
 command! -nargs=+ -complete=file_in_path -bar Grep  cgetexpr <sid>Grep(<f-args>)
 command! -nargs=+ -complete=file_in_path -bar LGrep lgetexpr <sid>Grep(<f-args>)
@@ -178,10 +177,10 @@ inoremap ` ``<esc>i
 vnoremap <c-r> y:%s/<c-r>=escape(@",'/\')<cr>//gc<left><left><left>
 " Remove extra white spaces
 function! <sid>TrimWhitespace() abort
-    let l = line(".")
-    let c = col(".")
-    keepp %s/\s\+$//e
-    call cursor(l, c)
+  let l = line(".")
+  let c = col(".")
+  keepp %s/\s\+$//e
+  call cursor(l, c)
 endfunction
 "" Gruvbox Config Starts
 let g:gruvbox_contrast_dark = "hard"
@@ -193,33 +192,33 @@ let g:clean_path_wildignore = 1
 let g:CoolTotalMatches = 1
 "" Lightline Config Starts
 let g:lightline = {
-            \ "colorscheme": "seoul256",
-            \ "active": {
-            \   "left": [ [ "mode", "paste" ],
-            \             [ "gitbranch", "readonly", "filename", "modified" ] ]
-            \ },
-            \ "component_function": {
-            \   "gitbranch": "gitbranch#name",
-            \ },
-            \ }
+      \ "colorscheme": "gruvbox",
+      \ "active": {
+      \   "left": [ [ "mode", "paste" ],
+      \             [ "gitbranch", "readonly", "filename", "modified" ] ]
+      \ },
+      \ "component_function": {
+      \   "gitbranch": "gitbranch#name",
+      \ },
+      \ }
 "" CoC Config Start
 " Extensions list
 let g:coc_global_extensions = [
-            \ "coc-angular",
-            \ "coc-css",
-            \ "coc-explorer",
-            \ "coc-html",
-            \ "coc-java",
-            \ "coc-json",
-            \ "coc-markdownlint",
-            \ "coc-prettier",
-            \ "coc-python",
-            \ "coc-sh",
-            \ "coc-snippets",
-            \ "coc-tsserver",
-            \ "coc-vimlsp",
-            \ "coc-yaml"
-            \ ]
+      \ "coc-angular",
+      \ "coc-css",
+      \ "coc-explorer",
+      \ "coc-html",
+      \ "coc-java",
+      \ "coc-json",
+      \ "coc-markdownlint",
+      \ "coc-prettier",
+      \ "coc-python",
+      \ "coc-sh",
+      \ "coc-snippets",
+      \ "coc-tsserver",
+      \ "coc-vimlsp",
+      \ "coc-yaml"
+      \ ]
 " TextEdit might fail if hidden is not set.
 set hidden
 " Give more space for displaying messages.
@@ -230,10 +229,10 @@ set updatetime=300
 set shortmess+=c
 " Always show the signcolumn, otherwise it would shift the text each time diagnostics appear/become resolved.
 if has("patch-8.1.1564")
-    " Recently vim can merge signcolumn and number column into one
-    set signcolumn=number
+  " Recently vim can merge signcolumn and number column into one
+  set signcolumn=number
 else
-    set signcolumn=yes
+  set signcolumn=yes
 endif
 " GoTo code navigation.
 nmap <silent> gd <plug>(coc-definition)
@@ -244,14 +243,14 @@ nmap <silent> gr <plug>(coc-references)
 nmap <f2> <plug>(coc-rename)
 " Make <tab> used for trigger completion, completion confirm, snippet expand and jump like VSCode
 function! <sid>check_back_space() abort
-    let col = col(".") - 1
-    return !col || getline(".")[col - 1]  =~# "\s"
+  let col = col(".") - 1
+  return !col || getline(".")[col - 1]  =~# "\s"
 endfunction
 inoremap <silent><expr> <TAB>
-            \ pumvisible() ? coc#_select_confirm() :
-            \ coc#expandableOrJumpable() ? "\<c-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<cr>" :
-            \ <sid>check_back_space() ? "\<tab>" :
-            \ coc#refresh()
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<c-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<cr>" :
+      \ <sid>check_back_space() ? "\<tab>" :
+      \ coc#refresh()
 let g:coc_snippet_next = "<leader><leader>"
 " Use <tab> and <S-Tab> to navigate the completion list
 inoremap <expr> <tab> pumvisible() ? "\<c-n>" : "\<tab>"
@@ -270,11 +269,11 @@ inoremap <silent> <c-b> <esc>:CocCommand explorer<cr>
 nnoremap <silent> <c-b> :CocCommand explorer<cr>
 " Show documentation
 function! <sid>show_documentation()
-    if (index(["vim","help"], &filetype) >= 0)
-        execute "h ".expand("<cword>")
-    else
-        call CocActionAsync("doHover")
-    endif
+  if (index(["vim","help"], &filetype) >= 0)
+    execute "h ".expand("<cword>")
+  else
+    call CocActionAsync("doHover")
+  endif
 endfunction
 inoremap <silent> <leader>k <esc>:call <sid>show_documentation()<cr>
 nnoremap <silent> <leader>k :call <sid>show_documentation()<cr>
@@ -299,25 +298,25 @@ inoremap <silent><leader>/ <esc>:Select bufline<cr>
 nnoremap <silent><leader>/ :Select bufline<cr>
 " AutoCommands
 augroup General
-    autocmd!
-    " Copy to Windows Clipboard
-    if system("uname -r") =~ "microsoft"
-        if (executable("clip.exe"))
-            autocmd TextYankPost * if v:event.operator ==# "y" | call system("clip.exe", @0) | endif
-        endif
+  autocmd!
+  " Copy to Windows Clipboard
+  if system("uname -r") =~ "microsoft"
+    if (executable("clip.exe"))
+      autocmd TextYankPost * if v:event.operator ==# "y" | call system("clip.exe", @0) | endif
     endif
-    " Add GrepQuickfix window
-    autocmd QuickFixCmdPost cgetexpr cwindow
-    autocmd QuickFixCmdPost lgetexpr lwindow
+  endif
+  " Add GrepQuickfix window
+  autocmd QuickFixCmdPost cgetexpr cwindow
+  autocmd QuickFixCmdPost lgetexpr lwindow
 augroup END
 augroup CoC
-    autocmd!
-    " Close coc-explorer when it's last buffer
-    autocmd BufEnter * if (winnr("$") == 1 && &filetype == "coc-explorer") | q | endif
-    " Open coc-explorer when no buffer is active
-    autocmd VimEnter * if @% == "" | call execute("CocCommand explorer") | endif
-    " Close the coc preview window when completion is done.
-    autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
-    " Highlight the symbol and its references when holding the cursor.
-    autocmd CursorHold * silent call CocActionAsync("highlight")
+  autocmd!
+  " Close coc-explorer when it's last buffer
+  autocmd BufEnter * if (winnr("$") == 1 && &filetype == "coc-explorer") | q | endif
+  " Open coc-explorer when no buffer is active
+  autocmd VimEnter * if @% == "" | call execute("CocCommand explorer") | endif
+  " Close the coc preview window when completion is done.
+  autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
+  " Highlight the symbol and its references when holding the cursor.
+  autocmd CursorHold * silent call CocActionAsync("highlight")
 augroup END

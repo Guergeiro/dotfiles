@@ -2,7 +2,12 @@
   window_state = maximise
   hide_on_lose_focus = True
   title_hide_sizetext = True
+  title_use_system_font = False
+  title_font = FantasqueSansMono Nerd Font Mono Bold 12
 [keybindings]
+  zoom_in = <Ctrl>+
+  zoom_normal = <Ctrl>=
+  new_tab = <Alt>t
   cycle_next = None
   cycle_prev = None
   go_next = None
@@ -16,17 +21,22 @@
   split_horiz = <Alt><Shift>j
   split_vert = <Alt><Shift>t
   close_term = None
+  copy = <Ctrl><Shift>c
+  paste = <Ctrl><Shift>v
   toggle_scrollbar = None
   search = None
-  close_window = <Alt><Shift>w
+  close_window = None
   resize_up = <Alt><Shift>Up
   resize_down = <Alt><Shift>Down
   resize_left = <Alt><Shift>Left
   resize_right = <Alt><Shift>Right
+  move_tab_right = None
+  move_tab_left = None
   toggle_zoom = None
   scaled_zoom = None
-  next_tab = None
-  prev_tab = None
+  next_tab = <Ctrl>Tab
+  prev_tab = <Ctrl><Shift>Tab
+  full_screen = f11
   reset = None
   reset_clear = None
   hide_window = None
@@ -47,12 +57,12 @@
   layout_launcher = None
 [profiles]
   [[default]]
-    background_color = "#282828"
+    background_color = "#1D2021"
     cursor_color = "#aaaaaa"
-    font = CaskaydiaCove Nerd Font 13
     foreground_color = "#ebdbb2"
     palette = "#282828:#cc241d:#98971a:#d79921:#458588:#b16286:#689d6a:#a89984:#928374:#fb4934:#b8bb26:#fabd2f:#83a598:#d3869b:#8ec07c:#ebdbb2"
     use_system_font = False
+    font = FantasqueSansMono Nerd Font Mono Bold 16
 [layouts]
   [[default]]
     [[[window0]]]
