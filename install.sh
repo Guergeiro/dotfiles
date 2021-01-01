@@ -80,6 +80,8 @@ echo "${yellow}General configs${reset}"
 git config --global core.editor vim
 git config --global user.name Breno Salles
 git config --global user.email git@brenosalles.com
+git config --global merge.tool vimdiff
+git config --global mergetool.keepBackup false
 sudo update-alternatives --install /usr/bin/editor editor /usr/local/bin/vim 1
 sudo update-alternatives --set editor /usr/local/bin/vim
 sudo update-alternatives --install /usr/bin/vi vi /usr/local/bin/vim 1

@@ -5,12 +5,6 @@ if empty(glob("~/.vim/autoload/plug.vim"))
 endif
 " Let's load plugins
 call plug#begin("~/.vim/plugged")
-" Colorschemes
-Plug 'morhetz/gruvbox'
-Plug 'srcery-colors/srcery-vim'
-" Syntax Plugins
-Plug 'sheerun/vim-polyglot'
-" Other
 Plug 'fcpg/vim-altscreen'
 Plug 'Guergeiro/clean-path.vim'
 Plug 'habamax/vim-select'
@@ -18,10 +12,13 @@ Plug 'itchyny/vim-gitbranch'
 Plug 'itchyny/lightline.vim'
 Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree'
+Plug 'morhetz/gruvbox'
 Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': 'yarn install'}
 Plug 'romainl/vim-cool'
 Plug 'TaDaa/vimade'
 Plug 'tpope/vim-surround'
+Plug 'sheerun/vim-polyglot'
+Plug 'wincent/scalpel'
 call plug#end()
 " Enter current millenium
 set nocompatible
@@ -173,8 +170,6 @@ inoremap [ []<esc>i
 " Auto closes marks
 inoremap " ""<esc>i
 inoremap ` ``<esc>i
-" Finds and Replaces selection
-vnoremap <c-r> y:%s/<c-r>=escape(@",'/\')<cr>//gc<left><left><left>
 " Remove extra white spaces
 function! <sid>TrimWhitespace() abort
   let l = line(".")
@@ -182,6 +177,14 @@ function! <sid>TrimWhitespace() abort
   keepp %s/\s\+$//e
   call cursor(l, c)
 endfunction
+" vimdiff specific
+if &diff
+  nnoremap <leader>1 :diffget LOCAL<cr>
+  nnoremap <leader>2 :diffget BASE<cr>
+  nnoremap <leader>3 :diffget REMOTE<cr>
+  " Make it like vim-fugitive conflict
+  nnoremap <leader>o 2<c-w>w<bar>:buffer 4<cr><bar>4<c-w>w<bar><c-w>c<bar>2<c-w>w
+endif
 "" Gruvbox Config Starts
 let g:gruvbox_contrast_dark = "hard"
 colorscheme gruvbox
@@ -201,6 +204,22 @@ let g:lightline = {
       \   "gitbranch": "gitbranch#name",
       \ },
       \ }
+"" Vimade Config Start
+let g:vimade = {
+      \ "fadelevel": 0.2,
+      \ "usecursorhold": 1
+      \ }
+"" Undotree Config Start
+inoremap <silent> <leader>u <esc>:UndotreeToggle<cr>
+nnoremap <silent> <leader>u :UndotreeToggle<cr>
+"" Vim-select Config Start
+let g:select_no_ignore_vcs = 0
+" A bunch of fuzzy
+inoremap <silent><c-p> <esc>:Select projectfile<cr>
+nnoremap <silent><c-p> :Select projectfile<cr>
+"" Scalpel Config Start
+let g:ScalpelMap=0
+nmap <leader>s <plug>(Scalpel)
 "" CoC Config Start
 " Extensions list
 let g:coc_global_extensions = [
@@ -277,25 +296,6 @@ function! <sid>show_documentation()
 endfunction
 inoremap <silent> <leader>k <esc>:call <sid>show_documentation()<cr>
 nnoremap <silent> <leader>k :call <sid>show_documentation()<cr>
-"" Vimade Config Start
-let g:vimade = {
-      \ "fadelevel": 0.2,
-      \ "usecursorhold": 1
-      \ }
-"" Undotree Config Start
-inoremap <silent> <leader>u <esc>:UndotreeToggle<cr>
-nnoremap <silent> <leader>u :UndotreeToggle<cr>
-"" Vim-select Config Start
-let g:select_no_ignore_vcs = 0
-" A bunch of fuzzy
-inoremap <silent><c-p> <esc>:Select projectfile<cr>
-nnoremap <silent><c-p> :Select projectfile<cr>
-inoremap <silent><leader>b <esc>:Select buffer<cr>
-nnoremap <silent><leader>b :Select buffer<cr>
-inoremap <silent><leader>h <esc>:Select help<cr>
-nnoremap <silent><leader>h :Select help<cr>
-inoremap <silent><leader>/ <esc>:Select bufline<cr>
-nnoremap <silent><leader>/ :Select bufline<cr>
 " AutoCommands
 augroup General
   autocmd!

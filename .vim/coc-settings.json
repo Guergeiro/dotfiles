@@ -1,4 +1,5 @@
 {
+  "coc.source.buffer.enable": false,
   "explorer.keyMappingMode": "none",
   "explorer.keyMappings.global": {
     "i": false,
