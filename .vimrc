@@ -14,6 +14,9 @@ Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree'
 Plug 'morhetz/gruvbox'
 Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': 'yarn install'}
+Plug 'prettier/vim-prettier', {
+      \ 'do': 'yarn install',
+      \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
 Plug 'romainl/vim-cool'
 Plug 'TaDaa/vimade'
 Plug 'tpope/vim-surround'
@@ -24,7 +27,7 @@ call plug#end()
 set nocompatible
 set encoding=utf-8
 " Backups and stuff
-if (exists("$SUDO_USER"))
+if exists("$SUDO_USER")
   set nobackup
   set nowritebackup
 else
@@ -33,7 +36,7 @@ else
     call mkdir(expand(&backupdir), "p")
   endif
 endif
-if (exists("$SUDO_USER"))
+if exists("$SUDO_USER")
   set noswapfile
 else
   set directory=$HOME/.vim/swapfiles//
@@ -41,8 +44,8 @@ else
     call mkdir(expand(&directory), "p")
   endif
 endif
-if (has("persistent_undo"))
-  if (exists("$SUDO_USER"))
+if has("persistent_undo")
+  if exists("$SUDO_USER")
     set noundofile
   else
     set undofile
@@ -52,11 +55,6 @@ if (has("persistent_undo"))
     endif
   endif
 endif
-" WSL compatibility shit...
-if system("uname -r") =~ "microsoft"
-  set ambw=double
-  noremap "+p :execute('norm a'.system('powershell.exe -Command Get-Clipboard'))<CR>
-endif
 " Sets backspace to work in case it doesn't
 set backspace=indent,eol,start
 let g:mapleader = "\\"
@@ -65,12 +63,12 @@ let g:loaded_netrwPlugin=1
 set path-=/usr/include
 " Enable syntax highlighting
 syntax on
-filetype plugin on
-if (has("syntax"))
+filetype plugin indent on
+if has("syntax")
   set cursorline
 endif
 " Make default clipboard the OS X clipboard (and unnamedplus for Linux)
-if (has("clipboard"))
+if has("clipboard")
   set clipboard=unnamed,unnamedplus
 endif
 " Formats stuff as I want, TAB=2spaces, but intelligent
@@ -84,7 +82,7 @@ set autoindent
 " Start scrolling 5 lines before the end
 set scrolloff=5
 " Folding
-if (has("folding"))
+if has("folding")
   set foldmethod=indent
   set foldlevelstart=3
 endif
@@ -95,54 +93,56 @@ set list
 set listchars=nbsp:⦸
 set listchars+=trail:⋅
 " Split stuff
-if (has("windows"))
+if has("windows")
   set splitbelow
 endif
-if (has("vertsplit"))
+if has("vertsplit")
   set splitright
 endif
 " Pretty terminal
-if (has("termguicolors"))
+if has("termguicolors")
   set termguicolors
   set t_Co=256
 endif
 " Allow cursor to move where there is no text in visual block mode
-if (has("virtualedit"))
+if has("virtualedit")
   set virtualedit=block
 endif
 " Disable error bells
-if (exists("&noerrorbells"))
+if exists("&noerrorbells")
   set noerrorbells
 endif
 " Display all matching files when tab complete
-if (has("wildmenu"))
+if has("wildmenu")
   set wildmenu
 endif
 " Enable line numbers
 set number
-if (exists("&relativenumber"))
+if exists("&relativenumber")
   set relativenumber
 endif
 " Enable mouse support
-if (has("mouse"))
+if has("mouse")
   set mouse=a
 endif
 " Enable statusline
-if (has("statusline"))
+if has("statusline")
   set laststatus=2
 endif
 " Highlight matching pairs as you type: (), [], {}
 set showmatch
-" Search-as-you-type
-set incsearch
+if has("extra_search")
+  " Search-as-you-type
+  set incsearch
+  " Use highlighting for search matches (:nohlsearch to clear [or :noh])
+  set hlsearch
+endif
 " Case-insensitive searching
 set ignorecase
 " Case-sensitive if expression contains a capital letter
 set smartcase
-" Use highlighting for search matches (:nohlsearch to clear [or :noh])
-set hlsearch
 " RipGrep to the rescue!
-if (executable("rg"))
+if executable("rg")
   set grepprg=rg\ --smart-case\ --vimgrep\ --hidden
   set grepformat=%f:%l:%c:%m
 endif
@@ -161,8 +161,8 @@ nnoremap <leader>gb :GB<left><left>
 " Y yanks to the end of the line
 nnoremap Y y$
 " Scrolls up/down but keeps cursor position
-nnoremap J <C-D>
-nnoremap K <C-U>
+nnoremap J <c-d>
+nnoremap K <c-u>
 " Auto closes brackets
 inoremap { {}<esc>i
 inoremap ( ()<esc>i
@@ -170,13 +170,6 @@ inoremap [ []<esc>i
 " Auto closes marks
 inoremap " ""<esc>i
 inoremap ` ``<esc>i
-" Remove extra white spaces
-function! <sid>TrimWhitespace() abort
-  let l = line(".")
-  let c = col(".")
-  keepp %s/\s\+$//e
-  call cursor(l, c)
-endfunction
 " vimdiff specific
 if &diff
   nnoremap <leader>1 :diffget LOCAL<cr>
@@ -230,7 +223,6 @@ let g:coc_global_extensions = [
       \ "coc-java",
       \ "coc-json",
       \ "coc-markdownlint",
-      \ "coc-prettier",
       \ "coc-python",
       \ "coc-sh",
       \ "coc-snippets",
@@ -238,6 +230,27 @@ let g:coc_global_extensions = [
       \ "coc-vimlsp",
       \ "coc-yaml"
       \ ]
+
+call coc#config("coc.source.buffer.enable", 0)
+call coc#config("explorer", {
+      \ "keyMappingMode": "none",
+      \ "keyMappings.global": {
+      \   "i": 0,
+      \   "<cr>": ["expandable?", ["expanded?", "collapse", "expand"], "open"],
+      \   "<2-LeftMouse>": [
+      \     "expandable?",
+      \     ["expanded?", "collapse", "expand"],
+      \     "open"
+      \   ],
+      \ "m": "actionMenu",
+      \ "<c-v>": "open:vsplit",
+      \ "<c-s>": "open:split"
+      \ },
+      \ "quitOnOpen": 1,
+      \ "previewAction.onHover": 0,
+      \ "icon.enableNerdfont": 1,
+      \ "file.showHiddenFiles": 1
+      \})
 " TextEdit might fail if hidden is not set.
 set hidden
 " Give more space for displaying messages.
@@ -278,9 +291,6 @@ inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
 inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
 " Use <c-space>for trigger completion
 inoremap <silent><expr> <c-@> coc#refresh()
-" coc-prettier
-command! -nargs=0 Prettier :CocCommand prettier.formatFile
-nnoremap ,fmt :call <sid>TrimWhitespace()<bar>:Prettier<cr>
 " Auto organizes import
 nnoremap ,or :CocCommand editor.action.organizeImport<cr>
 " coc-explorer
@@ -296,6 +306,30 @@ function! <sid>show_documentation()
 endfunction
 inoremap <silent> <leader>k <esc>:call <sid>show_documentation()<cr>
 nnoremap <silent> <leader>k :call <sid>show_documentation()<cr>
+" Remove extra white spaces
+function! <sid>TrimWhitespace() abort
+  let l = line(".")
+  let c = col(".")
+  keepp %s/\s\+$//e
+  call cursor(l, c)
+endfunction
+" Custom function
+function! <sid>Format() abort
+  call <sid>TrimWhitespace()
+  if (exists(":PrettierAsync"))
+    execute("PrettierAsync")
+  elseif (exists(":Prettier"))
+    execute("Prettier")
+  else
+    execute("normal! gg=G\<C-o>\<C-o>")
+  endif
+endfunction
+nnoremap ,fmt :call <sid>Format()<cr>
+command! Format call <sid>Format()
+" Paste from Windows Clipboard
+if system("uname -r") =~ "microsoft"
+  nnoremap "+p :execute('norm a'.system('powershell.exe -Command Get-Clipboard'))<cr>
+endif
 " AutoCommands
 augroup General
   autocmd!

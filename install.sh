@@ -72,7 +72,6 @@ cd dotfiles/
 cp .bashrc $HOME/
 cp .bash_aliases $HOME/
 cp .bash_functions $HOME/
-cp .vimrc $HOME/
 cp -r .vim/ $HOME/
 cd ..
 
