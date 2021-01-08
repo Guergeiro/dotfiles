@@ -58,20 +58,24 @@ sudo apt-get install ripgrep -y
 echo "${yellow}Installing Trash CLI${reset}"
 sudo apt-get install trash-cli -y
 
+echo "${yellow}Installing XCLIP${reset}"
+sudo apt-get install xclip -y
+
 echo "${yellow}Installing Yarn${reset}"
 sudo npm install -g yarn
 
 echo "${yellow}Installing TypeScript${reset}"
-sudo npm install -g typescript
+sudo yarn global add typescript
 
 echo "${yellow}Installing Prettier${reset}"
-sudo npm install -g prettier
+sudo yarn global add prettier
 
 echo "${yellow}Copying Vim/Bash Configs${reset}"
 cd dotfiles/
 cp .bashrc $HOME/
 cp .bash_aliases $HOME/
 cp .bash_functions $HOME/
+cp .vimrc $HOME/
 cp -r .vim/ $HOME/
 cd ..
 

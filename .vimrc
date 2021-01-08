@@ -14,9 +14,6 @@ Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree'
 Plug 'morhetz/gruvbox'
 Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': 'yarn install'}
-Plug 'prettier/vim-prettier', {
-      \ 'do': 'yarn install',
-      \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
 Plug 'romainl/vim-cool'
 Plug 'TaDaa/vimade'
 Plug 'tpope/vim-surround'
@@ -158,11 +155,42 @@ cnoreabbrev <expr> lgrep (getcmdtype() ==# ':' && getcmdline() ==# 'lgrep') ? 'L
 command! -range GB echo join(systemlist("git -C " . shellescape(expand("%:p:h")) . " blame -L <line1>,<line2> " . expand("%:t")), "\n")
 inoremap <leader>gb <esc>:GB<left><left>
 nnoremap <leader>gb :GB<left><left>
+" Remove extra white spaces
+function! <sid>trimWhitespace() abort
+  let l = line(".")
+  let c = col(".")
+  keepp %s/\s\+$//e
+  call cursor(l, c)
+endfunction
+function! <sid>Format(motion, mode, ...) abort
+  let l:executable = "normal! "
+  if a:mode ==? "v"
+    l:executable .= "'<v'>"
+  else
+    l:executable .= "'[v']"
+  endif
+  if a:motion == "="
+    l:executable .= "="
+  else
+    l:executable .= "gq"
+  endif
+  if v:shell_error > 0
+    let format_error = join(getline(line("'["), line("']")), "\n")
+    undo
+    echo format_error
+  end
+endfunction
+vnoremap <silent> gq :<c-u>call <sid>Format('gq', visualmode())<cr>
+nnoremap <silent> gq :setl operatorfunc=<sid>Format('gq')<cr>g@
+vnoremap <silent> = :<c-u>call <sid>Format('=', visualmode())<cr>
+nnoremap <silent> = :setl operatorfunc=<sid>Format('=')<cr>g@
+" Sudo write
+command! Write !sudo tee % >/dev/null
 " Y yanks to the end of the line
 nnoremap Y y$
 " Scrolls up/down but keeps cursor position
-nnoremap J <c-d>
-nnoremap K <c-u>
+map J <c-d>
+map K <c-u>
 " Auto closes brackets
 inoremap { {}<esc>i
 inoremap ( ()<esc>i
@@ -306,39 +334,11 @@ function! <sid>show_documentation()
 endfunction
 inoremap <silent> <leader>k <esc>:call <sid>show_documentation()<cr>
 nnoremap <silent> <leader>k :call <sid>show_documentation()<cr>
-" Remove extra white spaces
-function! <sid>TrimWhitespace() abort
-  let l = line(".")
-  let c = col(".")
-  keepp %s/\s\+$//e
-  call cursor(l, c)
-endfunction
-" Custom function
-function! <sid>Format() abort
-  call <sid>TrimWhitespace()
-  if (exists(":PrettierAsync"))
-    execute("PrettierAsync")
-  elseif (exists(":Prettier"))
-    execute("Prettier")
-  else
-    execute("normal! gg=G\<C-o>\<C-o>")
-  endif
-endfunction
-nnoremap ,fmt :call <sid>Format()<cr>
-command! Format call <sid>Format()
-" Paste from Windows Clipboard
-if system("uname -r") =~ "microsoft"
-  nnoremap "+p :execute('norm a'.system('powershell.exe -Command Get-Clipboard'))<cr>
-endif
 " AutoCommands
 augroup General
   autocmd!
-  " Copy to Windows Clipboard
-  if system("uname -r") =~ "microsoft"
-    if (executable("clip.exe"))
-      autocmd TextYankPost * if v:event.operator ==# "y" | call system("clip.exe", @0) | endif
-    endif
-  endif
+  " Remove extra spaces on save
+  autocmd BufWritePre,FileWritePre * :call <sid>trimWhitespace()
   " Add GrepQuickfix window
   autocmd QuickFixCmdPost cgetexpr cwindow
   autocmd QuickFixCmdPost lgetexpr lwindow

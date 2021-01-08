@@ -1,7 +1,7 @@
 #!/bin/bash
 # Just update/clean everything
-alias update="sudo apt-get update; sudo apt-get upgrade -y; sudo apt-get dist-upgrade -y; sudo apt-get autoremove -y; sudo apt-get autoclean -y;";
-# You remember Vi? It"s just faster to type
+alias update="sudo apt-get update; sudo apt-get upgrade -y; sudo apt-get dist-upgrade -y; sudo apt-get autoremove -y; sudo apt-get autoclean -y; sudo npm install -g yarn; sudo yarn global upgrade";
+# You remember Vi? It's just faster to type
 alias vi="vim";
 alias :q="exit";
 # Fuck Python2... Sorry :(
@@ -31,3 +31,4 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep="rg -E --color=auto"
 fi
 alias screenkey="screenkey --position fixed --geometry 70%x5%+15%-7";
+alias copy="xclip -i -selection clipboard"
