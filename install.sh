@@ -72,12 +72,12 @@ sudo yarn global add prettier
 
 echo "${yellow}Copying Vim/Bash Configs${reset}"
 cd dotfiles/
-ln -s "$(PWD)/.bashrc" $HOME/.bashrc
-ln -s "$(PWD)/.bash_aliases" $HOME/.bash_aliases
-ln -s "$(PWD)/.bash_functions" $HOME/.bash_functions
-ln -s "$(PWD)/.inputrc" $HOME/.inputrc
-ln -s "$(PWD)/.vimrc" $HOME/.vimrc
-ln -s "$(PWD)/.vim/" $HOME/.vim
+ln -s "$(pwd)/.bashrc" $HOME/.bashrc
+ln -s "$(pwd)/.bash_aliases" $HOME/.bash_aliases
+ln -s "$(pwd)/.bash_functions" $HOME/.bash_functions
+ln -s "$(pwd)/.inputrc" $HOME/.inputrc
+ln -s "$(pwd)/.vimrc" $HOME/.vimrc
+ln -s "$(pwd)/.vim/" $HOME/.vim
 cd ..
 
 echo "${yellow}General configs${reset}"
