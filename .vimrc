@@ -76,8 +76,8 @@ set expandtab
 set shiftwidth=2
 set smarttab
 set autoindent
-" Start scrolling 5 lines before the end
-set scrolloff=5
+" Start scrolling 10 lines before the end
+set scrolloff=10
 " Folding
 if has("folding")
   set foldmethod=indent
@@ -118,6 +118,9 @@ set number
 if exists("&relativenumber")
   set relativenumber
 endif
+if has("signs")
+  set signcolumn=yes
+endif
 " Enable mouse support
 if has("mouse")
   set mouse=a
@@ -143,6 +146,9 @@ if executable("rg")
   set grepprg=rg\ --smart-case\ --vimgrep\ --hidden
   set grepformat=%f:%l:%c:%m
 endif
+if has("quickfix")
+  set errorformat+=%f:\ line\ %l\\,\ col\ %c\\,\ %m,%-G%.%#
+endif
 " Instant grep + quickfix https://gist.github.com/romainl/56f0c28ef953ffc157f36cc495947ab3
 function! <sid>Grep(...)
   return system(join([&grepprg] + [expandcmd(join(a:000, " "))], " "))
@@ -162,17 +168,16 @@ function! <sid>trimWhitespace() abort
   keepp %s/\s\+$//e
   call cursor(l, c)
 endfunction
-function! <sid>Format(motion, mode, ...) abort
-  let l:executable = "normal! "
-  if a:mode ==? "v"
-    l:executable .= "'<v'>"
+" Wrapper for formatprg
+function! <sid>FormatPrg(type, ...) abort
+  if a:0  " Invoked from Visual mode, use '< and '> marks.
+    silent exe "normal! `<" . a:type . "`>gq"
+  elseif a:type == 'line'
+    silent exe "normal! '[V']gq"
+  elseif a:type == 'block'
+    silent exe "normal! `[\<C-V>`]gq"
   else
-    l:executable .= "'[v']"
-  endif
-  if a:motion == "="
-    l:executable .= "="
-  else
-    l:executable .= "gq"
+    silent exe "normal! `[v`]gq"
   endif
   if v:shell_error > 0
     let format_error = join(getline(line("'["), line("']")), "\n")
@@ -180,10 +185,27 @@ function! <sid>Format(motion, mode, ...) abort
     echo format_error
   end
 endfunction
-vnoremap <silent> gq :<c-u>call <sid>Format('gq', visualmode())<cr>
-nnoremap <silent> gq :setl operatorfunc=<sid>Format('gq')<cr>g@
-vnoremap <silent> = :<c-u>call <sid>Format('=', visualmode())<cr>
-nnoremap <silent> = :setl operatorfunc=<sid>Format('=')<cr>g@
+" Wrapper for indentprg
+function! <sid>IndentPrg(type, ...) abort
+  if a:0  " Invoked from Visual mode, use '< and '> marks.
+    silent exe "normal! `<" . a:type . "`>="
+  elseif a:type == 'line'
+    silent exe "normal! '[V']="
+  elseif a:type == 'block'
+    silent exe "normal! `[\<C-V>`]="
+  else
+    silent exe "normal! `[v`]="
+  endif
+  if v:shell_error > 0
+    let format_error = join(getline(line("'["), line("']")), "\n")
+    undo
+    echo format_error
+  end
+endfunction
+vnoremap <silent> gq :<c-u>call <sid>FormatPrg(visualmode(), 1)<cr>
+nnoremap <silent> gq :setlocal operatorfunc=<sid>FormatPrg<cr>g@
+vnoremap <silent> = :<c-u>call <sid>IndentPrg(visualmode(), 1)<cr>
+nnoremap <silent> = :setlocal operatorfunc=<sid>IndentPrg<cr>g@
 " Sudo write
 command! Write !sudo tee % >/dev/null
 " Y yanks to the end of the line
@@ -258,7 +280,6 @@ let g:coc_global_extensions = [
       \ "coc-vimlsp",
       \ "coc-yaml"
       \ ]
-
 call coc#config("coc.source.buffer.enable", 0)
 call coc#config("explorer", {
       \ "keyMappingMode": "none",
@@ -287,13 +308,6 @@ set cmdheight=2
 set updatetime=300
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
-" Always show the signcolumn, otherwise it would shift the text each time diagnostics appear/become resolved.
-if has("patch-8.1.1564")
-  " Recently vim can merge signcolumn and number column into one
-  set signcolumn=number
-else
-  set signcolumn=yes
-endif
 " GoTo code navigation.
 nmap <silent> gd <plug>(coc-definition)
 nmap <silent> gy <plug>(coc-type-definition)
