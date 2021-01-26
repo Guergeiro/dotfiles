@@ -1,6 +1,7 @@
 set completion-ignore-case on
 set show-mode-in-prompt on
 set editing-mode vi
+set blink-matching-paren on
 
 $if mode=vi
   set keymap vi-insert
@@ -11,12 +12,12 @@ $if mode=vi
   "\C-p": history-search-backward
   "\C-n": history-search-forward
   # alt dot cycles through last argument
-  "\e.":yank-last-arg
+  "\e.": yank-last-arg
   "\e\e": "\e0\C-ki"
 
   set keymap vi-command
   "u": undo
-  "D":kill-line
+  "D": kill-line
   "dw": kill-word
   "dd": kill-whole-line
   "db": backward-kill-word

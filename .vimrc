@@ -7,12 +7,12 @@ endif
 call plug#begin("~/.vim/plugged")
 Plug 'fcpg/vim-altscreen'
 Plug 'Guergeiro/clean-path.vim'
+Plug 'gruvbox-community/gruvbox'
 Plug 'habamax/vim-select'
 Plug 'itchyny/vim-gitbranch'
 Plug 'itchyny/lightline.vim'
 Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree'
-Plug 'morhetz/gruvbox'
 Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': 'yarn install'}
 Plug 'romainl/vim-cool'
 Plug 'TaDaa/vimade'
@@ -27,24 +27,20 @@ set encoding=utf-8
 if exists("$SUDO_USER")
   set nobackup
   set nowritebackup
+  set noswapfile
+  if has("persistent_undo")
+    set noundofile
+  endif
 else
   set backupdir=$HOME/.vim/backup//
   if !isdirectory(expand(&backupdir))
     call mkdir(expand(&backupdir), "p")
   endif
-endif
-if exists("$SUDO_USER")
-  set noswapfile
-else
   set directory=$HOME/.vim/swapfiles//
   if !isdirectory(expand(&directory))
     call mkdir(expand(&directory), "p")
   endif
-endif
-if has("persistent_undo")
-  if exists("$SUDO_USER")
-    set noundofile
-  else
+  if has("persistent_undo")
     set undofile
     set undodir=$HOME/.vim/undodir//
     if !isdirectory(expand(&undodir))
@@ -146,9 +142,6 @@ if executable("rg")
   set grepprg=rg\ --smart-case\ --vimgrep\ --hidden
   set grepformat=%f:%l:%c:%m
 endif
-if has("quickfix")
-  set errorformat+=%f:\ line\ %l\\,\ col\ %c\\,\ %m,%-G%.%#
-endif
 " Instant grep + quickfix https://gist.github.com/romainl/56f0c28ef953ffc157f36cc495947ab3
 function! <sid>Grep(...)
   return system(join([&grepprg] + [expandcmd(join(a:000, " "))], " "))
@@ -229,6 +222,7 @@ if &diff
   nnoremap <leader>o 2<c-w>w<bar>:buffer 4<cr><bar>4<c-w>w<bar><c-w>c<bar>2<c-w>w
 endif
 "" Gruvbox Config Starts
+let g:gruvbox_italic = 1
 let g:gruvbox_contrast_dark = "hard"
 colorscheme gruvbox
 set background=dark
@@ -286,16 +280,17 @@ call coc#config("explorer", {
       \ "keyMappings.global": {
       \   "i": 0,
       \   "<cr>": ["expandable?", ["expanded?", "collapse", "expand"], "open"],
-      \   "<2-LeftMouse>": [
-      \     "expandable?",
-      \     ["expanded?", "collapse", "expand"],
-      \     "open"
-      \   ],
-      \ "m": "actionMenu",
-      \ "<c-v>": "open:vsplit",
-      \ "<c-s>": "open:split"
+      \   "m": "actionMenu",
+      \   "<c-v>": "open:vsplit",
+      \   "<c-s>": "open:split",
+      \   "yy": "copyFile",
+      \   "dd": "cutFile",
+      \   "p": "pasteFile",
+      \   "df": "delete",
+      \   "r": "refresh",
       \ },
       \ "quitOnOpen": 1,
+      \ "openAction.strategy": "sourceWindow",
       \ "previewAction.onHover": 0,
       \ "icon.enableNerdfont": 1,
       \ "file.showHiddenFiles": 1
@@ -340,10 +335,12 @@ inoremap <silent> <c-b> <esc>:CocCommand explorer<cr>
 nnoremap <silent> <c-b> :CocCommand explorer<cr>
 " Show documentation
 function! <sid>show_documentation()
-  if (index(["vim","help"], &filetype) >= 0)
-    execute "h ".expand("<cword>")
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
   else
-    call CocActionAsync("doHover")
+    execute '!' . &keywordprg . " " . expand('<cword>')
   endif
 endfunction
 inoremap <silent> <leader>k <esc>:call <sid>show_documentation()<cr>
@@ -361,8 +358,6 @@ augroup CoC
   autocmd!
   " Close coc-explorer when it's last buffer
   autocmd BufEnter * if (winnr("$") == 1 && &filetype == "coc-explorer") | q | endif
-  " Open coc-explorer when no buffer is active
-  autocmd VimEnter * if @% == "" | call execute("CocCommand explorer") | endif
   " Close the coc preview window when completion is done.
   autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
   " Highlight the symbol and its references when holding the cursor.
