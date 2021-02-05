@@ -79,7 +79,7 @@ ln -s "$(pwd)/.bashrc" $HOME/.bashrc
 ln -s "$(pwd)/.bash_aliases" $HOME/.bash_aliases
 ln -s "$(pwd)/.bash_functions" $HOME/.bash_functions
 ln -s "$(pwd)/.inputrc" $HOME/.inputrc
-ln -s "$(pwd)/.gitconfig/" $HOME/.gitconfig
+ln -s "$(pwd)/.gitconfig" $HOME/.gitconfig
 ln -s "$(pwd)/.config/" $HOME/.config
 ln -s "$(pwd)/.vimrc" $HOME/.vimrc
 ln -s "$(pwd)/.vim/" $HOME/.vim
