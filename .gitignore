@@ -1,2 +1,5 @@
-.vim/
+.vim/*
 !.vim/after/
+.config/*
+!.config/starship.toml
+!.config/terminator/
