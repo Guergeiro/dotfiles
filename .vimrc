@@ -18,6 +18,7 @@ Plug 'romainl/vim-cool'
 Plug 'TaDaa/vimade'
 Plug 'tpope/vim-surround'
 Plug 'sheerun/vim-polyglot'
+Plug 'srcery-colors/srcery-vim'
 Plug 'wincent/scalpel'
 call plug#end()
 " Enter current millenium
@@ -213,6 +214,8 @@ inoremap [ []<esc>i
 " Auto closes marks
 inoremap " ""<esc>i
 inoremap ` ``<esc>i
+" Terminal escape
+tnoremap <leader><esc> <c-\><c-n>
 " vimdiff specific
 if &diff
   nnoremap <leader>1 :diffget LOCAL<cr>
@@ -222,9 +225,12 @@ if &diff
   nnoremap <leader>o 2<c-w>w<bar>:buffer 4<cr><bar>4<c-w>w<bar><c-w>c<bar>2<c-w>w
 endif
 "" Gruvbox Config Starts
-let g:gruvbox_italic = 1
-let g:gruvbox_contrast_dark = "hard"
-colorscheme gruvbox
+"let g:gruvbox_italic = 1
+"let g:gruvbox_contrast_dark = 'hard'
+"colorscheme gruvbox
+"" Srcery Config Starts
+let g:srcery_italic = 1
+colorscheme srcery
 set background=dark
 "" Clean-path Config Starts
 let g:clean_path_wildignore = 1
@@ -232,7 +238,6 @@ let g:clean_path_wildignore = 1
 let g:CoolTotalMatches = 1
 "" Lightline Config Starts
 let g:lightline = {
-      \ "colorscheme": "gruvbox",
       \ "active": {
       \   "left": [ [ "mode", "paste" ],
       \             [ "gitbranch", "readonly", "filename", "modified" ] ]
@@ -241,6 +246,8 @@ let g:lightline = {
       \   "gitbranch": "gitbranch#name",
       \ },
       \ }
+"let g:lightline.colorscheme = 'gruvbox'
+let g:lightline.colorscheme = 'srcery'
 "" Vimade Config Start
 let g:vimade = {
       \ "fadelevel": 0.2,
@@ -288,6 +295,7 @@ call coc#config("explorer", {
       \   "p": "pasteFile",
       \   "df": "delete",
       \   "r": "refresh",
+      \   "f2": "rename"
       \ },
       \ "quitOnOpen": 1,
       \ "openAction.strategy": "sourceWindow",
