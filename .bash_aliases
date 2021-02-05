@@ -16,7 +16,7 @@ alias mv="mv -i";
 # Some more ls aliases
 alias ll="ls -alF"; alias la="ls -A"; alias l="ls -CF";
 # Ripgrep rules for me!
-alias grep="rg"; alias frep="rg -F"; alias erep="rg -E";
+alias grep="rg --hidden";
 # Enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
