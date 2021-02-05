@@ -1,0 +1,10 @@
+[user]
+  email = git@brenosalles.com
+  name = Breno Salles
+[core]
+  editor = vim
+[merge]
+  tool = vimdiff
+[mergetool]
+  keepBackup = false
+  keepTemporaries =
