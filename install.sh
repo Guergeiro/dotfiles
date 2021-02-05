@@ -70,22 +70,22 @@ sudo yarn global add typescript
 echo "${yellow}Installing Prettier${reset}"
 sudo yarn global add prettier
 
+echo "${yellow}Installing starship shell${reset}"
+curl -fsSL https://starship.rs/install.sh | bash
+
 echo "${yellow}Copying Vim/Bash Configs${reset}"
 cd dotfiles/
 ln -s "$(pwd)/.bashrc" $HOME/.bashrc
 ln -s "$(pwd)/.bash_aliases" $HOME/.bash_aliases
 ln -s "$(pwd)/.bash_functions" $HOME/.bash_functions
 ln -s "$(pwd)/.inputrc" $HOME/.inputrc
+ln -s "$(pwd)/.gitconfig/" $HOME/.gitconfig
+ln -s "$(pwd)/.config/" $HOME/.config
 ln -s "$(pwd)/.vimrc" $HOME/.vimrc
 ln -s "$(pwd)/.vim/" $HOME/.vim
 cd ..
 
 echo "${yellow}General configs${reset}"
-git config --global core.editor vim
-git config --global user.name Breno Salles
-git config --global user.email git@brenosalles.com
-git config --global merge.tool vimdiff
-git config --global mergetool.keepBackup false
 sudo update-alternatives --install /usr/bin/editor editor /usr/local/bin/vim 1
 sudo update-alternatives --set editor /usr/local/bin/vim
 sudo update-alternatives --install /usr/bin/vi vi /usr/local/bin/vim 1
