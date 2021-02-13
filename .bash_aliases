@@ -1,6 +1,6 @@
 #!/bin/bash
 # Just update/clean everything
-alias update="sudo apt-get update; sudo apt-get upgrade -y; sudo apt-get dist-upgrade -y; sudo apt-get autoremove -y; sudo apt-get autoclean -y; sudo npm update -g yarn; sudo yarn global upgrade";
+alias update="sudo apt-get update; sudo apt-get upgrade -y; sudo apt-get dist-upgrade -y; sudo apt-get autoremove -y; sudo apt-get autoclean -y; sudo npm install -g npm; sudo npm update -g yarn; sudo yarn global upgrade";
 # You remember Vi? It's just faster to type
 alias vi="vim";
 # Sometimes I forget I'm not in VIM, but still want to quit :>

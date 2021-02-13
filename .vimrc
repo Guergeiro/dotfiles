@@ -16,9 +16,11 @@ Plug 'mbbill/undotree'
 Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': 'yarn install'}
 Plug 'romainl/vim-cool'
 Plug 'TaDaa/vimade'
+Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'sheerun/vim-polyglot'
 Plug 'srcery-colors/srcery-vim'
+Plug 'voldikss/vim-floaterm'
 Plug 'wincent/scalpel'
 call plug#end()
 " Enter current millenium
@@ -67,12 +69,11 @@ if has("clipboard")
 endif
 " Formats stuff as I want, TAB=2spaces, but intelligent
 set autoindent
-set tabstop=2
+set tabstop=8
 set softtabstop=2
 set expandtab
 set shiftwidth=2
 set smarttab
-set autoindent
 " Start scrolling 10 lines before the end
 set scrolloff=10
 " Folding
@@ -138,23 +139,13 @@ endif
 set ignorecase
 " Case-sensitive if expression contains a capital letter
 set smartcase
+" Disable showmode
+set noshowmode
 " RipGrep to the rescue!
 if executable("rg")
   set grepprg=rg\ --smart-case\ --vimgrep\ --hidden
   set grepformat=%f:%l:%c:%m
 endif
-" Instant grep + quickfix https://gist.github.com/romainl/56f0c28ef953ffc157f36cc495947ab3
-function! <sid>Grep(...)
-  return system(join([&grepprg] + [expandcmd(join(a:000, " "))], " "))
-endfunction
-command! -nargs=+ -complete=file_in_path -bar Grep  cgetexpr <sid>Grep(<f-args>)
-command! -nargs=+ -complete=file_in_path -bar LGrep lgetexpr <sid>Grep(<f-args>)
-cnoreabbrev <expr> grep  (getcmdtype() ==# ':' && getcmdline() ==# 'grep')  ? 'Grep'  : 'grep'
-cnoreabbrev <expr> lgrep (getcmdtype() ==# ':' && getcmdline() ==# 'lgrep') ? 'LGrep' : 'lgrep'
-" Super cheap git blame https://gist.github.com/romainl/5b827f4aafa7ee29bdc70282ecc31640
-command! -range GB echo join(systemlist("git -C " . shellescape(expand("%:p:h")) . " blame -L <line1>,<line2> " . expand("%:t")), "\n")
-inoremap <leader>gb <esc>:GB<left><left>
-nnoremap <leader>gb :GB<left><left>
 " Remove extra white spaces
 function! <sid>trimWhitespace() abort
   let l = line(".")
@@ -162,51 +153,10 @@ function! <sid>trimWhitespace() abort
   keepp %s/\s\+$//e
   call cursor(l, c)
 endfunction
-" Wrapper for formatprg
-function! <sid>FormatPrg(type, ...) abort
-  if a:0  " Invoked from Visual mode, use '< and '> marks.
-    silent exe "normal! `<" . a:type . "`>gq"
-  elseif a:type == 'line'
-    silent exe "normal! '[V']gq"
-  elseif a:type == 'block'
-    silent exe "normal! `[\<C-V>`]gq"
-  else
-    silent exe "normal! `[v`]gq"
-  endif
-  if v:shell_error > 0
-    let format_error = join(getline(line("'["), line("']")), "\n")
-    undo
-    echo format_error
-  end
-endfunction
-" Wrapper for indentprg
-function! <sid>IndentPrg(type, ...) abort
-  if a:0  " Invoked from Visual mode, use '< and '> marks.
-    silent exe "normal! `<" . a:type . "`>="
-  elseif a:type == 'line'
-    silent exe "normal! '[V']="
-  elseif a:type == 'block'
-    silent exe "normal! `[\<C-V>`]="
-  else
-    silent exe "normal! `[v`]="
-  endif
-  if v:shell_error > 0
-    let format_error = join(getline(line("'["), line("']")), "\n")
-    undo
-    echo format_error
-  end
-endfunction
-vnoremap <silent> gq :<c-u>call <sid>FormatPrg(visualmode(), 1)<cr>
-nnoremap <silent> gq :setlocal operatorfunc=<sid>FormatPrg<cr>g@
-vnoremap <silent> = :<c-u>call <sid>IndentPrg(visualmode(), 1)<cr>
-nnoremap <silent> = :setlocal operatorfunc=<sid>IndentPrg<cr>g@
 " Sudo write
 command! Write !sudo tee % >/dev/null
 " Y yanks to the end of the line
 nnoremap Y y$
-" Scrolls up/down but keeps cursor position
-map J <c-d>
-map K <c-u>
 " Auto closes brackets
 inoremap { {}<esc>i
 inoremap ( ()<esc>i
@@ -224,19 +174,19 @@ if &diff
   " Make it like vim-fugitive conflict
   nnoremap <leader>o 2<c-w>w<bar>:buffer 4<cr><bar>4<c-w>w<bar><c-w>c<bar>2<c-w>w
 endif
-"" Gruvbox Config Starts
-"let g:gruvbox_italic = 1
-"let g:gruvbox_contrast_dark = 'hard'
+"" Gruvbox Config Start
+let g:gruvbox_italic = 1
+let g:gruvbox_contrast_dark = 'hard'
 "colorscheme gruvbox
-"" Srcery Config Starts
+"" Srcery Config Start
 let g:srcery_italic = 1
 colorscheme srcery
 set background=dark
-"" Clean-path Config Starts
+"" Clean-path Config Start
 let g:clean_path_wildignore = 1
 "" vim-cool Config Starts
 let g:CoolTotalMatches = 1
-"" Lightline Config Starts
+"" Lightline Config Start
 let g:lightline = {
       \ "active": {
       \   "left": [ [ "mode", "paste" ],
@@ -256,11 +206,21 @@ let g:vimade = {
 "" Undotree Config Start
 inoremap <silent> <leader>u <esc>:UndotreeToggle<cr>
 nnoremap <silent> <leader>u :UndotreeToggle<cr>
+"" Floaterm Config Start
+let g:floaterm_wintype = "vsplit"
+let g:floaterm_width = 0.5
+let g:floaterm_autoclose = 2
 "" Vim-select Config Start
 let g:select_no_ignore_vcs = 0
 " A bunch of fuzzy
-inoremap <silent><c-p> <esc>:Select projectfile<cr>
-nnoremap <silent><c-p> :Select projectfile<cr>
+inoremap <leader>p <esc>:Select projectfile<cr>
+nnoremap <leader>p :Select projectfile<cr>
+inoremap <leader>b <esc>:Select buffer<cr>
+nnoremap <leader>b :Select buffer<cr>
+inoremap <leader>t <esc>:Select floaterm<cr>
+nnoremap <leader>t :Select floaterm<cr>
+inoremap <leader>/ <esc>:Select bufline<cr>
+nnoremap <leader>/ :Select bufline<cr>
 "" Scalpel Config Start
 let g:ScalpelMap=0
 nmap <leader>s <plug>(Scalpel)
@@ -295,7 +255,7 @@ call coc#config("explorer", {
       \   "p": "pasteFile",
       \   "df": "delete",
       \   "r": "refresh",
-      \   "f2": "rename"
+      \   "<f2>": "rename"
       \ },
       \ "quitOnOpen": 1,
       \ "openAction.strategy": "sourceWindow",
@@ -339,20 +299,20 @@ inoremap <silent><expr> <c-@> coc#refresh()
 " Auto organizes import
 nnoremap ,or :CocCommand editor.action.organizeImport<cr>
 " coc-explorer
-inoremap <silent> <c-b> <esc>:CocCommand explorer<cr>
-nnoremap <silent> <c-b> :CocCommand explorer<cr>
+inoremap <silent><c-b> <esc>:CocCommand explorer<cr>
+nnoremap <silent><c-b> :CocCommand explorer<cr>
 " Show documentation
 function! <sid>show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
+  if (index(["vim","help"], &filetype) >= 0)
+    execute "h ".expand("<cword>")
   elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
+    call CocActionAsync("doHover")
   else
-    execute '!' . &keywordprg . " " . expand('<cword>')
+    execute "!" . &keywordprg . " " . expand("<cword>")
   endif
 endfunction
-inoremap <silent> <leader>k <esc>:call <sid>show_documentation()<cr>
-nnoremap <silent> <leader>k :call <sid>show_documentation()<cr>
+inoremap <leader>k <esc>:call <sid>show_documentation()<cr>
+nnoremap <leader>k :call <sid>show_documentation()<cr>
 " AutoCommands
 augroup General
   autocmd!
@@ -365,7 +325,15 @@ augroup END
 augroup CoC
   autocmd!
   " Close coc-explorer when it's last buffer
-  autocmd BufEnter * if (winnr("$") == 1 && &filetype == "coc-explorer") | q | endif
+  autocmd BufEnter * if (winnr("$") == 1 && tabpagenr("$") == 1 && &filetype == "coc-explorer") | q | endif
+  " Open coc-explorer when argument is directory
+  autocmd User CocNvimInit if argc() == 1 && isdirectory(argv(0)) |
+        \ execute("cd " . argv(0)) |
+        \ call execute("CocCommand explorer " . argv(0)) |
+        \ endif
+  autocmd User CocExplorerOpenPost if argc() == 1 && isdirectory(argv(0)) |
+        \ wincmd h | wincmd o | 1bwipeout |
+        \ endif
   " Close the coc preview window when completion is done.
   autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
   " Highlight the symbol and its references when holding the cursor.
