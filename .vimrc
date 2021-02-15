@@ -157,6 +157,11 @@ endfunction
 command! Write !sudo tee % >/dev/null
 " Y yanks to the end of the line
 nnoremap Y y$
+" ctrl+d & ctrl+u feels weird, so remap for ctrl+j & ctrl+k
+noremap <c-j> <c-d>
+noremap <c-k> <c-u>
+noremap <c-d> <nop>
+noremap <c-u> <nop>
 " Auto closes brackets
 inoremap { {}<esc>i
 inoremap ( ()<esc>i
