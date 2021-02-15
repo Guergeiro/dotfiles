@@ -30,7 +30,14 @@ sudo apt-get purge vim vim-runtime gvim -y
 
 echo "${yellow}Building Vim from source${reset}"
 cd vim/
-./configure --with-features=huge --with-python3-config-dir=$(python3-config --configdir) --enable-python3interp=yes
+./configure --with-features=huge \
+            --enable-multibyte \
+            --enable-rubyinterp=yes \
+            --enable-python3interp=yes \
+            --with-python3-config-dir=$(python3-config --configdir) \
+            --enable-perlinterp=yes \
+            --enable-luainterp=yes \
+            --enable-cscope \
 sudo checkinstall
 cd ..
 
