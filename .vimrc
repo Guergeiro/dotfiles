@@ -1,7 +1,10 @@
 " Install VimPlug automatically
 if empty(glob("~/.vim/autoload/plug.vim"))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+  augroup VimPlug
+    autocmd!
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+  augroup END
 endif
 " Let's load plugins
 call plug#begin("~/.vim/plugged")
@@ -141,6 +144,14 @@ set ignorecase
 set smartcase
 " Disable showmode
 set noshowmode
+" TextEdit might fail if hidden is not set.
+set hidden
+" Give more space for displaying messages.
+set cmdheight=2
+" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable delays and poor user experience.
+set updatetime=300
+" Don't pass messages to |ins-completion-menu|.
+set shortmess+=c
 " RipGrep to the rescue!
 if executable("rg")
   set grepprg=rg\ --smart-case\ --vimgrep\ --hidden
@@ -234,6 +245,7 @@ nmap <leader>s <plug>(Scalpel)
 let g:coc_global_extensions = [
       \ "coc-angular",
       \ "coc-css",
+      \ "coc-deno",
       \ "coc-explorer",
       \ "coc-html",
       \ "coc-java",
@@ -268,14 +280,6 @@ call coc#config("explorer", {
       \ "icon.enableNerdfont": 1,
       \ "file.showHiddenFiles": 1
       \})
-" TextEdit might fail if hidden is not set.
-set hidden
-" Give more space for displaying messages.
-set cmdheight=2
-" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable delays and poor user experience.
-set updatetime=300
-" Don't pass messages to |ins-completion-menu|.
-set shortmess+=c
 " GoTo code navigation.
 nmap <silent> gd <plug>(coc-definition)
 nmap <silent> gy <plug>(coc-type-definition)
@@ -288,7 +292,7 @@ function! <sid>check_back_space() abort
   let col = col(".") - 1
   return !col || getline(".")[col - 1]  =~# "\s"
 endfunction
-inoremap <silent><expr> <TAB>
+inoremap <silent><expr> <tab>
       \ pumvisible() ? coc#_select_confirm() :
       \ coc#expandableOrJumpable() ? "\<c-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<cr>" :
       \ <sid>check_back_space() ? "\<tab>" :
@@ -300,6 +304,7 @@ inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
 " Use <cr> to confirm completion
 inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
 " Use <c-space>for trigger completion
+inoremap <silent><expr> <c-space> coc#refresh()
 inoremap <silent><expr> <c-@> coc#refresh()
 " Auto organizes import
 nnoremap ,or :CocCommand editor.action.organizeImport<cr>
@@ -308,8 +313,8 @@ inoremap <silent><c-b> <esc>:CocCommand explorer<cr>
 nnoremap <silent><c-b> :CocCommand explorer<cr>
 " Show documentation
 function! <sid>show_documentation()
-  if (index(["vim","help"], &filetype) >= 0)
-    execute "h ".expand("<cword>")
+  if (index(["vim", "help"], &filetype) >= 0)
+    execute "h " . expand("<cword>")
   elseif (coc#rpc#ready())
     call CocActionAsync("doHover")
   else
@@ -326,21 +331,32 @@ augroup General
   " Add GrepQuickfix window
   autocmd QuickFixCmdPost cgetexpr cwindow
   autocmd QuickFixCmdPost lgetexpr lwindow
+  " Close the completion window when done
+  autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
 augroup END
 augroup CoC
   autocmd!
   " Close coc-explorer when it's last buffer
   autocmd BufEnter * if (winnr("$") == 1 && tabpagenr("$") == 1 && &filetype == "coc-explorer") | q | endif
   " Open coc-explorer when argument is directory
-  autocmd User CocNvimInit if argc() == 1 && isdirectory(argv(0)) |
+  autocmd VimEnter *
+        \ if argc() == 0 |
+        \ let s:directory = 1 |
+        \ elseif argc() == 1 && isdirectory(argv(0)) |
+        \ let s:directory = 1 |
+        \ else |
+        \ let s:directory = 0 |
+        \ endif
+  autocmd User CocNvimInit
+        \ if s:directory == 1 |
         \ execute("cd " . argv(0)) |
         \ call execute("CocCommand explorer " . argv(0)) |
         \ endif
-  autocmd User CocExplorerOpenPost if argc() == 1 && isdirectory(argv(0)) |
+  autocmd User CocExplorerOpenPost
+        \ if s:directory == 1 |
         \ wincmd h | wincmd o | 1bwipeout |
+        \ let s:directory = 0 |
         \ endif
-  " Close the coc preview window when completion is done.
-  autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
   " Highlight the symbol and its references when holding the cursor.
   autocmd CursorHold * silent call CocActionAsync("highlight")
 augroup END
