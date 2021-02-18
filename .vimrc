@@ -12,8 +12,13 @@ Plug 'fcpg/vim-altscreen'
 Plug 'Guergeiro/clean-path.vim'
 Plug 'gruvbox-community/gruvbox'
 Plug 'habamax/vim-select'
+Plug 'habamax/vim-select-more'
 Plug 'itchyny/vim-gitbranch'
 Plug 'itchyny/lightline.vim'
+Plug 'lambdalisue/fern.vim'
+Plug 'lambdalisue/fern-hijack.vim'
+Plug 'lambdalisue/fern-renderer-nerdfont.vim'
+Plug 'lambdalisue/nerdfont.vim'
 Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree'
 Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': 'yarn install'}
@@ -57,7 +62,6 @@ endif
 " Sets backspace to work in case it doesn't
 set backspace=indent,eol,start
 let g:mapleader = "\\"
-let g:loaded_netrwPlugin=1
 " Removes /usr/include from path
 set path-=/usr/include
 " Enable syntax highlighting
@@ -190,6 +194,16 @@ if &diff
   " Make it like vim-fugitive conflict
   nnoremap <leader>o 2<c-w>w<bar>:buffer 4<cr><bar>4<c-w>w<bar><c-w>c<bar>2<c-w>w
 endif
+" Show documentation
+function! <sid>show_documentation()
+  if (index(["vim", "help"], &filetype) >= 0)
+    execute "h " . expand("<cword>")
+  else
+    execute "!" . &keywordprg . " " . expand("<cword>")
+  endif
+endfunction
+inoremap <leader>k <esc>:call <sid>show_documentation()<cr>
+nnoremap <leader>k :call <sid>show_documentation()<cr>
 "" Gruvbox Config Start
 let g:gruvbox_italic = 1
 let g:gruvbox_contrast_dark = 'hard'
@@ -205,13 +219,13 @@ let g:CoolTotalMatches = 1
 "" Lightline Config Start
 let g:lightline = {
       \ "active": {
-      \   "left": [ [ "mode", "paste" ],
-      \             [ "gitbranch", "readonly", "filename", "modified" ] ]
-      \ },
-      \ "component_function": {
-      \   "gitbranch": "gitbranch#name",
-      \ },
-      \ }
+        \   "left": [ [ "mode", "paste" ],
+        \             [ "gitbranch", "readonly", "filename", "modified" ] ]
+        \ },
+        \ "component_function": {
+          \   "gitbranch": "gitbranch#name",
+          \ },
+          \ }
 "let g:lightline.colorscheme = 'gruvbox'
 let g:lightline.colorscheme = 'srcery'
 "" Vimade Config Start
@@ -240,13 +254,20 @@ nnoremap <leader>/ :Select bufline<cr>
 "" Scalpel Config Start
 let g:ScalpelMap=0
 nmap <leader>s <plug>(Scalpel)
+" Fern
+let g:fern#disable_default_mappings = 1
+let g:fern#default_hidden = 1
+let g:fern#drawer_width = 40
+let g:fern#renderer = "nerdfont"
+inoremap <silent><c-b> <esc>:Fern . -drawer -toggle<cr>
+nnoremap <silent><c-b> :Fern . -drawer -toggle<cr>
 "" CoC Config Start
 " Extensions list
 let g:coc_global_extensions = [
       \ "coc-angular",
       \ "coc-css",
       \ "coc-deno",
-      \ "coc-explorer",
+      \ "coc-emmet",
       \ "coc-html",
       \ "coc-java",
       \ "coc-json",
@@ -258,71 +279,51 @@ let g:coc_global_extensions = [
       \ "coc-vimlsp",
       \ "coc-yaml"
       \ ]
-call coc#config("coc.source.buffer.enable", 0)
-call coc#config("explorer", {
-      \ "keyMappingMode": "none",
-      \ "keyMappings.global": {
-      \   "i": 0,
-      \   "<cr>": ["expandable?", ["expanded?", "collapse", "expand"], "open"],
-      \   "m": "actionMenu",
-      \   "<c-v>": "open:vsplit",
-      \   "<c-s>": "open:split",
-      \   "yy": "copyFile",
-      \   "dd": "cutFile",
-      \   "p": "pasteFile",
-      \   "df": "delete",
-      \   "r": "refresh",
-      \   "<f2>": "rename"
-      \ },
-      \ "quitOnOpen": 1,
-      \ "openAction.strategy": "sourceWindow",
-      \ "previewAction.onHover": 0,
-      \ "icon.enableNerdfont": 1,
-      \ "file.showHiddenFiles": 1
-      \})
-" GoTo code navigation.
-nmap <silent> gd <plug>(coc-definition)
-nmap <silent> gy <plug>(coc-type-definition)
-nmap <silent> gi <plug>(coc-implementation)
-nmap <silent> gr <plug>(coc-references)
-" Remap for rename current word
-nmap <f2> <plug>(coc-rename)
-" Make <tab> used for trigger completion, completion confirm, snippet expand and jump like VSCode
-function! <sid>check_back_space() abort
-  let col = col(".") - 1
-  return !col || getline(".")[col - 1]  =~# "\s"
+function! <sid>start_coc() abort
+  call coc#config("coc.source.buffer.enable", 0)
+  " Highlight the symbol and its references when holding the cursor.
+  autocmd CursorHold * silent call CocActionAsync("highlight")
+  " GoTo code navigation.
+  nmap <silent> gd <plug>(coc-definition)
+  nmap <silent> gy <plug>(coc-type-definition)
+  nmap <silent> gi <plug>(coc-implementation)
+  nmap <silent> gr <plug>(coc-references)
+  " Remap for rename current word
+  nmap <f2> <plug>(coc-rename)
+  " Make <tab> used for trigger completion, completion confirm, snippet expand and jump like VSCode
+  function! <sid>check_back_space() abort
+    let col = col(".") - 1
+    return !col || getline(".")[col - 1]  =~# "\s"
+  endfunction
+  inoremap <silent><expr> <tab>
+        \ pumvisible() ? coc#_select_confirm() :
+        \ coc#expandableOrJumpable() ? "\<c-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<cr>" :
+        \ <sid>check_back_space() ? "\<tab>" :
+        \ coc#refresh()
+  let g:coc_snippet_next = "<leader><leader>"
+  " Use <tab> and <S-Tab> to navigate the completion list
+  inoremap <expr> <tab> pumvisible() ? "\<c-n>" : "\<tab>"
+  inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
+  " Use <cr> to confirm completion
+  inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
+  " Use <c-space>for trigger completion
+  inoremap <silent><expr> <c-space> coc#refresh()
+  inoremap <silent><expr> <c-@> coc#refresh()
+  " Auto organizes import
+  nnoremap ,or :CocCommand editor.action.organizeImport<cr>
+  " Show documentation
+  function! <sid>show_documentation_coc()
+    if (index(["vim", "help"], &filetype) >= 0)
+      execute "h " . expand("<cword>")
+    elseif (coc#rpc#ready())
+      call CocActionAsync("doHover")
+    else
+      execute "!" . &keywordprg . " " . expand("<cword>")
+    endif
+  endfunction
+  inoremap <leader>k <esc>:call <sid>show_documentation_coc()<cr>
+  nnoremap <leader>k :call <sid>show_documentation_coc()<cr>
 endfunction
-inoremap <silent><expr> <tab>
-      \ pumvisible() ? coc#_select_confirm() :
-      \ coc#expandableOrJumpable() ? "\<c-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<cr>" :
-      \ <sid>check_back_space() ? "\<tab>" :
-      \ coc#refresh()
-let g:coc_snippet_next = "<leader><leader>"
-" Use <tab> and <S-Tab> to navigate the completion list
-inoremap <expr> <tab> pumvisible() ? "\<c-n>" : "\<tab>"
-inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
-" Use <cr> to confirm completion
-inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
-" Use <c-space>for trigger completion
-inoremap <silent><expr> <c-space> coc#refresh()
-inoremap <silent><expr> <c-@> coc#refresh()
-" Auto organizes import
-nnoremap ,or :CocCommand editor.action.organizeImport<cr>
-" coc-explorer
-inoremap <silent><c-b> <esc>:CocCommand explorer<cr>
-nnoremap <silent><c-b> :CocCommand explorer<cr>
-" Show documentation
-function! <sid>show_documentation()
-  if (index(["vim", "help"], &filetype) >= 0)
-    execute "h " . expand("<cword>")
-  elseif (coc#rpc#ready())
-    call CocActionAsync("doHover")
-  else
-    execute "!" . &keywordprg . " " . expand("<cword>")
-  endif
-endfunction
-inoremap <leader>k <esc>:call <sid>show_documentation()<cr>
-nnoremap <leader>k :call <sid>show_documentation()<cr>
 " AutoCommands
 augroup General
   autocmd!
@@ -333,30 +334,6 @@ augroup General
   autocmd QuickFixCmdPost lgetexpr lwindow
   " Close the completion window when done
   autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
-augroup END
-augroup CoC
-  autocmd!
-  " Close coc-explorer when it's last buffer
-  autocmd BufEnter * if (winnr("$") == 1 && tabpagenr("$") == 1 && &filetype == "coc-explorer") | q | endif
-  " Open coc-explorer when argument is directory
-  autocmd VimEnter *
-        \ if argc() == 0 |
-        \ let s:directory = 1 |
-        \ elseif argc() == 1 && isdirectory(argv(0)) |
-        \ let s:directory = 1 |
-        \ else |
-        \ let s:directory = 0 |
-        \ endif
-  autocmd User CocNvimInit
-        \ if s:directory == 1 |
-        \ execute("cd " . argv(0)) |
-        \ call execute("CocCommand explorer " . argv(0)) |
-        \ endif
-  autocmd User CocExplorerOpenPost
-        \ if s:directory == 1 |
-        \ wincmd h | wincmd o | 1bwipeout |
-        \ let s:directory = 0 |
-        \ endif
-  " Highlight the symbol and its references when holding the cursor.
-  autocmd CursorHold * silent call CocActionAsync("highlight")
+  " Start CoC related mappings
+  autocmd User CocNvimInit call <sid>start_coc()
 augroup END

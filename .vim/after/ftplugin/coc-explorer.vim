@@ -13,5 +13,5 @@ endif
 nnoremap <silent><buffer> A :call <sid>resize()<cr>
 setlocal number
 if exists("&relativenumber")
-  set relativenumber
+  setlocal relativenumber
 endif

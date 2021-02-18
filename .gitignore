@@ -1,4 +1,6 @@
 .vim/*
+!.vim/plugin/
+!.vim/ftplugin/
 !.vim/after/
 .config/*
 !.config/starship.toml
