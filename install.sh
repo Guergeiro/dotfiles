@@ -50,7 +50,7 @@ curl -fsSL https://deno.land/x/install/install.sh | sh
 sudo mv $HOME/.deno/bin/deno /usr/bin/
 
 echo "${yellow}Installing NodeJS (LTS)${reset}"
-curl -sL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+curl -sL https://deb.nodesource.com/setup_current.x | sudo -E bash -
 sudo apt-get install nodejs -y
 
 echo "${yellow}Installing Python3${reset}"
