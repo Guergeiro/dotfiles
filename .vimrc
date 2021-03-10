@@ -1,5 +1,5 @@
 " Install VimPlug automatically
-if empty(glob("~/.vim/autoload/plug.vim"))
+if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   augroup VimPlug
     autocmd!
@@ -7,7 +7,7 @@ if empty(glob("~/.vim/autoload/plug.vim"))
   augroup END
 endif
 " Let's load plugins
-call plug#begin("~/.vim/plugged")
+call plug#begin('~/.vim/plugged')
 Plug 'fcpg/vim-altscreen'
 Plug 'Guergeiro/clean-path.vim'
 Plug 'gruvbox-community/gruvbox'
@@ -16,9 +16,11 @@ Plug 'habamax/vim-select-more'
 Plug 'itchyny/vim-gitbranch'
 Plug 'itchyny/lightline.vim'
 Plug 'lambdalisue/fern.vim'
+Plug 'lambdalisue/fern-git-status.vim'
 Plug 'lambdalisue/fern-hijack.vim'
 Plug 'lambdalisue/fern-renderer-nerdfont.vim'
 Plug 'lambdalisue/nerdfont.vim'
+Plug 'machakann/vim-highlightedyank'
 Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree'
 Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': 'yarn install'}
@@ -28,6 +30,7 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'sheerun/vim-polyglot'
 Plug 'srcery-colors/srcery-vim'
+Plug 'vim-test/vim-test'
 Plug 'voldikss/vim-floaterm'
 Plug 'wincent/scalpel'
 call plug#end()
@@ -35,43 +38,43 @@ call plug#end()
 set nocompatible
 set encoding=utf-8
 " Backups and stuff
-if exists("$SUDO_USER")
+if exists('$SUDO_USER')
   set nobackup
   set nowritebackup
   set noswapfile
-  if has("persistent_undo")
+  if has('persistent_undo')
     set noundofile
   endif
 else
   set backupdir=$HOME/.vim/backup//
   if !isdirectory(expand(&backupdir))
-    call mkdir(expand(&backupdir), "p")
+    call mkdir(expand(&backupdir), 'p')
   endif
   set directory=$HOME/.vim/swapfiles//
   if !isdirectory(expand(&directory))
-    call mkdir(expand(&directory), "p")
+    call mkdir(expand(&directory), 'p')
   endif
-  if has("persistent_undo")
+  if has('persistent_undo')
     set undofile
     set undodir=$HOME/.vim/undodir//
     if !isdirectory(expand(&undodir))
-      call mkdir(expand(&undodir), "p")
+      call mkdir(expand(&undodir), 'p')
     endif
   endif
 endif
 " Sets backspace to work in case it doesn't
 set backspace=indent,eol,start
-let g:mapleader = "\\"
+let mapleader = '`'
 " Removes /usr/include from path
 set path-=/usr/include
 " Enable syntax highlighting
 syntax on
 filetype plugin indent on
-if has("syntax")
+if has('syntax')
   set cursorline
 endif
 " Make default clipboard the OS X clipboard (and unnamedplus for Linux)
-if has("clipboard")
+if has('clipboard')
   set clipboard=unnamed,unnamedplus
 endif
 " Formats stuff as I want, TAB=2spaces, but intelligent
@@ -84,7 +87,7 @@ set smarttab
 " Start scrolling 10 lines before the end
 set scrolloff=10
 " Folding
-if has("folding")
+if has('folding')
   set foldmethod=indent
   set foldlevelstart=3
 endif
@@ -92,51 +95,51 @@ endif
 set highlight+=N:DiffText
 " List stuff
 set list
-set listchars=nbsp:⦸
-set listchars+=trail:⋅
+set listchars=
+set listchars+=nbsp:⦸,trail:·,tab:»·,eol:↲
 " Split stuff
-if has("windows")
+if has('windows')
   set splitbelow
 endif
-if has("vertsplit")
+if has('vertsplit')
   set splitright
 endif
 " Pretty terminal
-if has("termguicolors")
+if has('termguicolors')
   set termguicolors
   set t_Co=256
 endif
 " Allow cursor to move where there is no text in visual block mode
-if has("virtualedit")
+if has('virtualedit')
   set virtualedit=block
 endif
 " Disable error bells
-if exists("&noerrorbells")
+if exists('&noerrorbells')
   set noerrorbells
 endif
 " Display all matching files when tab complete
-if has("wildmenu")
+if has('wildmenu')
   set wildmenu
 endif
 " Enable line numbers
 set number
-if exists("&relativenumber")
+if exists('&relativenumber')
   set relativenumber
 endif
-if has("signs")
+if has('signs')
   set signcolumn=yes
 endif
 " Enable mouse support
-if has("mouse")
+if has('mouse')
   set mouse=a
 endif
 " Enable statusline
-if has("statusline")
+if has('statusline')
   set laststatus=2
 endif
 " Highlight matching pairs as you type: (), [], {}
 set showmatch
-if has("extra_search")
+if has('extra_search')
   " Search-as-you-type
   set incsearch
   " Use highlighting for search matches (:nohlsearch to clear [or :noh])
@@ -157,19 +160,19 @@ set updatetime=300
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
 " RipGrep to the rescue!
-if executable("rg")
+if executable('rg')
   set grepprg=rg\ --smart-case\ --vimgrep\ --hidden
   set grepformat=%f:%l:%c:%m
 endif
 " Remove extra white spaces
 function! <sid>trimWhitespace() abort
-  let l = line(".")
-  let c = col(".")
+  let l = line('.')
+  let c = col('.')
   keepp %s/\s\+$//e
   call cursor(l, c)
 endfunction
 " Sudo write
-command! Write !sudo tee % >/dev/null
+command! Write !sudo tee % > /dev/null
 " Y yanks to the end of the line
 nnoremap Y y$
 " ctrl+d & ctrl+u feels weird, so remap for ctrl+j & ctrl+k
@@ -181,6 +184,7 @@ noremap <c-u> <nop>
 inoremap { {}<esc>i
 inoremap ( ()<esc>i
 inoremap [ []<esc>i
+inoremap < <><esc>i
 " Auto closes marks
 inoremap " ""<esc>i
 inoremap ` ``<esc>i
@@ -196,10 +200,10 @@ if &diff
 endif
 " Show documentation
 function! <sid>show_documentation()
-  if (index(["vim", "help"], &filetype) >= 0)
-    execute "h " . expand("<cword>")
+  if (index(['vim', 'help'], &filetype) >= 0)
+    execute 'h ' . expand('<cword>')
   else
-    execute "!" . &keywordprg . " " . expand("<cword>")
+    execute '!' . &keywordprg . ' ' . expand('<cword>')
   endif
 endfunction
 inoremap <leader>k <esc>:call <sid>show_documentation()<cr>
@@ -218,71 +222,80 @@ let g:clean_path_wildignore = 1
 let g:CoolTotalMatches = 1
 "" Lightline Config Start
 let g:lightline = {
-      \ "active": {
-        \   "left": [ [ "mode", "paste" ],
-        \             [ "gitbranch", "readonly", "filename", "modified" ] ]
+      \ 'active': {
+        \   'left': [ [ 'mode', 'paste' ],
+        \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
         \ },
-        \ "component_function": {
-          \   "gitbranch": "gitbranch#name",
+        \ 'component_function': {
+          \   'gitbranch': 'gitbranch#name',
           \ },
           \ }
 "let g:lightline.colorscheme = 'gruvbox'
 let g:lightline.colorscheme = 'srcery'
 "" Vimade Config Start
 let g:vimade = {
-      \ "fadelevel": 0.2,
-      \ "usecursorhold": 1
+      \ 'fadelevel': 0.2,
+      \ 'usecursorhold': 1
       \ }
 "" Undotree Config Start
 inoremap <silent> <leader>u <esc>:UndotreeToggle<cr>
 nnoremap <silent> <leader>u :UndotreeToggle<cr>
 "" Floaterm Config Start
-let g:floaterm_wintype = "vsplit"
+let g:floaterm_wintype = 'vsplit'
 let g:floaterm_width = 0.5
-let g:floaterm_autoclose = 2
 "" Vim-select Config Start
 let g:select_no_ignore_vcs = 0
 " A bunch of fuzzy
-inoremap <leader>p <esc>:Select projectfile<cr>
-nnoremap <leader>p :Select projectfile<cr>
-inoremap <leader>b <esc>:Select buffer<cr>
-nnoremap <leader>b :Select buffer<cr>
-inoremap <leader>t <esc>:Select floaterm<cr>
-nnoremap <leader>t :Select floaterm<cr>
-inoremap <leader>/ <esc>:Select bufline<cr>
-nnoremap <leader>/ :Select bufline<cr>
+inoremap <leader>sp <esc>:Select projectfile<cr>
+nnoremap <leader>sp :Select projectfile<cr>
+inoremap <leader>sb <esc>:Select buffer<cr>
+nnoremap <leader>sb :Select buffer<cr>
+inoremap <leader>st <esc>:Select floaterm<cr>
+nnoremap <leader>st :Select floaterm<cr>
+inoremap <leader>sd <esc>:Select todo<cr>
+nnoremap <leader>sd :Select todo<cr>
+inoremap <leader>sg <esc>:Select gitfile<cr>
+nnoremap <leader>sg :Select gitfile<cr>
+inoremap <leader>s/ <esc>:Select bufline<cr>
+nnoremap <leader>s/ :Select bufline<cr>
+"" vim-test Config Start
+nnoremap <leader>tf :TestFile -strategy=floaterm<cr>
+nnoremap <leader>ts :TestSuite -strategy=floaterm<cr>
+nnoremap <leader>tv :TestVisit -strategy=floaterm<cr>
 "" Scalpel Config Start
 let g:ScalpelMap=0
-nmap <leader>s <plug>(Scalpel)
-" Fern
+nmap <leader><f2> <plug>(Scalpel)
+"" Fern
 let g:fern#disable_default_mappings = 1
 let g:fern#default_hidden = 1
 let g:fern#drawer_width = 40
-let g:fern#renderer = "nerdfont"
-inoremap <silent><c-b> <esc>:Fern . -drawer -toggle<cr>
-nnoremap <silent><c-b> :Fern . -drawer -toggle<cr>
+let g:fern#renderer = 'nerdfont'
+inoremap <silent><c-b> <esc>:Fern . -drawer -toggle -reveal=%<cr>
+nnoremap <silent><c-b> :Fern . -drawer -toggle -reveal=%<cr>
+"" vim-highlightedyank Config Start
+let g:highlightedyank_highlight_duration = 500
 "" CoC Config Start
 " Extensions list
 let g:coc_global_extensions = [
-      \ "coc-angular",
-      \ "coc-css",
-      \ "coc-deno",
-      \ "coc-emmet",
-      \ "coc-html",
-      \ "coc-java",
-      \ "coc-json",
-      \ "coc-markdownlint",
-      \ "coc-python",
-      \ "coc-sh",
-      \ "coc-snippets",
-      \ "coc-tsserver",
-      \ "coc-vimlsp",
-      \ "coc-yaml"
+      \ 'coc-angular',
+      \ 'coc-css',
+      \ 'coc-deno',
+      \ 'coc-emmet',
+      \ 'coc-html',
+      \ 'coc-java',
+      \ 'coc-json',
+      \ 'coc-markdownlint',
+      \ 'coc-pyright',
+      \ 'coc-sh',
+      \ 'coc-snippets',
+      \ 'coc-tsserver',
+      \ 'coc-vimlsp',
+      \ 'coc-yaml'
       \ ]
 function! <sid>start_coc() abort
-  call coc#config("coc.source.buffer.enable", 0)
+  call coc#config('coc.source.buffer.enable', 0)
   " Highlight the symbol and its references when holding the cursor.
-  autocmd CursorHold * silent call CocActionAsync("highlight")
+  autocmd! CursorHold * silent call CocActionAsync('highlight')
   " GoTo code navigation.
   nmap <silent> gd <plug>(coc-definition)
   nmap <silent> gy <plug>(coc-type-definition)
@@ -292,33 +305,30 @@ function! <sid>start_coc() abort
   nmap <f2> <plug>(coc-rename)
   " Make <tab> used for trigger completion, completion confirm, snippet expand and jump like VSCode
   function! <sid>check_back_space() abort
-    let col = col(".") - 1
-    return !col || getline(".")[col - 1]  =~# "\s"
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
   endfunction
-  inoremap <silent><expr> <tab>
-        \ pumvisible() ? coc#_select_confirm() :
-        \ coc#expandableOrJumpable() ? "\<c-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<cr>" :
-        \ <sid>check_back_space() ? "\<tab>" :
-        \ coc#refresh()
-  let g:coc_snippet_next = "<leader><leader>"
   " Use <tab> and <S-Tab> to navigate the completion list
-  inoremap <expr> <tab> pumvisible() ? "\<c-n>" : "\<tab>"
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<c-n>" :
+      \ <sid>check_back_space() ? "\<tab>" :
+      \ coc#refresh()
   inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
+  let g:coc_snippet_next = '<leader><leader>'
   " Use <cr> to confirm completion
   inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
   " Use <c-space>for trigger completion
-  inoremap <silent><expr> <c-space> coc#refresh()
   inoremap <silent><expr> <c-@> coc#refresh()
   " Auto organizes import
   nnoremap ,or :CocCommand editor.action.organizeImport<cr>
   " Show documentation
   function! <sid>show_documentation_coc()
-    if (index(["vim", "help"], &filetype) >= 0)
-      execute "h " . expand("<cword>")
+    if (index(['vim', 'help'], &filetype) >= 0)
+      execute 'h ' . expand('<cword>')
     elseif (coc#rpc#ready())
-      call CocActionAsync("doHover")
+      call CocActionAsync('doHover')
     else
-      execute "!" . &keywordprg . " " . expand("<cword>")
+      execute '!' . &keywordprg . ' ' . expand('<cword>')
     endif
   endfunction
   inoremap <leader>k <esc>:call <sid>show_documentation_coc()<cr>
