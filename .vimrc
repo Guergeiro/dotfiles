@@ -8,6 +8,7 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 " Let's load plugins
 call plug#begin('~/.vim/plugged')
+Plug 'dense-analysis/ale'
 Plug 'fcpg/vim-altscreen'
 Plug 'Guergeiro/clean-path.vim'
 Plug 'gruvbox-community/gruvbox'
@@ -22,8 +23,8 @@ Plug 'lambdalisue/fern-renderer-nerdfont.vim'
 Plug 'lambdalisue/nerdfont.vim'
 Plug 'machakann/vim-highlightedyank'
 Plug 'mattn/emmet-vim'
+Plug 'maximbaz/lightline-ale'
 Plug 'mbbill/undotree'
-Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': 'yarn install'}
 Plug 'romainl/vim-cool'
 Plug 'TaDaa/vimade'
 Plug 'tpope/vim-commentary'
@@ -206,8 +207,8 @@ function! <sid>show_documentation()
     execute '!' . &keywordprg . ' ' . expand('<cword>')
   endif
 endfunction
-inoremap <leader>k <esc>:call <sid>show_documentation()<cr>
-nnoremap <leader>k :call <sid>show_documentation()<cr>
+inoremap <silent> <leader>k <esc>:call <sid>show_documentation()<cr>
+nnoremap <silent> <leader>k :call <sid>show_documentation()<cr>
 "" Gruvbox Config Start
 let g:gruvbox_italic = 1
 let g:gruvbox_contrast_dark = 'hard'
@@ -220,18 +221,6 @@ set background=dark
 let g:clean_path_wildignore = 1
 "" vim-cool Config Starts
 let g:CoolTotalMatches = 1
-"" Lightline Config Start
-let g:lightline = {
-      \ 'active': {
-        \   'left': [ [ 'mode', 'paste' ],
-        \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-        \ },
-        \ 'component_function': {
-          \   'gitbranch': 'gitbranch#name',
-          \ },
-          \ }
-"let g:lightline.colorscheme = 'gruvbox'
-let g:lightline.colorscheme = 'srcery'
 "" Vimade Config Start
 let g:vimade = {
       \ 'fadelevel': 0.2,
@@ -273,67 +262,67 @@ let g:fern#renderer = 'nerdfont'
 inoremap <silent><c-b> <esc>:Fern . -drawer -toggle -reveal=%<cr>
 nnoremap <silent><c-b> :Fern . -drawer -toggle -reveal=%<cr>
 "" vim-highlightedyank Config Start
-let g:highlightedyank_highlight_duration = 500
-"" CoC Config Start
-" Extensions list
-let g:coc_global_extensions = [
-      \ 'coc-angular',
-      \ 'coc-css',
-      \ 'coc-deno',
-      \ 'coc-emmet',
-      \ 'coc-html',
-      \ 'coc-java',
-      \ 'coc-json',
-      \ 'coc-markdownlint',
-      \ 'coc-pyright',
-      \ 'coc-sh',
-      \ 'coc-snippets',
-      \ 'coc-tsserver',
-      \ 'coc-vimlsp',
-      \ 'coc-yaml'
-      \ ]
-function! <sid>start_coc() abort
-  call coc#config('coc.source.buffer.enable', 0)
-  " Highlight the symbol and its references when holding the cursor.
-  autocmd! CursorHold * silent call CocActionAsync('highlight')
-  " GoTo code navigation.
-  nmap <silent> gd <plug>(coc-definition)
-  nmap <silent> gy <plug>(coc-type-definition)
-  nmap <silent> gi <plug>(coc-implementation)
-  nmap <silent> gr <plug>(coc-references)
-  " Remap for rename current word
-  nmap <f2> <plug>(coc-rename)
-  " Make <tab> used for trigger completion, completion confirm, snippet expand and jump like VSCode
-  function! <sid>check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~# '\s'
-  endfunction
-  " Use <tab> and <S-Tab> to navigate the completion list
-inoremap <silent><expr> <TAB>
+let g:highlightedyank_highlight_duration = 250
+"" ALE Config Start
+let g:ale_completion_enabled = 1
+let g:ale_completion_autoimport = 1
+set completeopt=menu,menuone,popup,noselect,noinsert
+set omnifunc+=ale#completion#OmniFunc
+function! <sid>check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+inoremap <silent><expr> <tab>
       \ pumvisible() ? "\<c-n>" :
       \ <sid>check_back_space() ? "\<tab>" :
-      \ coc#refresh()
-  inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
-  let g:coc_snippet_next = '<leader><leader>'
-  " Use <cr> to confirm completion
-  inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
-  " Use <c-space>for trigger completion
-  inoremap <silent><expr> <c-@> coc#refresh()
-  " Auto organizes import
-  nnoremap ,or :CocCommand editor.action.organizeImport<cr>
-  " Show documentation
-  function! <sid>show_documentation_coc()
-    if (index(['vim', 'help'], &filetype) >= 0)
-      execute 'h ' . expand('<cword>')
-    elseif (coc#rpc#ready())
-      call CocActionAsync('doHover')
-    else
-      execute '!' . &keywordprg . ' ' . expand('<cword>')
-    endif
-  endfunction
-  inoremap <leader>k <esc>:call <sid>show_documentation_coc()<cr>
-  nnoremap <leader>k :call <sid>show_documentation_coc()<cr>
-endfunction
+      \ "<c-x><c-o>"
+inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
+inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
+imap <c-@> <plug>(ale_complete)
+nmap gd <plug>(ale_go_to_definition)
+nmap gy <plug>(ale_go_to_type_definition)
+nmap gr <plug>(ale_find_references)
+nnoremap <f2> :ALERename<cr>
+nmap <c-h> <plug>(ale_previous_wrap)
+imap <c-h> <plug>(ale_previous_wrap)
+nmap <c-l> <plug>(ale_next_wrap)
+imap <c-l> <plug>(ale_next_wrap)
+"" Lightline Config Start
+let g:lightline = {
+      \ 'active': {
+      \   'left': [['mode', 'paste'],
+      \           ['gitbranch', 'readonly', 'filename', 'modified']],
+      \   'right': [['linter_checking',
+      \              'linter_errors',
+      \              'linter_warnings',
+      \              'linter_infos',
+      \              'linter_ok'],
+      \             ['percent',
+      \              'lineinfo'],
+      \             ['fileformat',
+      \              'fileencoding',
+      \              'filetype']],
+      \   },
+      \ 'component_function': {
+      \   'gitbranch': 'gitbranch#name',
+      \   },
+      \ 'component_type': {
+      \   'linter_checking': 'right',
+      \   'linter_infos': 'right',
+      \   'linter_warnings': 'warning',
+      \   'linter_errors': 'error',
+      \   'linter_ok': 'right',
+      \   },
+      \ 'component_expand': {
+      \   'linter_checking': 'lightline#ale#checking',
+      \   'linter_infos': 'lightline#ale#infos',
+      \   'linter_warnings': 'lightline#ale#warnings',
+      \   'linter_errors': 'lightline#ale#errors',
+      \   'linter_ok': 'lightline#ale#ok',
+      \   }
+      \ }
+"let g:lightline.colorscheme = 'gruvbox'
+let g:lightline.colorscheme = 'srcery'
 " AutoCommands
 augroup General
   autocmd!
@@ -344,6 +333,4 @@ augroup General
   autocmd QuickFixCmdPost lgetexpr lwindow
   " Close the completion window when done
   autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
-  " Start CoC related mappings
-  autocmd User CocNvimInit call <sid>start_coc()
 augroup END

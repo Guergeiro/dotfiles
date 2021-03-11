@@ -9,5 +9,5 @@ if has("eval")
   setlocal formatexpr=
 endif
 setlocal equalprg=prettier\ --stdin-filepath\ %
-set path-=node_modules/**
-set path-=./node_modules/**
+"set path-=node_modules/**
+"set path-=./node_modules/**
