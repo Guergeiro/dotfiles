@@ -3,27 +3,24 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   augroup VimPlug
     autocmd!
-    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    autocmd VimEnter * PlugUpdate --sync | source $MYVIMRC
   augroup END
 endif
 " Let's load plugins
 call plug#begin('~/.vim/plugged')
-Plug 'dense-analysis/ale'
 Plug 'fcpg/vim-altscreen'
 Plug 'Guergeiro/clean-path.vim'
 Plug 'gruvbox-community/gruvbox'
 Plug 'habamax/vim-select'
 Plug 'habamax/vim-select-more'
-Plug 'itchyny/vim-gitbranch'
 Plug 'itchyny/lightline.vim'
+Plug 'itchyny/vim-gitbranch'
 Plug 'lambdalisue/fern.vim'
 Plug 'lambdalisue/fern-git-status.vim'
 Plug 'lambdalisue/fern-hijack.vim'
 Plug 'lambdalisue/fern-renderer-nerdfont.vim'
 Plug 'lambdalisue/nerdfont.vim'
 Plug 'machakann/vim-highlightedyank'
-Plug 'mattn/emmet-vim'
-Plug 'maximbaz/lightline-ale'
 Plug 'mbbill/undotree'
 Plug 'romainl/vim-cool'
 Plug 'TaDaa/vimade'
@@ -34,6 +31,21 @@ Plug 'srcery-colors/srcery-vim'
 Plug 'vim-test/vim-test'
 Plug 'voldikss/vim-floaterm'
 Plug 'wincent/scalpel'
+
+Plug 'prabirshrestha/vim-lsp'
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'prabirshrestha/asyncomplete-emmet.vim'
+Plug 'prabirshrestha/asyncomplete-file.vim'
+Plug 'mattn/emmet-vim'
+Plug 'mattn/vim-lsp-settings'
+
+Plug 'thomasfaingnaert/vim-lsp-snippets'
+Plug 'thomasfaingnaert/vim-lsp-ultisnips'
+
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 call plug#end()
 " Enter current millenium
 set nocompatible
@@ -65,7 +77,8 @@ else
 endif
 " Sets backspace to work in case it doesn't
 set backspace=indent,eol,start
-let mapleader = '`'
+let g:mapleader = '`'
+let g:maplocalleader = '~'
 " Removes /usr/include from path
 set path-=/usr/include
 " Enable syntax highlighting
@@ -157,7 +170,7 @@ set hidden
 " Give more space for displaying messages.
 set cmdheight=2
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable delays and poor user experience.
-set updatetime=300
+set updatetime=250
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
 " RipGrep to the rescue!
@@ -200,15 +213,17 @@ if &diff
   nnoremap <leader>o 2<c-w>w<bar>:buffer 4<cr><bar>4<c-w>w<bar><c-w>c<bar>2<c-w>w
 endif
 " Show documentation
-function! <sid>show_documentation()
+function! <sid>show_documentation(serverLoaded)
   if (index(['vim', 'help'], &filetype) >= 0)
     execute 'h ' . expand('<cword>')
+  elseif (a:serverLoaded)
+    execute 'LspHover'
   else
     execute '!' . &keywordprg . ' ' . expand('<cword>')
   endif
 endfunction
-inoremap <silent> <leader>k <esc>:call <sid>show_documentation()<cr>
-nnoremap <silent> <leader>k :call <sid>show_documentation()<cr>
+let g:serverLoaded = 0
+nnoremap <silent> <leader>k :call <sid>show_documentation(g:serverLoaded)<cr>
 "" Gruvbox Config Start
 let g:gruvbox_italic = 1
 let g:gruvbox_contrast_dark = 'hard'
@@ -249,8 +264,11 @@ inoremap <leader>s/ <esc>:Select bufline<cr>
 nnoremap <leader>s/ :Select bufline<cr>
 "" vim-test Config Start
 nnoremap <leader>tf :TestFile -strategy=floaterm<cr>
+inoremap <leader>tf <esc>:TestFile -strategy=floaterm<cr>
 nnoremap <leader>ts :TestSuite -strategy=floaterm<cr>
+inoremap <leader>ts <esc>:TestSuite -strategy=floaterm<cr>
 nnoremap <leader>tv :TestVisit -strategy=floaterm<cr>
+inoremap <leader>tv <esc>:TestVisit -strategy=floaterm<cr>
 "" Scalpel Config Start
 let g:ScalpelMap=0
 nmap <leader><f2> <plug>(Scalpel)
@@ -263,11 +281,18 @@ inoremap <silent><c-b> <esc>:Fern . -drawer -toggle -reveal=%<cr>
 nnoremap <silent><c-b> :Fern . -drawer -toggle -reveal=%<cr>
 "" vim-highlightedyank Config Start
 let g:highlightedyank_highlight_duration = 250
-"" ALE Config Start
-let g:ale_completion_enabled = 1
-let g:ale_completion_autoimport = 1
-set completeopt=menu,menuone,popup,noselect,noinsert
-set omnifunc+=ale#completion#OmniFunc
+"" vim-lsp
+let g:lsp_fold_enabled = 0
+let g:lsp_diagnostics_float_cursor = 1
+let g:lsp_diagnostics_float_delay = 250
+let g:lsp_diagnostics_highlights_enabled = 0
+let g:lsp_diagnostics_signs_error = {'text': ''}
+let g:lsp_diagnostics_signs_warning = {'text': ''}
+let g:lsp_diagnostics_signs_info = {'text': ''}
+let g:lsp_diagnostics_signs_hint = {'text': ''}
+let g:lsp_diagnostics_signs_delay = 250
+let g:lsp_fold_enabled = 0
+set completeopt=menuone,noinsert,noselect,preview
 function! <sid>check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
@@ -275,54 +300,34 @@ endfunction
 inoremap <silent><expr> <tab>
       \ pumvisible() ? "\<c-n>" :
       \ <sid>check_back_space() ? "\<tab>" :
-      \ "<c-x><c-o>"
+      \ asyncomplete#force_refresh()
 inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
-inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
-imap <c-@> <plug>(ale_complete)
-nmap gd <plug>(ale_go_to_definition)
-nmap gy <plug>(ale_go_to_type_definition)
-nmap gr <plug>(ale_find_references)
-nnoremap <f2> :ALERename<cr>
-nmap <c-h> <plug>(ale_previous_wrap)
-imap <c-h> <plug>(ale_previous_wrap)
-nmap <c-l> <plug>(ale_next_wrap)
-imap <c-l> <plug>(ale_next_wrap)
+inoremap <silent> <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
+imap <c-@> <plug>(asyncomplete_force_refresh)
+nmap gd <plug>(lsp-definition)
+nmap gr <plug>(lsp-references)
+nmap gi <plug>(lsp-implementation)
+nmap gt <plug>(lsp-type-definition)
+nmap <c-@> <plug>(lsp-code-action)
+nmap <f2> <plug>(lsp-rename)
+nmap <silent> <c-h> <plug>(lsp-previous-diagnostic)
+nmap <silent> <c-l> <plug>(lsp-next-diagnostic)
 "" Lightline Config Start
 let g:lightline = {
       \ 'active': {
       \   'left': [['mode', 'paste'],
       \           ['gitbranch', 'readonly', 'filename', 'modified']],
-      \   'right': [['linter_checking',
-      \              'linter_errors',
-      \              'linter_warnings',
-      \              'linter_infos',
-      \              'linter_ok'],
-      \             ['percent',
-      \              'lineinfo'],
-      \             ['fileformat',
-      \              'fileencoding',
-      \              'filetype']],
       \   },
       \ 'component_function': {
       \   'gitbranch': 'gitbranch#name',
       \   },
-      \ 'component_type': {
-      \   'linter_checking': 'right',
-      \   'linter_infos': 'right',
-      \   'linter_warnings': 'warning',
-      \   'linter_errors': 'error',
-      \   'linter_ok': 'right',
-      \   },
-      \ 'component_expand': {
-      \   'linter_checking': 'lightline#ale#checking',
-      \   'linter_infos': 'lightline#ale#infos',
-      \   'linter_warnings': 'lightline#ale#warnings',
-      \   'linter_errors': 'lightline#ale#errors',
-      \   'linter_ok': 'lightline#ale#ok',
-      \   }
       \ }
 "let g:lightline.colorscheme = 'gruvbox'
 let g:lightline.colorscheme = 'srcery'
+"" UltiSnips
+let g:UltiSnipsExpandTrigger = '<nop>'
+let g:UltiSnipsJumpForwardTrigger = '<leader><leader>'
+let g:UltiSnipsJumpBackwardTrigger = '<localleader><localleader>'
 " AutoCommands
 augroup General
   autocmd!
@@ -333,4 +338,6 @@ augroup General
   autocmd QuickFixCmdPost lgetexpr lwindow
   " Close the completion window when done
   autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
+  " Change documentation to also allow lsp docs
+  autocmd User lsp_server_init let g:serverLoaded = 1
 augroup END

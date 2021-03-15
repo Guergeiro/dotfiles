@@ -1,7 +1,7 @@
-if exists("g:loaded_operatorfunc_wrapper")
+if exists('g:loaded_operatorfunc_wrapper')
   finish
 endif
-if !exists("*s:operator")
+if !exists('*s:operator')
   " Execute operatorfunc
   function! s:operator(type, operator) abort
     let w:view = winsaveview()
@@ -23,16 +23,16 @@ if !exists("*s:operator")
     unlet w:view
   endfunction
 endif
-if !exists("*s:FormatPrg")
+if !exists('*s:FormatPrg')
   " Wrapper for formatprg
   function! s:FormatPrg(type, ...) abort
-    call <sid>operator(a:type, "gq")
+    call <sid>operator(a:type, 'gq')
   endfunction
 endif
-if !exists("*s:IndentPrg")
+if !exists('*s:IndentPrg')
   " Wrapper for indentprg
   function! s:IndentPrg(type, ...) abort
-    call <sid>operator(a:type, "=")
+    call <sid>operator(a:type, '=')
   endfunction
 endif
 vnoremap <silent> gq :<c-u>call <sid>FormatPrg(visualmode(), 1)<cr>
