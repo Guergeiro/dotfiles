@@ -2,10 +2,10 @@
 
 ## Table of Contents
 
--   [About and Disclaimer](#about-and-disclaimer)
--   [Steps](#steps)
--   [Author](#author)
--   [License](#license)
+- [About and Disclaimer](#about-and-disclaimer)
+- [Steps](#steps)
+- [Author](#author)
+- [License](#license)
 
 ## About and Disclaimer
 
@@ -17,34 +17,39 @@ The purpose of this reposity is when I start a freshly Linux image, a bit more t
 
 1. Install [cURL](https://curl.haxx.se/)
 
-    ```
-    $ sudo apt-get install curl -y
-    ```
+   ```
+   $ sudo apt-get install curl -y
+   ```
 
 2. Navigate to where you want this repository to be located
 
-    ```
-    $ cd $HOME/Documents/
-    ```
+   ```
+   $ cd $HOME/Documents/
+   ```
 
 3. Run install script (Will take a while)
 
-    ```
-    $ curl -sL https://raw.githubusercontent.com/Guergeiro/dotfiles/master/install.sh | sh
-    $ curl -sL https://raw.githubusercontent.com/Guergeiro/dotfiles/master/install.sh | sh -s -- -with-fonts
-    ```
+   ```
+   $ curl -sL https://raw.githubusercontent.com/Guergeiro/dotfiles/master/install.sh | sh
+   $ curl -sL https://raw.githubusercontent.com/Guergeiro/dotfiles/master/install.sh | sh -s -- -with-fonts
+   ```
 
 4. Create ssh key for your git provider (GitHub in this example)
 
-    ```
-    $ ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
-    # Save it to /home/your-user-here/.ssh/GitHub
-    ```
+   ```
+   $ ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+   # Save it to /home/your-user-here/.ssh/GitHub
+   ```
 
-    ```
-    $ echo -e "Host github.com\n    Hostname ssh.github.com\n    IdentityFile ~/.ssh/GitHub\n    Port 443 #Only if the default 22 is blocked" > ~/.ssh/config
-    # Remove port option if possible
-    ```
+   ```
+   # Have .ssh/config with the following
+   Host github.com
+       IdentityFile ~/.ssh/GitHub
+   Host foo.com
+       IdentityFile ~/.ssh/Foo
+   Host bar.com
+       IdentityFile ~/.ssh/Bar
+   ```
 
 ## Author
 

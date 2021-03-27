@@ -38,7 +38,7 @@ cd vim/
             --enable-perlinterp=yes \
             --enable-luainterp=yes \
             --enable-cscope \
-sudo checkinstall
+sudo make install
 cd ..
 
 echo "${yellow}Installing Zip and Rar${reset}"
@@ -49,7 +49,7 @@ echo "${yellow}Installing Deno${reset}"
 curl -fsSL https://deno.land/x/install/install.sh | sh
 sudo mv $HOME/.deno/bin/deno /usr/bin/
 
-echo "${yellow}Installing NodeJS (LTS)${reset}"
+echo "${yellow}Installing NodeJS (Current)${reset}"
 curl -sL https://deb.nodesource.com/setup_current.x | sudo -E bash -
 sudo apt-get install nodejs -y
 
@@ -70,9 +70,6 @@ sudo apt-get install xclip -y
 
 echo "${yellow}Installing Yarn${reset}"
 sudo npm install -g yarn
-
-echo "${yellow}Installing TypeScript${reset}"
-sudo yarn global add typescript
 
 echo "${yellow}Installing Prettier${reset}"
 sudo yarn global add prettier

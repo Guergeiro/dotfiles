@@ -1,14 +1,30 @@
 add_newline = true
 [character]
 success_symbol = "[➜](bold green)"
-error_symbol = "[✖](bold red)"
-[package]
-disabled = true
-[line_break]
-disabled = true
+error_symbol = "[➜](bold red)"
 [cmd_duration]
 disabled = true
 [directory]
+read_only = " "
 style = "bold blue"
+[docker]
+symbol = " "
+[git_branch]
+symbol = " "
+[git_status]
+disabled = true
+[line_break]
+disabled = true
+[nodejs]
+detect_extensions = []
+not_capable_style = "bold yellow"
+[package]
+disabled = true
 [username]
 disabled = true
+[custom.deno]
+command = """ sed "s/deno //g" <<< "$(deno -V)" """
+files = ["mod.ts", "deps.ts", "mod.js", "deps.js"]
+symbol = "🦕 "
+style = "bold green"
+format = "via [$symbol(v$output )]($style)"

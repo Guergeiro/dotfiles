@@ -93,7 +93,7 @@ if has('clipboard')
 endif
 " Formats stuff as I want, TAB=2spaces, but intelligent
 set autoindent
-set tabstop=8
+set tabstop=2
 set softtabstop=2
 set expandtab
 set shiftwidth=2
@@ -232,8 +232,9 @@ let g:gruvbox_contrast_dark = 'hard'
 let g:srcery_italic = 1
 colorscheme srcery
 set background=dark
-"" Clean-path Config Start
-let g:clean_path_wildignore = 1
+"" clean-path.vim Config Start
+let &path.=cleanpath#setpath()
+let &wildignore.=cleanpath#setwildignore()
 "" vim-cool Config Starts
 let g:CoolTotalMatches = 1
 "" Vimade Config Start
