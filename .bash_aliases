@@ -7,12 +7,18 @@ alias vi="vim";
 alias :q="exit";
 # Fuck Python2... Sorry :(
 alias python="python3"; alias pip="pip3";
-# I"m lazy :>
-alias ..="cd ..";
 # Security stuff
 alias del="trash";
 alias rm="echo Use \"del\", or the full path i.e. \"/bin/rm\"";
 alias mv="mv -i";
+# I don't know the name of every explorer
+if [ "$(command uname -r)" = *"microsoft"* ]; then
+    alias explorer="explorer.exe"
+elif [ "$(command lsb_release -is)" = "Linuxmint" ]; then
+    alias explorer="thunar"
+else
+    alias explorer="nautilus"
+fi
 # Some more ls aliases
 alias ll="ls -alF"; alias la="ls -A"; alias l="ls -CF";
 # Ripgrep rules for me!
@@ -27,7 +33,7 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep="rg -E --color=auto";
 fi
 # Screenkey defaults
-alias screenkey="screenkey --position fixed --geometry 70%x5%+15%-7";
+alias screenkey="screenkey --position fixed --geometry 70%x5%+15%-1 &";
 # Create a new copy/paste command that allows too feed/read content directly to/from xclip
 alias copy="xclip -i -selection clipboard"
 alias paste="xclip -o -selection clipboard"
