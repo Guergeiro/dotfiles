@@ -3,8 +3,14 @@
   name = Breno Salles
 [core]
   editor = vim
+  pager = delta
 [merge]
-  tool = vimdiff
+  tool = diffconflicts
 [mergetool]
   keepBackup = false
   keepTemporaries =
+[mergetool "diffconflicts"]
+  cmd = vim -c DiffConflicts \"$MERGED\" \"$BASE\" \"$LOCAL\" \"$REMOTE\"
+  trustExitCode = true
+[delta]
+  side-by-side = true

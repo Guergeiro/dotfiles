@@ -6,47 +6,7 @@ if empty(glob('~/.vim/autoload/plug.vim'))
     autocmd VimEnter * PlugUpdate --sync | source $MYVIMRC
   augroup END
 endif
-" Let's load plugins
-call plug#begin('~/.vim/plugged')
-Plug 'fcpg/vim-altscreen'
-Plug 'Guergeiro/clean-path.vim'
-Plug 'gruvbox-community/gruvbox'
-Plug 'habamax/vim-select'
-Plug 'habamax/vim-select-more'
-Plug 'itchyny/lightline.vim'
-Plug 'itchyny/vim-gitbranch'
-Plug 'lambdalisue/fern.vim'
-Plug 'lambdalisue/fern-git-status.vim'
-Plug 'lambdalisue/fern-hijack.vim'
-Plug 'lambdalisue/fern-renderer-nerdfont.vim'
-Plug 'lambdalisue/nerdfont.vim'
-Plug 'machakann/vim-highlightedyank'
-Plug 'mbbill/undotree'
-Plug 'romainl/vim-cool'
-Plug 'TaDaa/vimade'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-surround'
-Plug 'sheerun/vim-polyglot'
-Plug 'srcery-colors/srcery-vim'
-Plug 'vim-test/vim-test'
-Plug 'voldikss/vim-floaterm'
-Plug 'wincent/scalpel'
-
-Plug 'prabirshrestha/vim-lsp'
-Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/asyncomplete.vim'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
-Plug 'prabirshrestha/asyncomplete-emmet.vim'
-Plug 'prabirshrestha/asyncomplete-file.vim'
-Plug 'mattn/emmet-vim'
-Plug 'mattn/vim-lsp-settings'
-
-Plug 'thomasfaingnaert/vim-lsp-snippets'
-Plug 'thomasfaingnaert/vim-lsp-ultisnips'
-
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-call plug#end()
+" General {{{
 " Enter current millenium
 set nocompatible
 set encoding=utf-8
@@ -59,17 +19,17 @@ if exists('$SUDO_USER')
     set noundofile
   endif
 else
-  set backupdir=$HOME/.vim/backup//
+  let &backupdir=expand("/tmp/.vimtrash/backup//")
   if !isdirectory(expand(&backupdir))
     call mkdir(expand(&backupdir), 'p')
   endif
-  set directory=$HOME/.vim/swapfiles//
+  let &directory=expand("/tmp/.vimtrash/swapfiles//")
   if !isdirectory(expand(&directory))
     call mkdir(expand(&directory), 'p')
   endif
   if has('persistent_undo')
     set undofile
-    set undodir=$HOME/.vim/undodir//
+    let &undodir=expand("/tmp/.vimtrash/undodir//")
     if !isdirectory(expand(&undodir))
       call mkdir(expand(&undodir), 'p')
     endif
@@ -78,8 +38,7 @@ endif
 " Sets backspace to work in case it doesn't
 set backspace=indent,eol,start
 let g:mapleader = '`'
-let g:maplocalleader = '~'
-" Removes /usr/include from path
+" Clears path
 set path-=/usr/include
 " Enable syntax highlighting
 syntax on
@@ -168,7 +127,7 @@ set noshowmode
 " TextEdit might fail if hidden is not set.
 set hidden
 " Give more space for displaying messages.
-set cmdheight=2
+set cmdheight=1
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable delays and poor user experience.
 set updatetime=250
 " Don't pass messages to |ins-completion-menu|.
@@ -204,14 +163,6 @@ inoremap " ""<esc>i
 inoremap ` ``<esc>i
 " Terminal escape
 tnoremap <leader><esc> <c-\><c-n>
-" vimdiff specific
-if &diff
-  nnoremap <leader>1 :diffget LOCAL<cr>
-  nnoremap <leader>2 :diffget BASE<cr>
-  nnoremap <leader>3 :diffget REMOTE<cr>
-  " Make it like vim-fugitive conflict
-  nnoremap <leader>o 2<c-w>w<bar>:buffer 4<cr><bar>4<c-w>w<bar><c-w>c<bar>2<c-w>w
-endif
 " Show documentation
 function! <sid>show_documentation(serverLoaded)
   if (index(['vim', 'help'], &filetype) >= 0)
@@ -224,31 +175,74 @@ function! <sid>show_documentation(serverLoaded)
 endfunction
 let g:serverLoaded = 0
 nnoremap <silent> <leader>k :call <sid>show_documentation(g:serverLoaded)<cr>
-"" Gruvbox Config Start
-let g:gruvbox_italic = 1
-let g:gruvbox_contrast_dark = 'hard'
-"colorscheme gruvbox
-"" Srcery Config Start
+
+" Let's load plugins
+call plug#begin('~/.vim/plugged')
+Plug 'fcpg/vim-altscreen'
+Plug 'Guergeiro/clean-path.vim'
+Plug 'habamax/vim-select'
+Plug 'habamax/vim-select-more'
+Plug 'itchyny/lightline.vim'
+Plug 'itchyny/vim-gitbranch'
+Plug 'lambdalisue/fern.vim'
+Plug 'lambdalisue/fern-git-status.vim'
+Plug 'lambdalisue/fern-hijack.vim'
+Plug 'lambdalisue/fern-renderer-nerdfont.vim'
+Plug 'lambdalisue/nerdfont.vim'
+Plug 'machakann/vim-highlightedyank'
+Plug 'mbbill/undotree'
+Plug 'romainl/vim-cool'
+Plug 'TaDaa/vimade'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
+Plug 'sheerun/vim-polyglot'
+Plug 'srcery-colors/srcery-vim'
+Plug 'vim-test/vim-test'
+Plug 'voldikss/vim-floaterm'
+Plug 'whiteinge/diffconflicts'
+Plug 'wincent/scalpel'
+
+Plug 'mattn/emmet-vim'
+Plug 'mattn/vim-lsp-settings'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'prabirshrestha/asyncomplete-emmet.vim'
+Plug 'prabirshrestha/asyncomplete-file.vim'
+Plug 'prabirshrestha/asyncomplete-neosnippet.vim'
+
+Plug 'Shougo/neosnippet.vim'
+Plug 'Shougo/neosnippet-snippets'
+Plug 'honza/vim-snippets'
+call plug#end()
+" Srcery Config Start {{{
 let g:srcery_italic = 1
 colorscheme srcery
 set background=dark
-"" clean-path.vim Config Start
+" }}}
+" clean-path.vim Config Start {{{
 let &path.=cleanpath#setpath()
 let &wildignore.=cleanpath#setwildignore()
-"" vim-cool Config Starts
+" }}}
+" vim-cool Config Starts {{{
 let g:CoolTotalMatches = 1
-"" Vimade Config Start
+" }}}
+" Vimade Config Start {{{
 let g:vimade = {
       \ 'fadelevel': 0.2,
       \ 'usecursorhold': 1
       \ }
-"" Undotree Config Start
+" }}}
+" Undotree Config Start {{{
 inoremap <silent> <leader>u <esc>:UndotreeToggle<cr>
 nnoremap <silent> <leader>u :UndotreeToggle<cr>
-"" Floaterm Config Start
+" }}}
+" Floaterm Config Start {{{
 let g:floaterm_wintype = 'vsplit'
 let g:floaterm_width = 0.5
-"" Vim-select Config Start
+" }}}
+" Vim-select Config Start {{{
 let g:select_no_ignore_vcs = 0
 " A bunch of fuzzy
 inoremap <leader>sp <esc>:Select projectfile<cr>
@@ -263,26 +257,31 @@ inoremap <leader>sg <esc>:Select gitfile<cr>
 nnoremap <leader>sg :Select gitfile<cr>
 inoremap <leader>s/ <esc>:Select bufline<cr>
 nnoremap <leader>s/ :Select bufline<cr>
-"" vim-test Config Start
+" }}}
+" vim-test Config Start {{{
 nnoremap <leader>tf :TestFile -strategy=floaterm<cr>
 inoremap <leader>tf <esc>:TestFile -strategy=floaterm<cr>
 nnoremap <leader>ts :TestSuite -strategy=floaterm<cr>
 inoremap <leader>ts <esc>:TestSuite -strategy=floaterm<cr>
 nnoremap <leader>tv :TestVisit -strategy=floaterm<cr>
 inoremap <leader>tv <esc>:TestVisit -strategy=floaterm<cr>
-"" Scalpel Config Start
+" }}}
+" Scalpel Config Start {{{
 let g:ScalpelMap=0
 nmap <leader><f2> <plug>(Scalpel)
-"" Fern
+" }}}
+" Fern {{{
 let g:fern#disable_default_mappings = 1
 let g:fern#default_hidden = 1
 let g:fern#drawer_width = 40
 let g:fern#renderer = 'nerdfont'
 inoremap <silent><c-b> <esc>:Fern . -drawer -toggle -reveal=%<cr>
 nnoremap <silent><c-b> :Fern . -drawer -toggle -reveal=%<cr>
-"" vim-highlightedyank Config Start
+" }}}
+" vim-highlightedyank Config Start {{{
 let g:highlightedyank_highlight_duration = 250
-"" vim-lsp
+" }}}
+" vim-lsp Config Starts {{{
 let g:lsp_fold_enabled = 0
 let g:lsp_diagnostics_float_cursor = 1
 let g:lsp_diagnostics_float_delay = 250
@@ -292,19 +291,6 @@ let g:lsp_diagnostics_signs_warning = {'text': ''}
 let g:lsp_diagnostics_signs_info = {'text': ''}
 let g:lsp_diagnostics_signs_hint = {'text': ''}
 let g:lsp_diagnostics_signs_delay = 250
-let g:lsp_fold_enabled = 0
-set completeopt=menuone,noinsert,noselect,preview
-function! <sid>check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-inoremap <silent><expr> <tab>
-      \ pumvisible() ? "\<c-n>" :
-      \ <sid>check_back_space() ? "\<tab>" :
-      \ asyncomplete#force_refresh()
-inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
-inoremap <silent> <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
-imap <c-@> <plug>(asyncomplete_force_refresh)
 nmap gd <plug>(lsp-definition)
 nmap gr <plug>(lsp-references)
 nmap gi <plug>(lsp-implementation)
@@ -313,23 +299,55 @@ nmap <c-@> <plug>(lsp-code-action)
 nmap <f2> <plug>(lsp-rename)
 nmap <silent> <c-h> <plug>(lsp-previous-diagnostic)
 nmap <silent> <c-l> <plug>(lsp-next-diagnostic)
-"" Lightline Config Start
+" }}}
+" Asyncomplete Config Starts {{{
+function! s:sort_by_priority_preprocessor(options, matches) abort
+  let l:items = []
+  for [l:source_name, l:matches] in items(a:matches)
+    for l:item in l:matches['items']
+      if stridx(l:item['word'], a:options['base']) == 0
+        let l:item['priority'] =
+            \ get(asyncomplete#get_source_info(l:source_name),'priority',0)
+        call add(l:items, l:item)
+      endif
+    endfor
+  endfor
+  let l:items = sort(l:items, {a, b -> b['priority'] - a['priority']})
+  call asyncomplete#preprocess_complete(a:options, l:items)
+endfunction
+function! s:asyncomplete_custom_expand() abort
+  if !pumvisible()
+    return "\<cr>"
+  endif
+  if neosnippet#expandable()
+    return "\<plug>(neosnippet_expand)"
+  endif
+  return asyncomplete#close_popup()
+endfunction
+" let g:asyncomplete_preprocessor = [function('s:sort_by_priority_preprocessor')]
+let g:asyncomplete_auto_completeopt = 0
+set completeopt=menuone,noinsert,noselect,preview
+inoremap <silent> <expr> <tab> pumvisible() ? "\<c-n>" : "\<tab>"
+inoremap <silent> <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
+imap <silent> <expr> <cr> pumvisible() ? <sid>asyncomplete_custom_expand() : "\<cr>"
+imap <c-@> <plug>(asyncomplete_force_refresh)
+
+imap <leader><leader> <plug>(neosnippet_jump)
+let g:neosnippet#enable_snipmate_compatibility = 1
+" }}}
+" Lightline Config Start {{{
 let g:lightline = {
       \ 'active': {
-      \   'left': [['mode', 'paste'],
-      \           ['gitbranch', 'readonly', 'filename', 'modified']],
-      \   },
-      \ 'component_function': {
-      \   'gitbranch': 'gitbranch#name',
-      \   },
-      \ }
-"let g:lightline.colorscheme = 'gruvbox'
+        \   'left': [['mode', 'paste'],
+        \           ['gitbranch', 'readonly', 'filename', 'modified']],
+        \   },
+        \ 'component_function': {
+          \   'gitbranch': 'gitbranch#name',
+          \   },
+          \ }
 let g:lightline.colorscheme = 'srcery'
-"" UltiSnips
-let g:UltiSnipsExpandTrigger = '<nop>'
-let g:UltiSnipsJumpForwardTrigger = '<leader><leader>'
-let g:UltiSnipsJumpBackwardTrigger = '<localleader><localleader>'
-" AutoCommands
+" }}}
+" AutoCommands {{{
 augroup General
   autocmd!
   " Remove extra spaces on save
@@ -337,8 +355,7 @@ augroup General
   " Add GrepQuickfix window
   autocmd QuickFixCmdPost cgetexpr cwindow
   autocmd QuickFixCmdPost lgetexpr lwindow
-  " Close the completion window when done
-  autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
   " Change documentation to also allow lsp docs
   autocmd User lsp_server_init let g:serverLoaded = 1
 augroup END
+" }}}
