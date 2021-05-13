@@ -2,17 +2,15 @@
 
 function git() {
   if [ "$1" = "root" ]; then
-    local ROOT="$(command git rev-parse --show-toplevel 2> /dev/null || pwd)"
+    local root="$(command git rev-parse --show-toplevel 2> /dev/null || pwd)"
 
     if [ "$#" -eq 1 ]; then
-      echo "$ROOT"
+      echo "$root"
+    elif [ "$2" = "cd" ]; then
+        command cd $root
     else
-      if [ "$2" = "cd" ]; then
-        command cd $ROOT
-      else
-        shift
-        (cd "$ROOT" && eval "$@")
-      fi
+      shift
+      (cd "$root" && eval "$@")
     fi
   elif [ "$1" = "prune" ]; then
     command git fetch --prune
@@ -36,39 +34,60 @@ function man() {
 }
 
 function deno() {
+  local version="alpine-deno"
+  if [ "$1" = "--docker" ]; then
+    shift
+    version="$1"
+    shift
+  fi
   docker run \
     --interactive \
     --tty \
     --rm \
+    --user $(id --user):$(id --group) \
     --volume $PWD:/usr/src/app \
     --volume $HOME/.deno:/deno-dir \
     --workdir /usr/src/app \
-    hayd/alpine-deno \
+    hayd/$version \
     deno "$@"
 }
 
 function node() {
+  local version="current-alpine"
+  if [ "$1" = "--docker" ]; then
+    shift
+    version="$1"
+    shift
+  fi
   docker run \
     --interactive \
     --tty \
     --rm \
+    --user $(id --user):$(id --group) \
     --volume $PWD:/usr/src/app \
     --workdir /usr/src/app \
-    node:alpine \
+    node:$version \
     node "$@"
 }
 
 function npm() {
-  if [ "$2" = "-g" ] || [ "$2" = "--global"]; then
+  if [ "$2" = "-g" ] || [ "$2" = "--global" ]; then
     command npm "$@"
   else
+    local version="current-alpine"
+    if [ "$1" = "--docker" ]; then
+      shift
+      version="$1"
+      shift
+    fi
     docker run \
       --interactive \
       --tty \
       --rm \
+      --user $(id --user):$(id --group) \
       --volume $PWD:/usr/src/app \
       --workdir /usr/src/app \
-      node:alpine \
+      node:$version \
       npm "$@"
   fi
 }
@@ -77,13 +96,29 @@ function yarn() {
   if [ "$1" = "global" ]; then
     command yarn "$@"
   else
+    local version="current-alpine"
+    if [ "$1" = "--docker" ]; then
+      shift
+      version="$1"
+      shift
+    fi
     docker run \
       --interactive \
       --tty \
       --rm \
+      --user $(id --user):$(id --group) \
       --volume $PWD:/usr/src/app \
       --workdir /usr/src/app \
-      node:12-alpine \
+      node:$version \
       yarn "$@"
+  fi
+}
+
+function docker-compose() {
+  if [ "$1" = "up" ]; then
+    shift
+    command docker-compose up --remove-orphans --build "$@"
+  else
+    command docker-compose "$@"
   fi
 }
