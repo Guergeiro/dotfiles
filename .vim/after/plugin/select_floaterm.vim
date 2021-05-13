@@ -30,7 +30,7 @@ let g:select_info.floaterm.data = {-> s:floaterm.source()}
 let g:select_info.floaterm.sink = {
       \ 'action': {v -> s:floaterm.sink(v)},
       \ }
-let g:select_info.floaterm.prompt = 'Terminal >'
+let g:select_info.floaterm.prompt = 'Floaterm Terminal >'
 let g:select_info.floaterm.highlight = {
       \ 'PrependBufNr': ['^\(\s*\d\+:\)', 'Identifier']
       \ }

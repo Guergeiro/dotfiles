@@ -5,6 +5,6 @@ endif
 if !exists(':GB')
   command! -range GB echo join(systemlist('git -C ' . shellescape(expand('%:p:h')) . ' blame -L <line1>,<line2> ' . expand('%:t')), '\n')
 endif
-inoremap <leader>gb <esc>:GB<left><left>
-nnoremap <leader>gb :GB<left><left>
+nnoremap <leader>gb :GB<cr>
+vnoremap <leader>gb :GB<cr>
 let g:loaded_git_blame = 1
