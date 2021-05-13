@@ -24,12 +24,13 @@ echo "${yellow}Installing extra packages${reset}"
 # https://github.com/ycm-core/YouCompleteMe/wiki/Building-Vim-from-source
 sudo apt-get install libncurses5-dev libgtk2.0-dev libatk1.0-dev \
   libcairo2-dev libx11-dev libxpm-dev libxt-dev python2-dev \
-  python3-dev ruby-dev lua5.2 liblua5.2-dev libperl-dev checkinstall -y
+  python3-dev ruby-dev lua5.2 liblua5.2-dev libperl-dev -y
 
 sudo apt-get purge vim vim-runtime gvim -y
 
 echo "${yellow}Building Vim from source${reset}"
 cd vim/
+git checkout $(git describe --tags $(git rev-list --tags --max-count=1))
 ./configure --with-features=huge \
             --enable-multibyte \
             --enable-rubyinterp=yes \
@@ -37,13 +38,13 @@ cd vim/
             --with-python3-config-dir=$(python3-config --configdir) \
             --enable-perlinterp=yes \
             --enable-luainterp=yes \
-            --enable-cscope \
+            --enable-cscope
 sudo make install
+git checkout master
 cd ..
 
 echo "${yellow}Installing Zip and Rar${reset}"
 sudo apt-get install zip rar -y
-
 
 echo "${yellow}Installing Deno${reset}"
 curl -fsSL https://deno.land/x/install/install.sh | sh
@@ -77,16 +78,30 @@ sudo yarn global add prettier
 echo "${yellow}Installing starship shell${reset}"
 curl -fsSL https://starship.rs/install.sh | bash
 
-echo "${yellow}Copying Vim/Bash Configs${reset}"
+echo "${yellow}Removing Vim/Bash Default Configs${reset}"
+rm -rf $HOME/.bashrc
+rm -rf $HOME/.bash_aliases
+rm -rf $HOME/.bash_functions
+rm -rf $HOME/.bash_starship
+rm -rf $HOME/.inputrc
+rm -rf $HOME/.gitconfig
+rm -rf $HOME/.config/terminator
+rm -rf $HOME/.config/starship.toml
+rm -rf $HOME/.vimrc
+rm -rf $HOME/.vim
+
+echo "${yellow}Linking Vim/Bash Configs${reset}"
 cd dotfiles/
 ln -s "$(pwd)/.bashrc" $HOME/.bashrc
 ln -s "$(pwd)/.bash_aliases" $HOME/.bash_aliases
 ln -s "$(pwd)/.bash_functions" $HOME/.bash_functions
+ln -s "$(pwd)/.bash_starship" $HOME/.bash_starship
 ln -s "$(pwd)/.inputrc" $HOME/.inputrc
 ln -s "$(pwd)/.gitconfig" $HOME/.gitconfig
-ln -s "$(pwd)/.config/" $HOME/.config
+ln -s "$(pwd)/.config/terminator" $HOME/.config/terminator
+ln -s "$(pwd)/.config/starship.toml" $HOME/.config/starship.toml
 ln -s "$(pwd)/.vimrc" $HOME/.vimrc
-ln -s "$(pwd)/.vim/" $HOME/.vim
+ln -s "$(pwd)/.vim" $HOME/.vim
 cd ..
 
 echo "${yellow}General configs${reset}"
@@ -101,3 +116,5 @@ if [ "$1" = "-with-fonts" ]; then
   ./install.sh
   cd ..
 fi
+
+echo "${yellow}Install delta gitdiff here:${reset} https://github.com/dandavison/delta"
