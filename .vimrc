@@ -1,11 +1,3 @@
-" Install VimPlug automatically
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  augroup VimPlug
-    autocmd!
-    autocmd VimEnter * PlugUpdate --sync | source $MYVIMRC
-  augroup END
-endif
 " General {{{
 " Enter current millenium
 set nocompatible
@@ -19,10 +11,13 @@ if exists('$SUDO_USER')
     set noundofile
   endif
 else
+  set backup
+  set writebackup
   let &backupdir=expand("/tmp/.vimtrash/backup//")
   if !isdirectory(expand(&backupdir))
     call mkdir(expand(&backupdir), 'p')
   endif
+  set swapfile
   let &directory=expand("/tmp/.vimtrash/swapfiles//")
   if !isdirectory(expand(&directory))
     call mkdir(expand(&directory), 'p')
@@ -57,6 +52,9 @@ set softtabstop=2
 set expandtab
 set shiftwidth=2
 set smarttab
+if has('smartindent')
+  set smartindent
+endif
 " Start scrolling 10 lines before the end
 set scrolloff=10
 " Folding
@@ -118,6 +116,8 @@ if has('extra_search')
   " Use highlighting for search matches (:nohlsearch to clear [or :noh])
   set hlsearch
 endif
+" Disable emoji weird width (https://youtu.be/F91VWOelFNE)
+set noemoji
 " Case-insensitive searching
 set ignorecase
 " Case-sensitive if expression contains a capital letter
@@ -132,6 +132,12 @@ set cmdheight=1
 set updatetime=250
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
+" Will not redraw the screen while running macros (goes faster)
+set lazyredraw
+" Prevents inserting two spaces after punctuation on a join
+set nojoinspaces
+" Search for the word under the cursor (but don't advance to the first match)
+map <silent> * :let @/="\\<<c-r><c-w>\\>"<cr>:set hls<cr>
 " RipGrep to the rescue!
 if executable('rg')
   set grepprg=rg\ --smart-case\ --vimgrep\ --hidden
@@ -145,9 +151,9 @@ function! <sid>trimWhitespace() abort
   call cursor(l, c)
 endfunction
 " Sudo write
-command! Write !sudo tee % > /dev/null
+command! Write write !sudo tee % >/dev/null
 " Y yanks to the end of the line
-nnoremap Y y$
+map Y y$
 " ctrl+d & ctrl+u feels weird, so remap for ctrl+j & ctrl+k
 noremap <c-j> <c-d>
 noremap <c-k> <c-u>
@@ -157,7 +163,6 @@ noremap <c-u> <nop>
 inoremap { {}<esc>i
 inoremap ( ()<esc>i
 inoremap [ []<esc>i
-inoremap < <><esc>i
 " Auto closes marks
 inoremap " ""<esc>i
 inoremap ` ``<esc>i
@@ -174,12 +179,23 @@ function! <sid>show_documentation(serverLoaded)
   endif
 endfunction
 let g:serverLoaded = 0
-nnoremap <silent> <leader>k :call <sid>show_documentation(g:serverLoaded)<cr>
-
+nnoremap <silent> <leader>k :call <sid>show_documentation(g:lsp_server_loaded)<cr>
+" Install VimPlug automatically
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  augroup VimPlug
+    autocmd!
+    autocmd VimEnter * PlugUpdate --sync | source $MYVIMRC
+  augroup END
+endif
+" Vim-Polyglot Config Start {{{
+let g:polyglot_disabled = ['autoindent']
+" }}}
 " Let's load plugins
 call plug#begin('~/.vim/plugged')
 Plug 'fcpg/vim-altscreen'
 Plug 'Guergeiro/clean-path.vim'
+Plug 'gruvbox-community/gruvbox'
 Plug 'habamax/vim-select'
 Plug 'habamax/vim-select-more'
 Plug 'itchyny/lightline.vim'
@@ -192,7 +208,6 @@ Plug 'lambdalisue/nerdfont.vim'
 Plug 'machakann/vim-highlightedyank'
 Plug 'mbbill/undotree'
 Plug 'romainl/vim-cool'
-Plug 'TaDaa/vimade'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'sheerun/vim-polyglot'
@@ -206,33 +221,27 @@ Plug 'mattn/emmet-vim'
 Plug 'mattn/vim-lsp-settings'
 Plug 'prabirshrestha/vim-lsp'
 Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/asyncomplete.vim'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
-Plug 'prabirshrestha/asyncomplete-emmet.vim'
-Plug 'prabirshrestha/asyncomplete-file.vim'
-Plug 'prabirshrestha/asyncomplete-neosnippet.vim'
 
-Plug 'Shougo/neosnippet.vim'
-Plug 'Shougo/neosnippet-snippets'
-Plug 'honza/vim-snippets'
+Plug 'Shougo/deoplete.nvim'
+Plug 'roxma/nvim-yarp'
+Plug 'roxma/vim-hug-neovim-rpc'
+Plug 'lighttiger2505/deoplete-vim-lsp'
 call plug#end()
 " Srcery Config Start {{{
 let g:srcery_italic = 1
-colorscheme srcery
-set background=dark
+let g:srcery_black = '#000000'
 " }}}
+" Gruvbox Config Start {{{
+let g:gruvbox_italic = 1
+" }}}
+set background=dark
+colorscheme srcery
 " clean-path.vim Config Start {{{
 let &path.=cleanpath#setpath()
 let &wildignore.=cleanpath#setwildignore()
 " }}}
 " vim-cool Config Starts {{{
 let g:CoolTotalMatches = 1
-" }}}
-" Vimade Config Start {{{
-let g:vimade = {
-      \ 'fadelevel': 0.2,
-      \ 'usecursorhold': 1
-      \ }
 " }}}
 " Undotree Config Start {{{
 inoremap <silent> <leader>u <esc>:UndotreeToggle<cr>
@@ -241,22 +250,26 @@ nnoremap <silent> <leader>u :UndotreeToggle<cr>
 " Floaterm Config Start {{{
 let g:floaterm_wintype = 'vsplit'
 let g:floaterm_width = 0.5
+nnoremap <leader>tt :FloatermToggle<cr>
+inoremap <leader>tt <esc>:FloatermToggle<cr>
+nnoremap <leader>nt :FloatermNew<cr>
+inoremap <leader>nt <esc>:FloatermNew<cr>
 " }}}
 " Vim-select Config Start {{{
 let g:select_no_ignore_vcs = 0
 " A bunch of fuzzy
-inoremap <leader>sp <esc>:Select projectfile<cr>
-nnoremap <leader>sp :Select projectfile<cr>
-inoremap <leader>sb <esc>:Select buffer<cr>
-nnoremap <leader>sb :Select buffer<cr>
-inoremap <leader>st <esc>:Select floaterm<cr>
-nnoremap <leader>st :Select floaterm<cr>
-inoremap <leader>sd <esc>:Select todo<cr>
-nnoremap <leader>sd :Select todo<cr>
-inoremap <leader>sg <esc>:Select gitfile<cr>
-nnoremap <leader>sg :Select gitfile<cr>
-inoremap <leader>s/ <esc>:Select bufline<cr>
-nnoremap <leader>s/ :Select bufline<cr>
+inoremap <silent><leader>sp <esc>:Select projectfile<cr>
+nnoremap <silent><leader>sp :Select projectfile<cr>
+inoremap <silent><leader>sb <esc>:Select buffer<cr>
+nnoremap <silent><leader>sb :Select buffer<cr>
+inoremap <silent><leader>st <esc>:Select floaterm<cr>
+nnoremap <silent><leader>st :Select floaterm<cr>
+inoremap <silent><leader>sd <esc>:Select todo<cr>
+nnoremap <silent><leader>sd :Select todo<cr>
+inoremap <silent><leader>sg <esc>:Select gitfile<cr>
+nnoremap <silent><leader>sg :Select gitfile<cr>
+inoremap <silent><leader>s/ <esc>:Select bufline<cr>
+nnoremap <silent><leader>s/ :Select bufline<cr>
 " }}}
 " vim-test Config Start {{{
 nnoremap <leader>tf :TestFile -strategy=floaterm<cr>
@@ -300,40 +313,21 @@ nmap <f2> <plug>(lsp-rename)
 nmap <silent> <c-h> <plug>(lsp-previous-diagnostic)
 nmap <silent> <c-l> <plug>(lsp-next-diagnostic)
 " }}}
-" Asyncomplete Config Starts {{{
-function! s:sort_by_priority_preprocessor(options, matches) abort
-  let l:items = []
-  for [l:source_name, l:matches] in items(a:matches)
-    for l:item in l:matches['items']
-      if stridx(l:item['word'], a:options['base']) == 0
-        let l:item['priority'] =
-            \ get(asyncomplete#get_source_info(l:source_name),'priority',0)
-        call add(l:items, l:item)
-      endif
-    endfor
-  endfor
-  let l:items = sort(l:items, {a, b -> b['priority'] - a['priority']})
-  call asyncomplete#preprocess_complete(a:options, l:items)
-endfunction
-function! s:asyncomplete_custom_expand() abort
+" Deoplete Config Start {{{
+function! s:custom_expand() abort
   if !pumvisible()
     return "\<cr>"
   endif
-  if neosnippet#expandable()
-    return "\<plug>(neosnippet_expand)"
-  endif
-  return asyncomplete#close_popup()
+  return "\<c-y>"
 endfunction
-" let g:asyncomplete_preprocessor = [function('s:sort_by_priority_preprocessor')]
-let g:asyncomplete_auto_completeopt = 0
+let g:deoplete#enable_at_startup = 1
+call deoplete#custom#option('num_processes', 2)
+call deoplete#custom#option('on_insert_enter', v:false)
 set completeopt=menuone,noinsert,noselect,preview
 inoremap <silent> <expr> <tab> pumvisible() ? "\<c-n>" : "\<tab>"
 inoremap <silent> <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
-imap <silent> <expr> <cr> pumvisible() ? <sid>asyncomplete_custom_expand() : "\<cr>"
-imap <c-@> <plug>(asyncomplete_force_refresh)
-
-imap <leader><leader> <plug>(neosnippet_jump)
-let g:neosnippet#enable_snipmate_compatibility = 1
+inoremap <silent> <cr> <c-r>=<sid>custom_expand()<cr>
+inoremap <silent> <expr> <c-@> deoplete#manual_complete()
 " }}}
 " Lightline Config Start {{{
 let g:lightline = {
@@ -345,8 +339,11 @@ let g:lightline = {
           \   'gitbranch': 'gitbranch#name',
           \   },
           \ }
-let g:lightline.colorscheme = 'srcery'
+let g:lightline.colorscheme = g:colors_name
 " }}}
+function! s:lsp_server_commands() abort
+  let g:lsp_server_loaded = 1
+endfunction
 " AutoCommands {{{
 augroup General
   autocmd!
@@ -356,6 +353,8 @@ augroup General
   autocmd QuickFixCmdPost cgetexpr cwindow
   autocmd QuickFixCmdPost lgetexpr lwindow
   " Change documentation to also allow lsp docs
-  autocmd User lsp_server_init let g:serverLoaded = 1
+  autocmd User lsp_server_init call <sid>lsp_server_commands()
+  " Close the completion window when done
+  autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
 augroup END
 " }}}
