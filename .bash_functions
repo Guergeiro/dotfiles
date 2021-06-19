@@ -14,6 +14,7 @@ function git() {
     fi
   elif [ "$1" = "prune" ]; then
     command git fetch --prune
+    command git fetch upstream --prune
   elif [ "$1" = "tree" ]; then
     command git log --graph
   elif [ "$1" = "branch" ] && [ "$#" -eq 1 ]; then
@@ -21,6 +22,10 @@ function git() {
   else
     command git "$@"
   fi
+}
+
+function cd() {
+  builtin cd "$@" && ls -A --color=auto
 }
 
 function man() {
@@ -33,39 +38,56 @@ function man() {
   command man "$@"
 }
 
+function __docker_default_args(){
+  # Default args
+  local args="--interactive"
+  local args+=" --tty"
+  local args+=" --rm"
+  local args+=" --user $(id --user):$(id --group)"
+  local args+=" --volume $PWD:/usr/src/app"
+  local args+=" --volume $HOME/.deno:/deno-dir"
+  local args+=" --workdir /usr/src/app"
+  # Generate random port to use https://en.wikipedia.org/wiki/Ephemeral_port#range
+  # 65535-49152=16383 (max range)
+  local port=$((49152 + $RANDOM % 16383))
+  local args+=" --env PORT=$port"
+  local args+=" --network host"
+  # Check if .env file exits
+  local file=".env"
+  if [ -f $file ]; then
+    local args+=" --env-file $file"
+  fi
+  echo "$args"
+}
+
 function deno() {
-  local version="alpine-deno"
+  local version="alpine"
+  # Check for flag version
   if [ "$1" = "--docker" ]; then
     shift
-    version="$1"
+    local version="$1"
     shift
   fi
+  local args=$(__docker_default_args)
+
   docker run \
-    --interactive \
-    --tty \
-    --rm \
-    --user $(id --user):$(id --group) \
-    --volume $PWD:/usr/src/app \
-    --volume $HOME/.deno:/deno-dir \
-    --workdir /usr/src/app \
-    hayd/$version \
+    $args \
+    denoland/deno:$version \
     deno "$@"
 }
 
 function node() {
   local version="current-alpine"
+  # Check for flag version
   if [ "$1" = "--docker" ]; then
     shift
-    version="$1"
+    local version="$1"
     shift
   fi
+  local args=$(__docker_default_args)
+
   docker run \
-    --interactive \
-    --tty \
-    --rm \
-    --user $(id --user):$(id --group) \
-    --volume $PWD:/usr/src/app \
-    --workdir /usr/src/app \
+    $args \
     node:$version \
     node "$@"
 }
@@ -75,18 +97,16 @@ function npm() {
     command npm "$@"
   else
     local version="current-alpine"
+    # Check for flag version
     if [ "$1" = "--docker" ]; then
       shift
-      version="$1"
+      local version="$1"
       shift
     fi
+    local args=$(__docker_default_args)
+
     docker run \
-      --interactive \
-      --tty \
-      --rm \
-      --user $(id --user):$(id --group) \
-      --volume $PWD:/usr/src/app \
-      --workdir /usr/src/app \
+      $args \
       node:$version \
       npm "$@"
   fi
@@ -97,18 +117,16 @@ function yarn() {
     command yarn "$@"
   else
     local version="current-alpine"
+    # Check for flag version
     if [ "$1" = "--docker" ]; then
       shift
-      version="$1"
+      local version="$1"
       shift
     fi
+    local args=$(__docker_default_args)
+
     docker run \
-      --interactive \
-      --tty \
-      --rm \
-      --user $(id --user):$(id --group) \
-      --volume $PWD:/usr/src/app \
-      --workdir /usr/src/app \
+      $args \
       node:$version \
       yarn "$@"
   fi
