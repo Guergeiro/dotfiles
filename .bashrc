@@ -115,3 +115,4 @@ fi
 if [ -f ~/.bash_starship ]; then
   . ~/.bash_starship
 fi
+. "$HOME/.cargo/env"

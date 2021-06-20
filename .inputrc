@@ -2,6 +2,7 @@ set completion-ignore-case on
 set show-mode-in-prompt on
 set editing-mode vi
 set blink-matching-paren on
+set keyseq-timeout 0
 
 $if mode=vi
   set keymap vi-insert

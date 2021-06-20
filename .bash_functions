@@ -140,3 +140,57 @@ function docker-compose() {
     command docker-compose "$@"
   fi
 }
+
+function createWindow() {
+  local session=$1
+  local window=$2
+  shift
+  shift
+  local hasWindow=$(tmux list-windows -t $session | grep "^$window")
+  if [ -z "$hasWindow" ]; then
+    tmux new-window -t $session: -n $window -d "$@"
+  fi
+}
+
+function createSession() {
+  local session=$1
+  local window=$2
+  shift
+  shift
+  tmux new -s $session -d -n $window $@
+
+  if [ $? -ne 0 ]; then
+    tmux attach-session -t $session
+  fi
+}
+
+function startWork() {
+  while [ "$#" -gt 0 ]; do
+    local curr=$1
+    shift
+
+    case "$curr" in
+    "-bolsas")
+      local bolsasDirectory=$HOME/Documents/libertrium/bolsas
+      createSession bolsas primary
+      createWindow bolsas docker -c $bolsasDirectory  "docker-compose up --remove-orphans --build"
+      createWindow bolsas apicm_bolsas -c $bolsasDirectory/apicm_bolsas
+      createWindow bolsas apiuser_bolsas -c $bolsasDirectory/apiuser_bolsas
+      createWindow bolsas cm_bolsas -c $bolsasDirectory/cm_bolsas
+      createWindow bolsas user_bolsas -c $bolsasDirectory/user_bolsas
+      ;;
+
+    "-associativismo")
+      local associativismoDirectory=$HOME/Documents/libertrium/associativismo
+      createSession associativismo primary
+      createWindow associativismo docker -c $associativismoDirectory  "docker-compose up --remove-orphans --build"
+      createWindow associativismo apicm_associativismo -c $associativismoDirectory/apicm
+      createWindow associativismo apiuser_associativismo -c $associativismoDirectory/apiuser
+      createWindow associativismo cm_associativismo -c $associativismoDirectory/cm
+      createWindow associativismo user_associativismo -c $associativismoDirectory/user
+      ;;
+
+    *) echo "Unavailable command... $curr"
+    esac
+  done
+}

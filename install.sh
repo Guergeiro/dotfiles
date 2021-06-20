@@ -3,6 +3,12 @@
 yellow=`tput setaf 3`
 reset=`tput sgr0`
 
+dotfilesDirectory=$HOME/Documents/guergeiro/dotfiles
+vimDirectory=$HOME/Documents/vim/vim
+srceryterminalDirectory=$HOME/Documents/srcery-colors/srcery-terminal
+alacrittyDirectory=$HOME/Documents/alacritty/alacritty
+nerdfontsDirectory=$HOME/Documents/ryanoasis/nerd-fonts
+
 echo "${yellow}Updating/Cleaning Packages${reset}"
 sudo apt-get update
 sudo apt-get upgrade -y
@@ -14,10 +20,12 @@ echo "${yellow}Installing Git${reset}"
 sudo apt-get install git -y
 
 echo "${yellow}Cloning Git Repos${reset}"
-git clone https://github.com/Guergeiro/dotfiles.git
-git clone https://github.com/vim/vim.git
+git clone --bare https://github.com/Guergeiro/dotfiles.git $dotfilesDirectory
+git clone https://github.com/vim/vim.git $vimDirectory
+git clone https://github.com/srcery-colors/srcery-terminal.git $srceryterminalDirectory
+git clone https://github.com/alacritty/alacritty.git $alacrittyDirectory
 if [ "$1" = "-with-fonts" ]; then
-  git clone https://github.com/ryanoasis/nerd-fonts.git
+  git clone https://github.com/ryanoasis/nerd-fonts.git $nerdfontsDirectory
 fi
 
 echo "${yellow}Installing extra packages${reset}"
@@ -26,11 +34,21 @@ sudo apt-get install libncurses5-dev libgtk2.0-dev libatk1.0-dev \
   libcairo2-dev libx11-dev libxpm-dev libxt-dev python2-dev \
   python3-dev ruby-dev lua5.2 liblua5.2-dev libperl-dev -y
 
-sudo apt-get purge vim vim-runtime gvim -y
+sudo apt-get install cmake pkg-config libfreetype6-dev libfontconfig1-dev \
+  libxcb-xfixes0-dev python3
+
+echo "${yellow}Installing Rust${reset}"
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source $HOME/.cargo/env
+rustup override set stable
+rustup update stable
+
+echo "${yellow}Installing Zip and Rar${reset}"
+sudo apt-get install zip rar gzip -y
 
 echo "${yellow}Building Vim from source${reset}"
-cd vim/
-git checkout $(git describe --tags $(git rev-list --tags --max-count=1))
+sudo apt-get purge vim vim-runtime gvim -y
+cd $vimDirectory/
 ./configure --with-features=huge \
             --enable-multibyte \
             --enable-rubyinterp=yes \
@@ -40,11 +58,29 @@ git checkout $(git describe --tags $(git rev-list --tags --max-count=1))
             --enable-luainterp=yes \
             --enable-cscope
 sudo make install
-git checkout master
-cd ..
+cd $HOME
 
-echo "${yellow}Installing Zip and Rar${reset}"
-sudo apt-get install zip rar -y
+echo "${yellow}Building Alacritty from source${reset}"
+cd $alacrittyDirectory
+cargo build --release
+# Terminfo
+sudo tic -xe alacritty,alacritty-direct extra/alacritty.info
+# Desktop entry
+sudo cp target/release/alacritty /usr/bin
+sudo cp extra/logo/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
+sudo desktop-file-install extra/linux/Alacritty.desktop
+sudo update-desktop-database
+# Man page
+sudo mkdir -p /usr/local/share/man/man1
+gzip -c extra/alacritty.man | sudo tee /usr/local/share/man/man1/alacritty.1.gz > /dev/null
+# Shell completions
+sudo cp extra/completions/alacritty.bash /etc/bash_completion.d/
+
+echo "${yellow}Installing Tmux${reset}"
+sudo apt-get install tmux -y
+git clone https://github.com/imomaliev/tmux-bash-completion.git $HOME/Documents/imomaliev/tmux-bash-completion
+sudo cp $HOME/Documents/imomaliev/tmux-bash-completion/completions/tmux /etc/bash_completion.d/
+rm -rf $HOME/Documents/imomaliev/tmux-bash-completion
 
 echo "${yellow}Installing Deno${reset}"
 curl -fsSL https://deno.land/x/install/install.sh | sh
@@ -85,24 +121,12 @@ rm -rf $HOME/.bash_functions
 rm -rf $HOME/.bash_starship
 rm -rf $HOME/.inputrc
 rm -rf $HOME/.gitconfig
-rm -rf $HOME/.config/terminator
 rm -rf $HOME/.config/starship.toml
 rm -rf $HOME/.vimrc
 rm -rf $HOME/.vim
 
 echo "${yellow}Linking Vim/Bash Configs${reset}"
-cd dotfiles/
-ln -s "$(pwd)/.bashrc" $HOME/.bashrc
-ln -s "$(pwd)/.bash_aliases" $HOME/.bash_aliases
-ln -s "$(pwd)/.bash_functions" $HOME/.bash_functions
-ln -s "$(pwd)/.bash_starship" $HOME/.bash_starship
-ln -s "$(pwd)/.inputrc" $HOME/.inputrc
-ln -s "$(pwd)/.gitconfig" $HOME/.gitconfig
-ln -s "$(pwd)/.config/terminator" $HOME/.config/terminator
-ln -s "$(pwd)/.config/starship.toml" $HOME/.config/starship.toml
-ln -s "$(pwd)/.vimrc" $HOME/.vimrc
-ln -s "$(pwd)/.vim" $HOME/.vim
-cd ..
+git --git-dir=$HOME/Documents/guergeiro/dotfiles --work-tree=$HOME checkout
 
 echo "${yellow}General configs${reset}"
 sudo update-alternatives --install /usr/bin/editor editor /usr/local/bin/vim 1
@@ -112,9 +136,9 @@ sudo update-alternatives --set vi /usr/local/bin/vim
 
 if [ "$1" = "-with-fonts" ]; then
   echo "${yellow}Installing NerdFonts${reset}"
-  cd nerdfonts/
+  cd $nerdfontsDirectory/
   ./install.sh
-  cd ..
+  cd $HOME
 fi
 
 echo "${yellow}Install delta gitdiff here:${reset} https://github.com/dandavison/delta"

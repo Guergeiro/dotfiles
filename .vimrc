@@ -76,10 +76,7 @@ if has('vertsplit')
   set splitright
 endif
 " Pretty terminal
-if has('termguicolors')
-  set termguicolors
-  set t_Co=256
-endif
+set t_Co=256
 " Allow cursor to move where there is no text in visual block mode
 if has('virtualedit')
   set virtualedit=block
@@ -227,13 +224,6 @@ Plug 'roxma/nvim-yarp'
 Plug 'roxma/vim-hug-neovim-rpc'
 Plug 'lighttiger2505/deoplete-vim-lsp'
 call plug#end()
-" Srcery Config Start {{{
-let g:srcery_italic = 1
-let g:srcery_black = '#000000'
-" }}}
-" Gruvbox Config Start {{{
-let g:gruvbox_italic = 1
-" }}}
 set background=dark
 colorscheme srcery
 " clean-path.vim Config Start {{{
