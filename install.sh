@@ -85,6 +85,8 @@ rm -rf $HOME/Documents/imomaliev/tmux-bash-completion
 echo "${yellow}Installing Deno${reset}"
 curl -fsSL https://deno.land/x/install/install.sh | sh
 sudo mv $HOME/.deno/bin/deno /usr/bin/
+deno completions > deno
+sudo mv deno /etc/bash_completion.d/
 
 echo "${yellow}Installing NodeJS (Current)${reset}"
 curl -sL https://deb.nodesource.com/setup_current.x | sudo -E bash -
@@ -92,6 +94,7 @@ sudo apt-get install nodejs -y
 
 echo "${yellow}Installing Python3${reset}"
 sudo apt-get install python3 -y
+sudo apt-get install python3-pip -y
 
 echo "${yellow}Installing OpenJDK (Headless)${reset}"
 sudo apt-get install default-jdk-headless -y
