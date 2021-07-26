@@ -14,3 +14,7 @@
   trustExitCode = true
 [delta]
   side-by-side = true
+[checkout]
+  defaultRemote = origin
+[commit]
+  verbose = true
