@@ -7,7 +7,7 @@ disabled = true
 [directory]
 read_only = " "
 style = "bold blue"
-[docker]
+[docker_context]
 symbol = " "
 [git_branch]
 symbol = " "
@@ -22,9 +22,3 @@ not_capable_style = "bold yellow"
 disabled = true
 [username]
 disabled = true
-[custom.deno]
-command = """ sed "s/deno //g" <<< "$(deno -V)" """
-files = ["mod.ts", "deps.ts", "mod.js", "deps.js"]
-symbol = "🦕 "
-style = "bold green"
-format = "via [$symbol(v$output )]($style)"
