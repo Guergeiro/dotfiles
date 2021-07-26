@@ -14,16 +14,16 @@ if !exists('*s:projectFmt')
     let l:projectDir = <sid>projectDir()
     let l:formatprg = 'deno fmt -'
     if filereadable(l:projectDir . '/package.json')
-      let l:formatprg = 'prettier --stdin-filepath %'
+      let l:formatprg = 'npx prettier --stdin-filepath %'
     endif
     if isdirectory(l:projectDir . '/node_modules/')
-      let l:formatprg = 'prettier --stdin-filepath %'
+      let l:formatprg = 'npx prettier --stdin-filepath %'
     endif
     return l:formatprg
   endfunction
 endif
 
-setlocal makeprg=npx\ eslint\ --format\ compact\ --fix
+let &l:makeprg = 'npx eslint --format compact --fix'
 setlocal autoread
 nnoremap <buffer> <leader>m :make %<bar>cwindow<cr>
 if has('quickfix')

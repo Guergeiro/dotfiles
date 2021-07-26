@@ -1,2 +1,2 @@
-setlocal formatprg=prettier\ --stdin-filepath\ %
+setlocal formatprg=npx\ prettier\ --stdin-filepath\ %
 setlocal formatexpr=
