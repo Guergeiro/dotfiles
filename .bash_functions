@@ -1,5 +1,19 @@
 #!/bin/bash
 
+function update() {
+  if [ "$1" = "dpki" ]; then
+    sudo apt-get -f install
+  else
+    sudo apt-get update
+    sudo apt-get upgrade -y
+    sudo apt-get dist-upgrade -y
+    sudo apt-get autoremove -y
+    sudo apt-get autoclean -y
+    sudo npm update -g yarn
+    sudo yarn global upgrade
+  fi
+}
+
 function git() {
   if [ "$1" = "root" ]; then
     local root="$(command git rev-parse --show-toplevel 2> /dev/null || pwd)"
@@ -7,25 +21,43 @@ function git() {
     if [ "$#" -eq 1 ]; then
       echo "$root"
     elif [ "$2" = "cd" ]; then
-        command cd $root
+      command cd $root
     else
       shift
       (cd "$root" && eval "$@")
     fi
   elif [ "$1" = "prune" ]; then
+    shift
     command git fetch --prune
     command git fetch upstream --prune
   elif [ "$1" = "tree" ]; then
+    shift
     command git log --graph
   elif [ "$1" = "branch" ] && [ "$#" -eq 1 ]; then
+    shift
     command git branch -a
+  elif [ "$1" = "add-upstream" ] && [ "$#" -eq 2 ]; then
+    if ! git config --get remote.origin.url > /dev/null 2>&1; then
+      echo "A remote called 'origin' doesn't exist. Aborting." >&2
+      return 1
+    fi
+    shift
+    local upstream="$1"
+    shift
+    command git remote add upstream "git@$upstream/"
   else
     command git "$@"
   fi
 }
 
 function cd() {
-  builtin cd "$@" && ls -A --color=auto
+  local dir="$@"
+  if [ "$1" = "vim" ]; then
+    local dir=$vimDirectory
+  elif [ "$1" = "dotfiles" ]; then
+    local dir=$dotfilesDirectory
+  fi
+  builtin cd $dir && ls -A --color=auto
 }
 
 function man() {
@@ -141,27 +173,54 @@ function docker-compose() {
   fi
 }
 
+function update_branch() {
+  local branch="master"
+  if [ "$#" -ne 0 ]; then
+    local branch=$1
+    shift
+  fi
+  git checkout "$branch"
+  git pull --all
+  git fetch upstream --prune
+  git fetch --prune
+  git push "$branch"
+}
+
+function update_all() {
+  local curPwd=$(pwd)
+  local currDirs=$(find $curPwd -mindepth 1 -maxdepth 1 -type d | xargs realpath)
+  for d in $currDirs; do
+    if [ -d "$d/.git" ]; then
+      cd $d
+      update_git
+    fi
+  done
+  cd $curPwd
+}
+
+function createPane() {
+  local session=$1
+  shift
+  local window=$1
+  shift
+  local direction="-h"
+  tmux split-window $direction -t $session:$window -d "$@"
+}
+
 function createWindow() {
   local session=$1
-  local window=$2
   shift
+  local window=$1
   shift
-  local hasWindow=$(tmux list-windows -t $session | grep "^$window")
-  if [ -z "$hasWindow" ]; then
-    tmux new-window -t $session: -n $window -d "$@"
-  fi
+  tmux new-window -t $session: -n $window -d "$@"
 }
 
 function createSession() {
   local session=$1
-  local window=$2
   shift
+  local window=$1
   shift
-  tmux new -s $session -d -n $window $@
-
-  if [ $? -ne 0 ]; then
-    tmux attach-session -t $session
-  fi
+  tmux new -s $session -d -n $window "$@"
 }
 
 function startWork() {
@@ -170,27 +229,68 @@ function startWork() {
     shift
 
     case "$curr" in
-    "-bolsas")
-      local bolsasDirectory=$HOME/Documents/libertrium/bolsas
+    "bolsas")
+      local directory=$HOME/Documents/libertrium/bolsas
       createSession bolsas primary
-      createWindow bolsas docker -c $bolsasDirectory  "docker-compose up --remove-orphans --build"
-      createWindow bolsas apicm_bolsas -c $bolsasDirectory/apicm_bolsas
-      createWindow bolsas apiuser_bolsas -c $bolsasDirectory/apiuser_bolsas
-      createWindow bolsas cm_bolsas -c $bolsasDirectory/cm_bolsas
-      createWindow bolsas user_bolsas -c $bolsasDirectory/user_bolsas
+      createWindow bolsas docker -c $directory  "docker-compose up --remove-orphans --build"
+      createPane bolsas docker -c $directory
+      createWindow bolsas apicm_bolsas -c $directory/apicm_bolsas
+      createWindow bolsas apiuser_bolsas -c $directory/apiuser_bolsas
+      createWindow bolsas cm_bolsas -c $directory/cm_bolsas
+      createWindow bolsas user_bolsas -c $directory/user_bolsas
       ;;
 
-    "-associativismo")
-      local associativismoDirectory=$HOME/Documents/libertrium/associativismo
+    "associativismo")
+      local directory=$HOME/Documents/libertrium/associativismo
       createSession associativismo primary
-      createWindow associativismo docker -c $associativismoDirectory  "docker-compose up --remove-orphans --build"
-      createWindow associativismo apicm_associativismo -c $associativismoDirectory/apicm
-      createWindow associativismo apiuser_associativismo -c $associativismoDirectory/apiuser
-      createWindow associativismo cm_associativismo -c $associativismoDirectory/cm
-      createWindow associativismo user_associativismo -c $associativismoDirectory/user
+      createWindow associativismo docker -c $directory  "docker-compose up --remove-orphans --build"
+      createPane associativismo docker -c $directory
+      createWindow associativismo apicm_associativismo -c $directory/apicm_associativismo
+      createWindow associativismo apiuser_associativismo -c $directory/apiuser_associativismo
+      createWindow associativismo cm_associativismo -c $directory/cm_associativismo
+      createWindow associativismo user_associativismo -c $directory/user_associativismo
+      ;;
+
+    "brenosalles")
+      local directory=$HOME/Documents/guergeiro/breno-website
+      createSession breno primary
+      createWindow breno docker -c $directory  "docker-compose up --remove-orphans --build"
+      createPane breno docker -c $directory
+      createWindow breno api -c $directory/api.brenosalles.com
+      createWindow breno angular -c $directory/brenosalles.com
+      ;;
+
+    "drash")
+      local directory=$HOME/Documents/drashland/deno-drash
+      createSession drash primary -c $directory
+      ;;
+
+    "unilogger")
+      local directory=$HOME/Documents/guergeiro/unilogger
+      createSession unilogger primary -c $directory
       ;;
 
     *) echo "Unavailable command... $curr"
     esac
   done
+}
+
+
+function goWork() {
+  if [ "$#" -eq 0 ]; then
+    echo "No argument provided"
+    return 1
+  fi
+  local arg=$1
+  shift
+  local session=$(tmux list-sessions | grep "^$arg")
+  if [ "$session" = "" ]; then
+    echo "No session called ${arg} available"
+    return 1
+  fi
+  if [ ! -z "${TMUX+x}" ]; then
+    tmux switch-client -t $arg
+  else
+    tmux attach -t $arg
+  fi
 }

@@ -1,10 +1,10 @@
 #!/bin/bash
-# Just update/clean everything
-alias update="sudo apt-get update; sudo apt-get upgrade -y; sudo apt-get dist-upgrade -y; sudo apt-get autoremove -y; sudo apt-get autoclean -y; sudo npm update -g yarn; sudo yarn global upgrade";
 # Dotfiles config
-alias config="git --git-dir=$HOME/Documents/guergeiro/dotfiles --work-tree=$HOME"
+alias cfg="git --git-dir=$HOME/Documents/guergeiro/dotfiles --work-tree=$HOME"
 # You remember Vi? It's just faster to type
 alias vi="vim";
+# Force tmux UTF-8
+alias tmux="tmux -u"
 # Sometimes I forget I'm not in VIM, but still want to quit :>
 alias :q="exit";
 # Fuck Python2... Sorry :(

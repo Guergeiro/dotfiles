@@ -95,8 +95,6 @@ shopt -s autocd
 # Automatically tries it's best to correct misspell
 shopt -s cdspell
 
-export PATH=/home/breno/.local/bin:$PATH
-
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
@@ -115,4 +113,8 @@ fi
 if [ -f ~/.bash_starship ]; then
   . ~/.bash_starship
 fi
+
 . "$HOME/.cargo/env"
+export PATH=/home/breno/.local/bin:$PATH
+export dotfilesDirectory=$HOME/Documents/guergeiro/dotfiles
+export vimDirectory=$HOME/Documents/vim/vim
