@@ -13,18 +13,18 @@ if exists('$SUDO_USER')
 else
   set backup
   set writebackup
-  let &backupdir=expand("/tmp/.vimtrash/backup//")
+  let &backupdir=expand('/tmp/.vimtrash/backup//')
   if !isdirectory(expand(&backupdir))
     call mkdir(expand(&backupdir), 'p')
   endif
   set swapfile
-  let &directory=expand("/tmp/.vimtrash/swapfiles//")
+  let &directory=expand('/tmp/.vimtrash/swapfiles//')
   if !isdirectory(expand(&directory))
     call mkdir(expand(&directory), 'p')
   endif
   if has('persistent_undo')
     set undofile
-    let &undodir=expand("/tmp/.vimtrash/undodir//")
+    let &undodir=expand('/tmp/.vimtrash/undodir//')
     if !isdirectory(expand(&undodir))
       call mkdir(expand(&undodir), 'p')
     endif
@@ -40,6 +40,7 @@ syntax on
 filetype plugin indent on
 if has('syntax')
   set cursorline
+  set colorcolumn=80
 endif
 " Make default clipboard the OS X clipboard (and unnamedplus for Linux)
 if has('clipboard')
@@ -190,6 +191,7 @@ let g:polyglot_disabled = ['autoindent']
 " }}}
 " Let's load plugins
 call plug#begin('~/.vim/plugged')
+Plug 'christoomey/vim-tmux-navigator'
 Plug 'fcpg/vim-altscreen'
 Plug 'Guergeiro/clean-path.vim'
 Plug 'gruvbox-community/gruvbox'
@@ -204,12 +206,13 @@ Plug 'lambdalisue/fern-renderer-nerdfont.vim'
 Plug 'lambdalisue/nerdfont.vim'
 Plug 'machakann/vim-highlightedyank'
 Plug 'mbbill/undotree'
+Plug 'rhysd/committia.vim'
 Plug 'romainl/vim-cool'
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-surround'
 Plug 'sheerun/vim-polyglot'
 Plug 'srcery-colors/srcery-vim'
-Plug 'vim-test/vim-test'
 Plug 'voldikss/vim-floaterm'
 Plug 'whiteinge/diffconflicts'
 Plug 'wincent/scalpel'
@@ -224,8 +227,20 @@ Plug 'roxma/nvim-yarp'
 Plug 'roxma/vim-hug-neovim-rpc'
 Plug 'lighttiger2505/deoplete-vim-lsp'
 call plug#end()
+" ColorScheme {{{
+let g:srcery_italic=1
+let g:gruvbox_italic=1
 set background=dark
 colorscheme srcery
+" }}}
+" vim-tmux-navigator Config Start{{{
+let g:tmux_navigator_no_mappings = 1
+nnoremap <silent> <c-w>h :TmuxNavigateLeft<cr>
+nnoremap <silent> <c-w>j :TmuxNavigateDown<cr>
+nnoremap <silent> <c-w>k :TmuxNavigateUp<cr>
+nnoremap <silent> <c-w>l :TmuxNavigateRight<cr>
+nnoremap <silent> <c-w>\ :TmuxNavigatePrevious<cr>
+" }}}
 " clean-path.vim Config Start {{{
 let &path.=cleanpath#setpath()
 let &wildignore.=cleanpath#setwildignore()
@@ -261,14 +276,6 @@ nnoremap <silent><leader>sg :Select gitfile<cr>
 inoremap <silent><leader>s/ <esc>:Select bufline<cr>
 nnoremap <silent><leader>s/ :Select bufline<cr>
 " }}}
-" vim-test Config Start {{{
-nnoremap <leader>tf :TestFile -strategy=floaterm<cr>
-inoremap <leader>tf <esc>:TestFile -strategy=floaterm<cr>
-nnoremap <leader>ts :TestSuite -strategy=floaterm<cr>
-inoremap <leader>ts <esc>:TestSuite -strategy=floaterm<cr>
-nnoremap <leader>tv :TestVisit -strategy=floaterm<cr>
-inoremap <leader>tv <esc>:TestVisit -strategy=floaterm<cr>
-" }}}
 " Scalpel Config Start {{{
 let g:ScalpelMap=0
 nmap <leader><f2> <plug>(Scalpel)
@@ -285,6 +292,10 @@ nnoremap <silent><c-b> :Fern . -drawer -toggle -reveal=%<cr>
 let g:highlightedyank_highlight_duration = 250
 " }}}
 " vim-lsp Config Starts {{{
+if !isdirectory(expand('/home/breno/.local/vim-lsp-settings/servers'))
+  call mkdir(expand('/home/breno/.local/vim-lsp-settings/servers'), 'p')
+endif
+let g:lsp_settings_servers_dir='/home/breno/.local/vim-lsp-settings/servers'
 let g:lsp_fold_enabled = 0
 let g:lsp_diagnostics_float_cursor = 1
 let g:lsp_diagnostics_float_delay = 250
