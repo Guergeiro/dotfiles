@@ -81,12 +81,14 @@ sudo apt-get install tmux -y
 git clone https://github.com/imomaliev/tmux-bash-completion.git $HOME/Documents/imomaliev/tmux-bash-completion
 sudo cp $HOME/Documents/imomaliev/tmux-bash-completion/completions/tmux /etc/bash_completion.d/
 rm -rf $HOME/Documents/imomaliev/tmux-bash-completion
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
 echo "${yellow}Installing Deno${reset}"
 curl -fsSL https://deno.land/x/install/install.sh | sh
 sudo mv $HOME/.deno/bin/deno /usr/bin/
 deno completions > deno
 sudo mv deno /etc/bash_completion.d/
+rm deno
 
 echo "${yellow}Installing NodeJS (Current)${reset}"
 curl -sL https://deb.nodesource.com/setup_current.x | sudo -E bash -
@@ -108,14 +110,34 @@ sudo apt-get install trash-cli -y
 echo "${yellow}Installing XCLIP${reset}"
 sudo apt-get install xclip -y
 
-echo "${yellow}Installing Yarn${reset}"
-sudo npm install -g yarn
-
-echo "${yellow}Installing Prettier${reset}"
-sudo yarn global add prettier
-
 echo "${yellow}Installing starship shell${reset}"
 curl -fsSL https://starship.rs/install.sh | bash
+
+echo "${yellow}Installing Docker${reset}"
+sudo apt-get remove docker docker-engine docker.io containerd runc
+sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    gnupg \
+    lsb-release
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo \
+  "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+sudo groupadd docker
+sudo usermod -aG docker $USER
+
+echo "${yellow}Installing Docker Compose${reset}"
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+sudo curl \
+    -L https://raw.githubusercontent.com/docker/compose/1.29.2/contrib/completion/bash/docker-compose \
+    -o /etc/bash_completion.d/docker-compose
+
+echo "${yellow}Installing Yarn${reset}"
+sudo npm install -g yarn
 
 echo "${yellow}Removing Vim/Bash Default Configs${reset}"
 rm -rf $HOME/.bashrc
