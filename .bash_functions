@@ -36,15 +36,6 @@ function git() {
   elif [ "$1" = "branch" ] && [ "$#" -eq 1 ]; then
     shift
     command git branch -a
-  elif [ "$1" = "add-upstream" ] && [ "$#" -eq 2 ]; then
-    if ! git config --get remote.origin.url > /dev/null 2>&1; then
-      echo "A remote called 'origin' doesn't exist. Aborting." >&2
-      return 1
-    fi
-    shift
-    local upstream="$1"
-    shift
-    command git remote add upstream "git@$upstream/"
   else
     command git "$@"
   fi
