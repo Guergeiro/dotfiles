@@ -3,6 +3,7 @@
 !.vim/plugin/
 !.vim/ftplugin/
 !.vim/after/
+!.vim/vimrc/
 .config/*
 !.config/starship.toml
 !.alacritty.yml
