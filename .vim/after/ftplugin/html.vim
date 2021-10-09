@@ -1,2 +1,1 @@
-setlocal formatprg=npx\ prettier\ --stdin-filepath\ %
-setlocal formatexpr=
+source <sfile>:h/prettier-config.vim

@@ -1,4 +1,3 @@
-" General {{{
 " Enter current millenium
 set nocompatible
 set encoding=utf-8
@@ -120,10 +119,8 @@ set ignorecase
 set smartcase
 " Disable showmode
 set noshowmode
-" TextEdit might fail if hidden is not set.
+" Allow not saved buffers
 set hidden
-" Give more space for displaying messages.
-set cmdheight=1
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable delays and poor user experience.
 set updatetime=250
 " Don't pass messages to |ins-completion-menu|.
@@ -132,9 +129,17 @@ set shortmess+=c
 set lazyredraw
 " Prevents inserting two spaces after punctuation on a join
 set nojoinspaces
+" Complete menu options
 set completeopt=menuone,noinsert,noselect,preview
+" Custom quit command
+if !exists(':Q')
+  command! Q q!
+endif
 " Search for the word under the cursor (but don't advance to the first match)
 map <silent> * :let @/="\\<<c-r><c-w>\\>"<cr>:set hls<cr>
+" Remove defaults I don't like
+noremap <F1> <nop>
+nnoremap Q <nop>
 " Keeps n and N centered
 nnoremap n nzzzv
 nnoremap N Nzzzv
@@ -178,38 +183,36 @@ inoremap ` ``<esc>i
 " Terminal escape
 tnoremap <leader><esc> <c-\><c-n>
 " Show documentation
-function! <sid>show_documentation(serverLoaded)
+function! <sid>show_documentation()
   if (index(['vim', 'help'], &filetype) >= 0)
     execute 'h ' . expand('<cword>')
-  elseif (a:serverLoaded)
+  elseif get(g:, 'lsp_server_loaded', 0) == 1
     execute 'LspHover'
   else
     execute '!' . &keywordprg . ' ' . expand('<cword>')
   endif
 endfunction
-let g:serverLoaded = 0
-nnoremap <silent> K :call <sid>show_documentation(g:lsp_server_loaded)<cr>
-function! s:lsp_server_commands() abort
-  let g:lsp_server_loaded = 1
-endfunction
-" AutoCommands {{{
-augroup General
+nnoremap <silent> K :call <sid>show_documentation()<cr>
+" AutoCommands {{{ "
+augroup Autocmd
   autocmd!
   " Remove extra spaces on save
   autocmd BufWritePre,FileWritePre * :call <sid>trimWhitespace()
-  " Add GrepQuickfix window
-  autocmd QuickFixCmdPost cgetexpr cwindow
-  autocmd QuickFixCmdPost lgetexpr lwindow
-  " Change documentation to also allow lsp docs
-  autocmd User lsp_server_init call <sid>lsp_server_commands()
   " Close the completion window when done
   autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
 augroup END
-" }}}
+" AutoCommands }}} "
 " Install minpac automatically
-if empty(glob('~/.vim/pack/minpac/opt/minpac'))
-  silent !git clone https://github.com/k-takata/minpac.git
-        \ ~/.vim/pack/minpac/opt/minpac
+if !isdirectory(expand('$HOME') . '/.vim/pack/minpac/opt/minpac')
+  if has('dialog_con')
+    let choice = confirm("Install minpac?", "&Yes\n&No", 2)
+    if choice == 1
+      silent !git clone https://github.com/k-takata/minpac.git
+            \ ~/.vim/pack/minpac/opt/minpac
+    endif
+  else
+    echo 'Install mincpac to ~/.vim/pack/minpac/opt/minpac'
+  endif
 else
   function! PackInit() abort
     packadd minpac
@@ -221,6 +224,7 @@ else
     call minpac#add('christoomey/vim-tmux-navigator')
     call minpac#add('fcpg/vim-altscreen')
     call minpac#add('Guergeiro/clean-path.vim')
+    call minpac#add('Guergeiro/vim-smartpairs')
     call minpac#add('gruvbox-community/gruvbox')
     call minpac#add('habamax/vim-select')
     call minpac#add('habamax/vim-select-more')
@@ -250,10 +254,21 @@ else
     call minpac#add('prabirshrestha/vim-lsp')
     call minpac#add('prabirshrestha/async.vim')
 
-    call minpac#add('Shougo/deoplete.nvim')
-    call minpac#add('roxma/nvim-yarp')
-    call minpac#add('roxma/vim-hug-neovim-rpc')
-    call minpac#add('lighttiger2505/deoplete-vim-lsp')
+    call minpac#add('SirVer/ultisnips')
+    call minpac#add('honza/vim-snippets')
+
+    call minpac#add('Shougo/ddc.vim')
+    call minpac#add('Shougo/ddc-around')
+    call minpac#add('Shougo/ddc-matcher_head')
+    call minpac#add('Shougo/ddc-sorter_rank')
+    call minpac#add('Shougo/ddc-converter_remove_overlap')
+    call minpac#add('LumaKernel/ddc-file')
+    call minpac#add('matsui54/ddc-buffer')
+    call minpac#add('matsui54/ddc-matcher_fuzzy')
+    call minpac#add('matsui54/ddc-ultisnips')
+    call minpac#add('matsui54/denops-popup-preview.vim')
+    call minpac#add('shun/ddc-vim-lsp')
+    call minpac#add('vim-denops/denops.vim')
   endfunction
   function! PackList(...) abort
     call PackInit()

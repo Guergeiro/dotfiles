@@ -35,3 +35,11 @@ endif
 let &l:formatprg=<sid>projectFmt()
 set path-=node_modules/**
 set path-=./node_modules/**
+let g:smartpairs_pairs[&filetype] = {
+      \ '(': ')',
+      \ '[': ']',
+      \ '{': '}',
+      \ "'": "'",
+      \ '`': '`',
+      \ '"': '"'
+      \ }
