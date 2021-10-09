@@ -1,10 +1,4 @@
 *
-.vim/*
-!.vim/plugin/
-!.vim/ftplugin/
-!.vim/after/
-.config/*
-!.config/starship.toml
 !.alacritty.yml
 !.bash_aliases
 !.bash_functions
@@ -18,3 +12,10 @@
 !install.sh
 !LICENSE
 !README.md
+.vim/*
+!.vim/plugin/
+!.vim/ftplugin/
+!.vim/after/
+!.vim/vimrc/
+.config/*
+!.config/starship.toml

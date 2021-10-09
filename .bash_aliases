@@ -45,3 +45,5 @@ alias POST="curl --include --request POST --header \"Content-Type: application/j
 alias PUT="curl --include --request PUT --header \"Content-Type: application/json \"";
 alias DELETE="curl --include --request DELETE --header \"Content-Type: application/json \"";
 alias PATCH="curl --include --request PATCH --header \"Content-Type: application/json \"";
+# Bat is awesome
+alias cat="batcat"

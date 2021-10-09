@@ -84,7 +84,7 @@ function __docker_default_args(){
 }
 
 function deno() {
-  local version="alpine"
+  local version="debian"
   # Check for flag version
   if [ "$1" = "--docker" ]; then
     shift
@@ -100,7 +100,7 @@ function deno() {
 }
 
 function node() {
-  local version="current-alpine"
+  local version="latest"
   # Check for flag version
   if [ "$1" = "--docker" ]; then
     shift
@@ -119,7 +119,7 @@ function npm() {
   if [ "$2" = "-g" ] || [ "$2" = "--global" ]; then
     command npm "$@"
   else
-    local version="current-alpine"
+    local version="latest"
     # Check for flag version
     if [ "$1" = "--docker" ]; then
       shift
@@ -139,7 +139,7 @@ function yarn() {
   if [ "$1" = "global" ]; then
     command yarn "$@"
   else
-    local version="current-alpine"
+    local version="latest"
     # Check for flag version
     if [ "$1" = "--docker" ]; then
       shift
@@ -161,6 +161,15 @@ function docker-compose() {
     command docker-compose up --remove-orphans --build "$@"
   else
     command docker-compose "$@"
+  fi
+}
+
+# Check if internet is working
+function ping() {
+  if [ "$#" -ne 0 ]; then
+    command ping "$@"
+  else
+    command ping "www.brenosalles.com"
   fi
 }
 
@@ -266,8 +275,7 @@ function startWork() {
   done
 }
 
-
-function goWork() {
+function goTmux() {
   if [ "$#" -eq 0 ]; then
     echo "No argument provided"
     return 1
@@ -285,3 +293,4 @@ function goWork() {
     tmux attach -t $arg
   fi
 }
+

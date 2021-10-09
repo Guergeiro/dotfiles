@@ -3,18 +3,24 @@
   name = Breno Salles
 [core]
   editor = vim
-  pager = delta
 [merge]
   tool = diffconflicts
 [mergetool]
   keepBackup = false
   keepTemporaries =
 [mergetool "diffconflicts"]
-  cmd = vim -c DiffConflicts \"$MERGED\" \"$BASE\" \"$LOCAL\" \"$REMOTE\"
+  cmd = vim \
+    -c DiffConflicts \"$MERGED\" \"$BASE\" \"$LOCAL\" \"$REMOTE\"
   trustExitCode = true
-[delta]
-  side-by-side = true
 [checkout]
   defaultRemote = origin
 [commit]
   verbose = true
+[diff]
+  tool = customdiff
+[difftool]
+  prompt = false
+[difftool "customdiff"]
+  cmd = vim -R -f -d \
+    -c 'wincmd h' \
+    -c 'cd $GIT_PREFIX' "$REMOTE" "$LOCAL" \
