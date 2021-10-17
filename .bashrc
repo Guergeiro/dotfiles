@@ -114,7 +114,10 @@ if [ -f ~/.bash_starship ]; then
   . ~/.bash_starship
 fi
 
+# Private scripts
+if [ -f ~/Documents/guergeiro/dotfiles-libertrium/.bashrc ]; then
+  . ~/Documents/guergeiro/dotfiles-libertrium/.bashrc
+fi
+
 . "$HOME/.cargo/env"
 export PATH=/home/breno/.local/bin:$PATH
-export dotfilesDirectory=$HOME/Documents/guergeiro/dotfiles
-export vimDirectory=$HOME/Documents/vim/vim
