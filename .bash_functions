@@ -9,8 +9,6 @@ function update() {
     sudo apt-get dist-upgrade -y
     sudo apt-get autoremove -y
     sudo apt-get autoclean -y
-    sudo npm update -g yarn
-    sudo yarn global upgrade
   fi
 }
 
@@ -43,11 +41,6 @@ function git() {
 
 function cd() {
   local dir="$@"
-  if [ "$1" = "vim" ]; then
-    local dir=$vimDirectory
-  elif [ "$1" = "dotfiles" ]; then
-    local dir=$dotfilesDirectory
-  fi
   builtin cd $dir && ls -A --color=auto
 }
 
@@ -62,14 +55,18 @@ function man() {
 }
 
 function __docker_default_args(){
+  local dockerHome="/home/$(id --user --name)"
   # Default args
   local args="--interactive"
   local args+=" --tty"
   local args+=" --rm"
   local args+=" --user $(id --user):$(id --group)"
-  local args+=" --volume $PWD:/usr/src/app"
+  local args+=" --volume $PWD:$dockerHome/src"
   local args+=" --volume $HOME/.deno:/deno-dir"
-  local args+=" --workdir /usr/src/app"
+  local args+=" --volume $HOME/.pnpm-store:$dockerHome/.pnpm-store"
+  local args+=" --volume $HOME/.m2:$dockerHome/maven/.m2"
+  local args+=" --env MAVEN_CONFIG=$dockerHome/maven/.m2"
+  local args+=" --workdir $dockerHome/src"
   # Generate random port to use https://en.wikipedia.org/wiki/Ephemeral_port#range
   # 65535-49152=16383 (max range)
   local port=$((49152 + $RANDOM % 16383))
@@ -116,43 +113,84 @@ function node() {
 }
 
 function npm() {
-  if [ "$2" = "-g" ] || [ "$2" = "--global" ]; then
-    command npm "$@"
-  else
-    local version="latest"
-    # Check for flag version
-    if [ "$1" = "--docker" ]; then
-      shift
-      local version="$1"
-      shift
-    fi
-    local args=$(__docker_default_args)
-
-    docker run \
-      $args \
-      node:$version \
-      npm "$@"
+  local version="latest"
+  # Check for flag version
+  if [ "$1" = "--docker" ]; then
+    shift
+    local version="$1"
+    shift
   fi
+  local args=$(__docker_default_args)
+
+  docker run \
+    $args \
+    node:$version \
+    npm "$@"
 }
 
 function yarn() {
-  if [ "$1" = "global" ]; then
-    command yarn "$@"
-  else
-    local version="latest"
-    # Check for flag version
-    if [ "$1" = "--docker" ]; then
-      shift
-      local version="$1"
-      shift
-    fi
-    local args=$(__docker_default_args)
-
-    docker run \
-      $args \
-      node:$version \
-      yarn "$@"
+  local version="latest"
+  # Check for flag version
+  if [ "$1" = "--docker" ]; then
+    shift
+    local version="$1"
+    shift
   fi
+  local args=$(__docker_default_args)
+
+  docker run \
+    $args \
+    node:$version \
+    yarn "$@"
+}
+
+function pnpm() {
+  local version="latest"
+  # Check for flag version
+  if [ "$1" = "--docker" ]; then
+    shift
+    local version="$1"
+    shift
+  fi
+  local args=$(__docker_default_args)
+
+  docker run \
+    $args \
+    guergeiro/pnpm:$version \
+    /bin/sh -c "\
+    pnpm config set store-dir /home/$(id --user --name)/.pnpm-store && \
+    pnpm \"$@\"\
+    "
+}
+
+function mvn() {
+  local version="latest"
+  # Check for flag version
+  if [ "$1" = "--docker" ]; then
+    shift
+    local version="$1"
+    shift
+  fi
+  local args=$(__docker_default_args)
+  docker run \
+    $args \
+    maven:$version \
+    mvn -D user.home=$HOME/maven archetype:generate "$@"
+}
+
+function java() {
+  local version="latest"
+  # Check for flag version
+  if [ "$1" = "--docker" ]; then
+    shift
+    local version="$1"
+    shift
+  fi
+  local args=$(__docker_default_args)
+  docker run \
+    $args \
+    openjdk:$version \
+    java "$@"
 }
 
 function docker-compose() {
@@ -171,31 +209,6 @@ function ping() {
   else
     command ping "www.brenosalles.com"
   fi
-}
-
-function update_branch() {
-  local branch="master"
-  if [ "$#" -ne 0 ]; then
-    local branch=$1
-    shift
-  fi
-  git checkout "$branch"
-  git pull --all
-  git fetch upstream --prune
-  git fetch --prune
-  git push "$branch"
-}
-
-function update_all() {
-  local curPwd=$(pwd)
-  local currDirs=$(find $curPwd -mindepth 1 -maxdepth 1 -type d | xargs realpath)
-  for d in $currDirs; do
-    if [ -d "$d/.git" ]; then
-      cd $d
-      update_git
-    fi
-  done
-  cd $curPwd
 }
 
 function createPane() {
@@ -223,57 +236,6 @@ function createSession() {
   tmux new -s $session -d -n $window "$@"
 }
 
-function startWork() {
-  while [ "$#" -gt 0 ]; do
-    local curr=$1
-    shift
-
-    case "$curr" in
-    "bolsas")
-      local directory=$HOME/Documents/libertrium/bolsas
-      createSession bolsas primary
-      createWindow bolsas docker -c $directory  "docker-compose up --remove-orphans --build"
-      createPane bolsas docker -c $directory
-      createWindow bolsas apicm_bolsas -c $directory/apicm_bolsas
-      createWindow bolsas apiuser_bolsas -c $directory/apiuser_bolsas
-      createWindow bolsas cm_bolsas -c $directory/cm_bolsas
-      createWindow bolsas user_bolsas -c $directory/user_bolsas
-      ;;
-
-    "associativismo")
-      local directory=$HOME/Documents/libertrium/associativismo
-      createSession associativismo primary
-      createWindow associativismo docker -c $directory  "docker-compose up --remove-orphans --build"
-      createPane associativismo docker -c $directory
-      createWindow associativismo apicm_associativismo -c $directory/apicm_associativismo
-      createWindow associativismo apiuser_associativismo -c $directory/apiuser_associativismo
-      createWindow associativismo cm_associativismo -c $directory/cm_associativismo
-      createWindow associativismo user_associativismo -c $directory/user_associativismo
-      ;;
-
-    "brenosalles")
-      local directory=$HOME/Documents/guergeiro/breno-website
-      createSession breno primary
-      createWindow breno docker -c $directory  "docker-compose up --remove-orphans --build"
-      createPane breno docker -c $directory
-      createWindow breno api -c $directory/api.brenosalles.com
-      createWindow breno angular -c $directory/brenosalles.com
-      ;;
-
-    "drash")
-      local directory=$HOME/Documents/drashland/deno-drash
-      createSession drash primary -c $directory
-      ;;
-
-    "unilogger")
-      local directory=$HOME/Documents/guergeiro/unilogger
-      createSession unilogger primary -c $directory
-      ;;
-
-    *) echo "Unavailable command... $curr"
-    esac
-  done
-}
 
 function goTmux() {
   if [ "$#" -eq 0 ]; then
@@ -293,4 +255,3 @@ function goTmux() {
     tmux attach -t $arg
   fi
 }
-
