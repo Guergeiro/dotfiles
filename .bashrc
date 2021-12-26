@@ -119,5 +119,7 @@ if [ -f ~/Documents/guergeiro/dotfiles-libertrium/.bashrc ]; then
   . ~/Documents/guergeiro/dotfiles-libertrium/.bashrc
 fi
 
-. "$HOME/.cargo/env"
+source "$HOME/.cargo/env"
 export PATH=/home/breno/.local/bin:$PATH
+export PNPM_HOME="/home/breno/.local/share/pnpm"
+export PATH="$PNPM_HOME:$PATH"

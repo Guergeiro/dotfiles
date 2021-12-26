@@ -262,6 +262,7 @@ else
     call minpac#add('Shougo/ddc-matcher_head')
     call minpac#add('Shougo/ddc-sorter_rank')
     call minpac#add('Shougo/ddc-converter_remove_overlap')
+    call minpac#add('Shougo/ddc-rg')
     call minpac#add('LumaKernel/ddc-file')
     call minpac#add('matsui54/ddc-buffer')
     call minpac#add('matsui54/ddc-matcher_fuzzy')

@@ -147,6 +147,7 @@ function! s:custom_expand() abort
 
   return "\<c-y>"
 endfunction
+
 packadd denops.vim
 packadd ddc.vim
 packadd ddc-around
@@ -158,15 +159,18 @@ packadd ddc-file
 packadd ddc-buffer
 packadd ddc-matcher_fuzzy
 packadd ddc-ultisnips
-packadd denops-popup-preview.vim
+packadd ddc-rg
 packadd ddc-vim-lsp
+
+packloadall
 call ddc#custom#patch_global('sources',
       \ [
       \   'vim-lsp',
       \   'buffer',
       \   'around',
       \   'ultisnips',
-      \   'file'
+      \   'file',
+      \   'rg'
       \ ])
 call ddc#custom#patch_global('sourceOptions', {
       \ '_': {
@@ -176,9 +180,9 @@ call ddc#custom#patch_global('sourceOptions', {
       \   'converters': ['converter_remove_overlap']
       \   },
       \ 'vim-lsp': {
+      \   'minAutoCompleteLength': 2,
       \   'mark': 'lsp',
-      \   'matchers': ['matcher_head'],
-      \   'isVolatile': v:true,
+      \   'matchers': ['matcher_head']
       \   },
       \ 'file': {
       \   'mark': 'file',
@@ -196,6 +200,11 @@ call ddc#custom#patch_global('sourceOptions', {
       \ 'ultisnips': {
       \   'matchers': ['matcher_head'],
       \   'mark': 'us'
+      \   },
+      \ 'rg': {
+      \   'minAutoCompleteLength': 4,
+      \   'matchers': ['matcher_fuzzy'],
+      \   'mark': 'rg'
       \   }
       \ })
 call ddc#custom#patch_global('filterParams', {
@@ -203,11 +212,10 @@ call ddc#custom#patch_global('filterParams', {
       \   'camelcase': v:true
       \   },
       \ })
-inoremap <silent> <expr> <tab> pumvisible() ? "\<c-n>" : "\<tab>"
-inoremap <silent> <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
+inoremap <silent> <expr> <tab> ddc#map#pum_visible() ? "\<c-n>" : "\<tab>"
+inoremap <silent> <expr> <s-tab> ddc#map#pum_visible() ? "\<c-p>" : "\<s-tab>"
 inoremap <silent> <cr> <c-r>=<sid>custom_expand()<cr>
 inoremap <silent> <expr> <c-@> ddc#manual_complete()
-call popup_preview#enable()
 call ddc#enable()
 " ddc.vim }}} "
 

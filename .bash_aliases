@@ -8,7 +8,7 @@ alias tmux="tmux -u"
 # Sometimes I forget I'm not in VIM, but still want to quit :>
 alias :q="exit";
 # Fuck Python2... Sorry :(
-alias python="python3"; alias pip="pip3";
+# alias python="python3"; alias pip="pip3";
 # Security stuff
 alias del="trash";
 alias rm="echo Use \"del\", or the full path i.e. \"/bin/rm\"";
