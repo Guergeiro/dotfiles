@@ -2,10 +2,6 @@ if exists('g:loaded_plugins')
   finish
 endif
 
-" Vim-Polyglot {{{ "
-let g:polyglot_disabled = ['autoindent']
-" Vim-Polyglot }}} "
-
 " ColorScheme {{{ "
 let g:srcery_italic=1
 let g:gruvbox_italic=1
@@ -91,6 +87,7 @@ if !isdirectory(expand('$HOME') . '/.local/vim-lsp-settings/servers')
 endif
 let g:lsp_settings_servers_dir=expand('$HOME') . '/.local/vim-lsp-settings/servers'
 let g:lsp_fold_enabled = 0
+let g:lsp_document_highlight_enabled = 0
 let g:lsp_diagnostics_float_cursor = 1
 let g:lsp_diagnostics_float_delay = 250
 let g:lsp_diagnostics_highlights_enabled = 0
@@ -123,7 +120,6 @@ let g:lightline.colorscheme = g:colors_name
 " Lightline }}} "
 
 " clean-path.vim {{{ "
-packadd clean-path.vim
 let &path.=cleanpath#setpath()
 let &wildignore.=cleanpath#setwildignore()
 " clean-path.vim }}} "
@@ -148,21 +144,6 @@ function! s:custom_expand() abort
   return "\<c-y>"
 endfunction
 
-packadd denops.vim
-packadd ddc.vim
-packadd ddc-around
-packadd ddc-matcher_head
-packadd ddc-matcher_fuzzy
-packadd ddc-sorter_rank
-packadd ddc-converter_remove_overlap
-packadd ddc-file
-packadd ddc-buffer
-packadd ddc-matcher_fuzzy
-packadd ddc-ultisnips
-packadd ddc-rg
-packadd ddc-vim-lsp
-
-packloadall
 call ddc#custom#patch_global('sources',
       \ [
       \   'vim-lsp',
@@ -212,8 +193,8 @@ call ddc#custom#patch_global('filterParams', {
       \   'camelcase': v:true
       \   },
       \ })
-inoremap <silent> <expr> <tab> ddc#map#pum_visible() ? "\<c-n>" : "\<tab>"
-inoremap <silent> <expr> <s-tab> ddc#map#pum_visible() ? "\<c-p>" : "\<s-tab>"
+inoremap <silent> <expr> <tab> ddc#map#pum_visible() ? "<c-n>" : "<tab>"
+inoremap <silent> <expr> <s-tab> ddc#map#pum_visible() ? "<c-p>" : "<s-tab>"
 inoremap <silent> <cr> <c-r>=<sid>custom_expand()<cr>
 inoremap <silent> <expr> <c-@> ddc#manual_complete()
 call ddc#enable()

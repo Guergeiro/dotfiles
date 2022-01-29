@@ -203,86 +203,76 @@ augroup Autocmd
 augroup END
 " AutoCommands }}} "
 " Install minpac automatically
-if !isdirectory(expand('$HOME') . '/.vim/pack/minpac/opt/minpac')
+if empty(glob(expand('$HOME') . '/.vim/autoload/plug.vim'))
   if has('dialog_con')
-    let choice = confirm("Install minpac?", "&Yes\n&No", 2)
+    let choice = confirm("Install VimPlug?", "&Yes\n&No", 2)
     if choice == 1
-      silent !git clone https://github.com/k-takata/minpac.git
-            \ ~/.vim/pack/minpac/opt/minpac
+      silent execute '!curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
     endif
   else
-    echo 'Install mincpac to ~/.vim/pack/minpac/opt/minpac'
+    echo 'Install vim plug to ~/.vim/autoload/plug.vim'
   endif
 else
-  function! PackInit() abort
-    packadd minpac
+  " Vim-Polyglot {{{ "
+  let g:polyglot_disabled = ['autoindent']
+  " Vim-Polyglot }}} "
+  "
+  call plug#begin('~/.vim/plugged')
+  Plug 'christoomey/vim-tmux-navigator'
+  Plug 'fcpg/vim-altscreen'
+  Plug 'Guergeiro/clean-path.vim'
+  Plug 'Guergeiro/vim-smartpairs'
+  Plug 'gruvbox-community/gruvbox'
+  Plug 'habamax/vim-select'
+  Plug 'habamax/vim-select-more'
+  Plug 'itchyny/lightline.vim'
+  Plug 'itchyny/vim-gitbranch'
+  Plug 'lambdalisue/fern.vim'
+  Plug 'lambdalisue/fern-git-status.vim'
+  Plug 'lambdalisue/fern-hijack.vim'
+  Plug 'lambdalisue/fern-renderer-nerdfont.vim'
+  Plug 'lambdalisue/nerdfont.vim'
+  Plug 'machakann/vim-highlightedyank'
+  Plug 'mbbill/undotree'
+  Plug 'rhysd/committia.vim'
+  Plug 'romainl/vim-cool'
+  Plug 'tommcdo/vim-exchange'
+  Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-obsession'
+  Plug 'tpope/vim-surround'
+  Plug 'sheerun/vim-polyglot'
+  Plug 'srcery-colors/srcery-vim'
+  Plug 'voldikss/vim-floaterm'
+  Plug 'whiteinge/diffconflicts'
+  Plug 'wincent/scalpel'
 
-    call minpac#init()
-    call minpac#add('k-takata/minpac', {'type': 'opt'})
+  Plug 'mattn/emmet-vim', { 'for':
+        \ [
+        \   'html',
+        \   'typescriptreact',
+        \   'javascriptreact'
+        \ ] }
+  Plug 'mattn/vim-lsp-settings'
+  Plug 'prabirshrestha/vim-lsp'
+  Plug 'prabirshrestha/async.vim'
 
-    " Additional plugins here
-    call minpac#add('christoomey/vim-tmux-navigator')
-    call minpac#add('fcpg/vim-altscreen')
-    call minpac#add('Guergeiro/clean-path.vim')
-    call minpac#add('Guergeiro/vim-smartpairs')
-    call minpac#add('gruvbox-community/gruvbox')
-    call minpac#add('habamax/vim-select')
-    call minpac#add('habamax/vim-select-more')
-    call minpac#add('itchyny/lightline.vim')
-    call minpac#add('itchyny/vim-gitbranch')
-    call minpac#add('lambdalisue/fern.vim')
-    call minpac#add('lambdalisue/fern-git-status.vim')
-    call minpac#add('lambdalisue/fern-hijack.vim')
-    call minpac#add('lambdalisue/fern-renderer-nerdfont.vim')
-    call minpac#add('lambdalisue/nerdfont.vim')
-    call minpac#add('machakann/vim-highlightedyank')
-    call minpac#add('mbbill/undotree')
-    call minpac#add('rhysd/committia.vim')
-    call minpac#add('romainl/vim-cool')
-    call minpac#add('tommcdo/vim-exchange')
-    call minpac#add('tpope/vim-commentary')
-    call minpac#add('tpope/vim-obsession')
-    call minpac#add('tpope/vim-surround')
-    call minpac#add('sheerun/vim-polyglot')
-    call minpac#add('srcery-colors/srcery-vim')
-    call minpac#add('voldikss/vim-floaterm')
-    call minpac#add('whiteinge/diffconflicts')
-    call minpac#add('wincent/scalpel')
+  Plug 'SirVer/ultisnips'
+  Plug 'honza/vim-snippets'
 
-    call minpac#add('mattn/emmet-vim')
-    call minpac#add('mattn/vim-lsp-settings')
-    call minpac#add('prabirshrestha/vim-lsp')
-    call minpac#add('prabirshrestha/async.vim')
-
-    call minpac#add('SirVer/ultisnips')
-    call minpac#add('honza/vim-snippets')
-
-    call minpac#add('Shougo/ddc.vim')
-    call minpac#add('Shougo/ddc-around')
-    call minpac#add('Shougo/ddc-matcher_head')
-    call minpac#add('Shougo/ddc-sorter_rank')
-    call minpac#add('Shougo/ddc-converter_remove_overlap')
-    call minpac#add('Shougo/ddc-rg')
-    call minpac#add('LumaKernel/ddc-file')
-    call minpac#add('matsui54/ddc-buffer')
-    call minpac#add('matsui54/ddc-matcher_fuzzy')
-    call minpac#add('matsui54/ddc-ultisnips')
-    call minpac#add('matsui54/denops-popup-preview.vim')
-    call minpac#add('shun/ddc-vim-lsp')
-    call minpac#add('vim-denops/denops.vim')
-  endfunction
-  function! PackList(...) abort
-    call PackInit()
-    return join(sort(keys(minpac#getpluglist())), "\n")
-  endfunction
-
-  command! -nargs=1 -complete=custom,PackList
-        \ PackOpenDir call PackInit() | call term_start(&shell,
-        \    {'cwd': minpac#getpluginfo(<q-args>).dir,
-        \     'term_finish': 'close'})
-  command! PackUpdate source $MYVIMRC | call PackInit() | call minpac#update()
-  command! PackClean  source $MYVIMRC | call PackInit() | call minpac#clean()
-  command! PackStatus call PackInit() | call minpac#status()
+  Plug 'Shougo/ddc.vim'
+  Plug 'Shougo/ddc-around'
+  Plug 'Shougo/ddc-matcher_head'
+  Plug 'Shougo/ddc-sorter_rank'
+  Plug 'Shougo/ddc-converter_remove_overlap'
+  Plug 'Shougo/ddc-rg'
+  Plug 'LumaKernel/ddc-file'
+  Plug 'matsui54/ddc-buffer'
+  Plug 'matsui54/ddc-matcher_fuzzy'
+  Plug 'matsui54/ddc-ultisnips'
+  Plug 'matsui54/denops-popup-preview.vim'
+  Plug 'shun/ddc-vim-lsp'
+  Plug 'vim-denops/denops.vim'
+  call plug#end()
 
   source $HOME/.vim/vimrc/plugins.vim
 endif
