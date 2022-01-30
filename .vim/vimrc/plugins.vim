@@ -125,85 +125,66 @@ let &wildignore.=cleanpath#setwildignore()
 " clean-path.vim }}} "
 
 " ddc.vim {{{ "
-function! s:custom_expand() abort
-  if !pumvisible()
-    return "\<cr>"
-  endif
+if !exists('*s:ddcinit')
+  function! s:ddcinit() abort
+    call ddc#custom#patch_global('sources',
+          \ [
+          \   'vim-lsp',
+          \   'buffer',
+          \   'around',
+          \   'file',
+          \   'rg'
+          \ ])
+    call ddc#custom#patch_global('sourceOptions', {
+          \ '_': {
+          \   'ignoreCase': v:true,
+          \   'minAutoCompleteLength': 1,
+          \   'sorters': ['sorter_rank'],
+          \   'converters': ['converter_remove_overlap']
+          \   },
+          \ 'vim-lsp': {
+          \   'minAutoCompleteLength': 2,
+          \   'mark': 'lsp',
+          \   'matchers': ['matcher_head']
+          \   },
+          \ 'file': {
+          \   'mark': 'file',
+          \   'matchers': ['matcher_fuzzy'],
+          \   'isVolatile': v:true,
+          \   },
+          \ 'buffer': {
+          \   'mark': 'b',
+          \   'matchers': ['matcher_fuzzy']
+          \   },
+          \ 'around': {
+          \   'mark': 'a',
+          \   'matchers': ['matcher_fuzzy']
+          \   },
+          \ 'rg': {
+          \   'minAutoCompleteLength': 4,
+          \   'matchers': ['matcher_fuzzy'],
+          \   'mark': 'rg'
+          \   }
+          \ })
+    call ddc#custom#patch_global('filterParams', {
+          \ 'matcher_fuzzy': {
+          \   'camelcase': v:true
+          \   },
+          \ })
+    inoremap <silent> <expr> <tab> ddc#map#pum_visible() ? "<c-n>" : "<tab>"
+    inoremap <silent> <expr> <s-tab> ddc#map#pum_visible() ? "<c-p>" : "<s-tab>"
+    inoremap <silent> <expr> <cr>
+          \ ddc#map#pum_visible() ?
+          \ ddc#map#complete() : '<cr>'
+    inoremap <silent> <expr> <c-@> ddc#manual_complete()
+    call ddc#enable()
+  endfunction
+endif
 
-  " Workaround Ultisnips horrible expand keybind disabled
-  let l:complete_info = complete_info(['selected', 'items'])
-  if l:complete_info == {}
-    return "\<c-y>"
-  endif
-  let l:index = l:complete_info.selected
-  let l:item = l:complete_info.items[l:index]
-  if stridx(l:item.menu, '[us]') != -1
-    return UltiSnips#ExpandSnippet()
-  endif
-
-  return "\<c-y>"
-endfunction
-
-call ddc#custom#patch_global('sources',
-      \ [
-      \   'vim-lsp',
-      \   'buffer',
-      \   'around',
-      \   'ultisnips',
-      \   'file',
-      \   'rg'
-      \ ])
-call ddc#custom#patch_global('sourceOptions', {
-      \ '_': {
-      \   'ignoreCase': v:true,
-      \   'minAutoCompleteLength': 1,
-      \   'sorters': ['sorter_rank'],
-      \   'converters': ['converter_remove_overlap']
-      \   },
-      \ 'vim-lsp': {
-      \   'minAutoCompleteLength': 2,
-      \   'mark': 'lsp',
-      \   'matchers': ['matcher_head']
-      \   },
-      \ 'file': {
-      \   'mark': 'file',
-      \   'matchers': ['matcher_fuzzy'],
-      \   'isVolatile': v:true,
-      \   },
-      \ 'buffer': {
-      \   'mark': 'b',
-      \   'matchers': ['matcher_fuzzy']
-      \   },
-      \ 'around': {
-      \   'mark': 'a',
-      \   'matchers': ['matcher_fuzzy']
-      \   },
-      \ 'ultisnips': {
-      \   'matchers': ['matcher_head'],
-      \   'mark': 'us'
-      \   },
-      \ 'rg': {
-      \   'minAutoCompleteLength': 4,
-      \   'matchers': ['matcher_fuzzy'],
-      \   'mark': 'rg'
-      \   }
-      \ })
-call ddc#custom#patch_global('filterParams', {
-      \ 'matcher_fuzzy': {
-      \   'camelcase': v:true
-      \   },
-      \ })
-inoremap <silent> <expr> <tab> ddc#map#pum_visible() ? "<c-n>" : "<tab>"
-inoremap <silent> <expr> <s-tab> ddc#map#pum_visible() ? "<c-p>" : "<s-tab>"
-inoremap <silent> <cr> <c-r>=<sid>custom_expand()<cr>
-inoremap <silent> <expr> <c-@> ddc#manual_complete()
-call ddc#enable()
+augroup Ddc
+  autocmd!
+  autocmd User DenopsReady call s:ddcinit()
+augroup END
 " ddc.vim }}} "
-
-" Ultisnips {{{ "
-let g:UltiSnipsExpandTrigger="<nop>"
-let g:UltiSnipsJumpForwardTrigger="<leader><leader>"
-let g:UltiSnipsJumpBackwardTrigger="<nop>"
-" Ultisnips }}} "
 
 let g:loaded_plugins = 1

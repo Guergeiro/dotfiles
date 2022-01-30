@@ -35,6 +35,9 @@ endif
 let &l:formatprg=<sid>projectFmt()
 set path-=node_modules/**
 set path-=./node_modules/**
+if !exists('g:smartpairs_loaded')
+  finish
+endif
 let g:smartpairs_pairs[&filetype] = {
       \ '(': ')',
       \ '[': ']',
