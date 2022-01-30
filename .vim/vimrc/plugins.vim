@@ -1,7 +1,6 @@
 if exists('g:loaded_plugins')
   finish
 endif
-
 " ColorScheme {{{ "
 let g:srcery_italic=1
 let g:gruvbox_italic=1
@@ -123,10 +122,11 @@ let g:lightline.colorscheme = g:colors_name
 let &path.=cleanpath#setpath()
 let &wildignore.=cleanpath#setwildignore()
 " clean-path.vim }}} "
-
+"
 " ddc.vim {{{ "
 if !exists('*s:ddcinit')
   function! s:ddcinit() abort
+    call ddc#custom#patch_global('completionMenu', 'pum.vim')
     call ddc#custom#patch_global('sources',
           \ [
           \   'vim-lsp',
@@ -171,11 +171,15 @@ if !exists('*s:ddcinit')
           \   'camelcase': v:true
           \   },
           \ })
-    inoremap <silent> <expr> <tab> ddc#map#pum_visible() ? "<c-n>" : "<tab>"
-    inoremap <silent> <expr> <s-tab> ddc#map#pum_visible() ? "<c-p>" : "<s-tab>"
+    inoremap <silent> <expr> <tab>
+          \ pum#visible() ?
+          \ '<cmd>call pum#map#select_relative(+1)<cr>' : '<tab>'
+    inoremap <silent> <expr> <s-tab>
+          \ pum#visible() ?
+          \ '<cmd>call pum#map#select_relative(-1)<cr>' : '<s-tab>'
     inoremap <silent> <expr> <cr>
-          \ ddc#map#pum_visible() ?
-          \ ddc#map#complete() : '<cr>'
+          \ pum#visible() ?
+          \ '<cmd>call pum#map#confirm()<cr>' : '<cr>'
     inoremap <silent> <expr> <c-@> ddc#manual_complete()
     call ddc#enable()
   endfunction
