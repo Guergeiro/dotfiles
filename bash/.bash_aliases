@@ -1,6 +1,4 @@
 #!/bin/bash
-# Dotfiles config
-alias cfg="git --git-dir=$HOME/Documents/guergeiro/dotfiles --work-tree=$HOME"
 # You remember Vi? It's just faster to type
 alias vi="vim";
 # Force tmux UTF-8
