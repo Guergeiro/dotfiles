@@ -17,27 +17,27 @@ The purpose of this reposity is when I start a freshly Linux image, a bit more t
 
 1. Install [cURL](https://curl.haxx.se/)
 
-   ```
-   $ sudo apt-get install curl -y
+   ```bash
+   sudo apt-get install curl -y
    ```
 
-2. Navigate to where you want this repository to be located
+2. Navigate to `$HOME`
 
-   ```
-   $ cd $HOME/Documents/
+   ```bash
+   cd $HOME
    ```
 
 3. Run install script (Will take a while)
 
-   ```
-   $ curl -sL https://raw.githubusercontent.com/Guergeiro/dotfiles/master/install.sh | sh
-   $ curl -sL https://raw.githubusercontent.com/Guergeiro/dotfiles/master/install.sh | sh -s -- -with-fonts
+   ```bash
+   curl -sL https://raw.githubusercontent.com/Guergeiro/dotfiles/master/install.sh | sh
+   curl -sL https://raw.githubusercontent.com/Guergeiro/dotfiles/master/install.sh | sh -s -- -with-fonts
    ```
 
 4. Create ssh key for your git provider (GitHub in this example)
 
-   ```
-   $ ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+   ```bash
+   ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
    # Save it to /home/your-user-here/.ssh/GitHub
    ```
 

@@ -20,7 +20,7 @@ echo "${yellow}Installing Git${reset}"
 sudo apt-get install git -y
 
 echo "${yellow}Cloning Git Repos${reset}"
-git clone --bare https://github.com/Guergeiro/dotfiles.git $dotfilesDirectory
+git clone https://github.com/Guergeiro/dotfiles.git $dotfilesDirectory
 git clone https://github.com/vim/vim.git $vimDirectory
 git clone https://github.com/srcery-colors/srcery-terminal.git $srceryterminalDirectory
 git clone https://github.com/alacritty/alacritty.git $alacrittyDirectory
@@ -101,7 +101,10 @@ sudo apt-get install python3-pip -y
 echo "${yellow}Installing OpenJDK (Headless)${reset}"
 sudo apt-get install default-jdk-headless -y
 
-echo "${yellow}Installing RipGrep${reset}"
+echo "${yellow}Installing bat${reset}"
+sudo apt-get install bat -y
+
+echo "${yellow}Installing ripgrep${reset}"
 sudo apt-get install ripgrep -y
 
 echo "${yellow}Installing Trash CLI${reset}"
@@ -110,24 +113,17 @@ sudo apt-get install trash-cli -y
 echo "${yellow}Installing XCLIP${reset}"
 sudo apt-get install xclip -y
 
+echo "${yellow}Installing stow${reset}"
+sudo apt-get install stow -y
+
 echo "${yellow}Installing starship shell${reset}"
 curl -fsSL https://starship.rs/install.sh | bash
 
 echo "${yellow}Installing Docker${reset}"
-sudo apt-get remove docker docker-engine docker.io containerd runc
-sudo apt-get install \
-    apt-transport-https \
-    ca-certificates \
-    gnupg \
-    lsb-release
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-echo \
-  "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
-  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update
-sudo apt-get install docker-ce docker-ce-cli containerd.io
 sudo groupadd docker
 sudo usermod -aG docker $USER
+sudo apt-get purge docker* containerd runc
+curl -fsSL https://get.docker.com | sh
 
 echo "${yellow}Installing Docker Compose${reset}"
 sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
@@ -136,8 +132,8 @@ sudo curl \
     -L https://raw.githubusercontent.com/docker/compose/1.29.2/contrib/completion/bash/docker-compose \
     -o /etc/bash_completion.d/docker-compose
 
-echo "${yellow}Installing Yarn${reset}"
-sudo npm install -g yarn
+echo "${yellow}Installing pnpm${reset}"
+sudo npx pnpm add -g pnpm
 
 echo "${yellow}Removing Vim/Bash Default Configs${reset}"
 rm -rf $HOME/.bashrc
@@ -149,9 +145,6 @@ rm -rf $HOME/.gitconfig
 rm -rf $HOME/.config/starship.toml
 rm -rf $HOME/.vimrc
 rm -rf $HOME/.vim
-
-echo "${yellow}Linking Vim/Bash Configs${reset}"
-git --git-dir=$HOME/Documents/guergeiro/dotfiles --work-tree=$HOME checkout
 
 echo "${yellow}General configs${reset}"
 sudo update-alternatives --install /usr/bin/editor editor /usr/local/bin/vim 1
@@ -165,5 +158,3 @@ if [ "$1" = "-with-fonts" ]; then
   ./install.sh
   cd $HOME
 fi
-
-echo "${yellow}Install delta gitdiff here:${reset} https://github.com/dandavison/delta"

@@ -101,25 +101,30 @@ shopt -s cdspell
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
 if [ -f ~/.bash_aliases ]; then
-  . ~/.bash_aliases
+  source ~/.bash_aliases
 fi
 
 # Functions definitions
 if [ -f ~/.bash_functions ]; then
-  . ~/.bash_functions
+  source ~/.bash_functions
+fi
+
+# Tmux definitions
+if [ -f ~/.config/tmux/.bash_functions ]; then
+  source ~/.config/tmux/.bash_functions
 fi
 
 # Starship definitions
-if [ -f ~/.bash_starship ]; then
-  . ~/.bash_starship
+if [ -f ~/.config/starship/.bash_functions ]; then
+  source ~/.config/starship/.bash_functions
 fi
 
-# Private scripts
-if [ -f ~/Documents/guergeiro/dotfiles-libertrium/.bashrc ]; then
-  . ~/Documents/guergeiro/dotfiles-libertrium/.bashrc
+# Docker definitions
+if [ -f ~/.config/docker/.bash_functions ]; then
+  source ~/.config/docker/.bash_functions
 fi
 
-source "$HOME/.cargo/env"
-export PATH=/home/breno/.local/bin:$PATH
-export PNPM_HOME="/home/breno/.local/share/pnpm"
-export PATH="$PNPM_HOME:$PATH"
+# Private work scripts
+if [ -f ~/work/.bashrc ]; then
+  . ~/work/.bashrc
+fi
