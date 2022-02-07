@@ -1,6 +1,6 @@
 #!/bin/sh
 
-update-vim() {
+update_vim() {
   local yellow=`tput setaf 3`
   local reset=`tput sgr0`
   local currentDirectory=$(pwd)
@@ -28,4 +28,4 @@ update-vim() {
   builtin cd $currentDirectory
 }
 
-update-vim
+update_vim

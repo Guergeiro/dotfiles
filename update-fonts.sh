@@ -1,6 +1,6 @@
 #!/bin/sh
 
-update-fonts() {
+update_fonts() {
   local yellow=`tput setaf 3`
   local reset=`tput sgr0`
   local currentDirectory=$(pwd)
@@ -13,4 +13,4 @@ update-fonts() {
   builtin cd $currentDirectory
 }
 
-update-fonts
+update_fonts

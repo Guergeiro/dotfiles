@@ -1,6 +1,6 @@
 #!/bin/sh
 
-update-starship() {
+update_starship() {
   local yellow=`tput setaf 3`
   local reset=`tput sgr0`
   local currentDirectory=$(pwd)
@@ -11,4 +11,4 @@ update-starship() {
   builtin cd $currentDirectory
 }
 
-update-starship
+update_starship

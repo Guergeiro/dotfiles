@@ -1,6 +1,6 @@
 #!/bin/sh
 
-update-alacritty() {
+update_alacritty() {
   local yellow=`tput setaf 3`
   local reset=`tput sgr0`
   local currentDirectory=$(pwd)
@@ -25,4 +25,4 @@ update-alacritty() {
   builtin cd $currentDirectory
 }
 
-update-alacritty
+update_alacritty

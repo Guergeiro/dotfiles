@@ -1,6 +1,6 @@
 #!/bin/sh
 
-update-rust() {
+update_rust() {
   local yellow=`tput setaf 3`
   local reset=`tput sgr0`
   local currentDirectory=$(pwd)
@@ -11,4 +11,4 @@ update-rust() {
   builtin cd $currentDirectory
 }
 
-update-rust
+update_rust

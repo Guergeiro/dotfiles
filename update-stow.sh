@@ -1,6 +1,6 @@
 #!/bin/sh
 
-update-stow() {
+update_stow() {
   local yellow=`tput setaf 3`
   local reset=`tput sgr0`
   local currentDirectory=$(pwd)
@@ -13,4 +13,4 @@ update-stow() {
   builtin cd $currentDirectory
 }
 
-update-stow
+update_stow

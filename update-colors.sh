@@ -1,6 +1,6 @@
 #!/bin/sh
 
-update-colors() {
+update_colors() {
   local yellow=`tput setaf 3`
   local reset=`tput sgr0`
   local currentDirectory=$(pwd)
@@ -12,4 +12,4 @@ update-colors() {
   builtin cd $currentDirectory
 }
 
-update-colors
+update_colors

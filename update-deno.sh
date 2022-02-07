@@ -1,6 +1,6 @@
 #!/bin/sh
 
-update-deno() {
+update_deno() {
   local yellow=`tput setaf 3`
   local reset=`tput sgr0`
   local currentDirectory=$(pwd)
@@ -14,4 +14,4 @@ update-deno() {
   builtin cd $currentDirectory
 }
 
-update-deno
+update_deno

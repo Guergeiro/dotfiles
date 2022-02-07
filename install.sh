@@ -1,6 +1,6 @@
 #!/bin/sh
 
-install-dotfiles() {
+install_dotfiles() {
   local yellow=`tput setaf 3`
   local reset=`tput sgr0`
 
@@ -117,4 +117,4 @@ install-dotfiles() {
   echo "nerdfontsDirectory=$nerdfontsDirectory" >> $HOME/.bashrc
 }
 
-install-dotfiles
+install_dotfiles
