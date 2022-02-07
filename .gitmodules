@@ -1,0 +1,3 @@
+[submodule "dotfiles-work"]
+	path = dotfiles-work
+	url = git@github.com:Guergeiro/dotfiles-work.git
