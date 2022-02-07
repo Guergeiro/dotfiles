@@ -101,30 +101,40 @@ shopt -s cdspell
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
 if [ -f ~/.bash_aliases ]; then
-  source ~/.bash_aliases
+  . ~/.bash_aliases
 fi
 
 # Functions definitions
 if [ -f ~/.bash_functions ]; then
-  source ~/.bash_functions
+  . ~/.bash_functions
 fi
 
 # Tmux definitions
 if [ -f ~/.config/tmux/.bash_functions ]; then
-  source ~/.config/tmux/.bash_functions
+  . ~/.config/tmux/.bash_functions
 fi
 
 # Starship definitions
 if [ -f ~/.config/starship/.bash_functions ]; then
-  source ~/.config/starship/.bash_functions
+  . ~/.config/starship/.bash_functions
 fi
 
 # Docker definitions
 if [ -f ~/.config/docker/.bash_functions ]; then
-  source ~/.config/docker/.bash_functions
+  . ~/.config/docker/.bash_functions
 fi
 
 # Private work scripts
-if [ -f ~/work/.bashrc ]; then
-  . ~/work/.bashrc
+if [ -f ~/.config/dotfiles-work/.bashrc ]; then
+  . ~/.config/dotfiles-work/.bashrc
 fi
+
+# Rust
+if [ -f ~/.cargo/env ]; then
+  . ~/.cargo/env
+fi
+dotfilesDirectory=/home/breno/Documents/guergeiro/dotfiles
+vimDirectory=/home/breno/Documents/vim/vim
+srceryterminalDirectory=/home/breno/Documents/srcery-colors/srcery-terminal
+alacrittyDirectory=/home/breno/Documents/alacritty/alacritty
+nerdfontsDirectory=/home/breno/Documents/ryanoasis/nerd-fonts

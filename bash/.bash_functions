@@ -3,6 +3,28 @@
 function update() {
   if [ "$1" = "dpki" ]; then
     sudo apt-get -f install
+  elif [ "$1" = "alacritty" ]; then
+    . $dotfilesDirectory/update-alacritty.sh
+  elif [ "$1" = "colors" ]; then
+    . $dotfilesDirectory/update-colors.sh
+  elif [ "$1" = "deno" ]; then
+    . $dotfilesDirectory/update-deno.sh
+  elif [ "$1" = "fonts" ]; then
+    . $dotfilesDirectory/update-fonts.sh
+  elif [ "$1" = "rust" ]; then
+    . $dotfilesDirectory/update-rust.sh
+  elif [ "$1" = "starship" ]; then
+    . $dotfilesDirectory/update-starship.sh
+  elif [ "$1" = "vim" ]; then
+    . $dotfilesDirectory/update-vim.sh
+  elif [ "$1" = "all" ]; then
+    . $dotfilesDirectory/update-alacritty.sh
+    . $dotfilesDirectory/update-colors.sh
+    . $dotfilesDirectory/update-deno.sh
+    . $dotfilesDirectory/update-fonts.sh
+    . $dotfilesDirectory/update-rust.sh
+    . $dotfilesDirectory/update-starship.sh
+    . $dotfilesDirectory/update-vim.sh
   else
     sudo apt-get update
     sudo apt-get upgrade -y
