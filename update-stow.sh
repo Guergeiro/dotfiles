@@ -6,11 +6,11 @@ update_stow() {
   local currentDirectory=$(pwd)
 
   echo "${yellow}Updating stow${reset}"
-  builtin cd $dotfilesDirectory
+  command cd $dotfilesDirectory
   stow --delete */
   stow --target $HOME */
 
-  builtin cd $currentDirectory
+  command cd $currentDirectory
 }
 
 update_stow

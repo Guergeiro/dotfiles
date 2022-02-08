@@ -8,6 +8,7 @@ install_dotfiles() {
   local vimDirectory=$HOME/Documents/vim/vim
   local srceryterminalDirectory=$HOME/Documents/srcery-colors/srcery-terminal
   local alacrittyDirectory=$HOME/Documents/alacritty/alacritty
+  local tmuxDirectory=$HOME/Documents/tmux/tmux
   local nerdfontsDirectory=$HOME/Documents/ryanoasis/nerd-fonts
 
   echo "${yellow}Updating/Cleaning Packages${reset}"
@@ -25,6 +26,7 @@ install_dotfiles() {
   git clone https://github.com/vim/vim.git $vimDirectory
   git clone https://github.com/srcery-colors/srcery-terminal.git $srceryterminalDirectory
   git clone https://github.com/alacritty/alacritty.git $alacrittyDirectory
+  git clone https://github.com/tmux/tmux.git $tmuxDirectory
   if [ "$1" = "-with-fonts" ]; then
     git clone https://github.com/ryanoasis/nerd-fonts.git $nerdfontsDirectory
   fi
@@ -33,17 +35,16 @@ install_dotfiles() {
   # https://github.com/ycm-core/YouCompleteMe/wiki/Building-Vim-from-source
   sudo apt-get install libncurses5-dev libgtk2.0-dev libatk1.0-dev \
     libcairo2-dev libx11-dev libxpm-dev libxt-dev python2-dev \
-    python3-dev ruby-dev lua5.2 liblua5.2-dev libperl-dev -y
-
-  sudo apt-get install cmake pkg-config libfreetype6-dev libfontconfig1-dev \
-    libxcb-xfixes0-dev python3
+    python3-dev ruby-dev lua5.2 liblua5.2-dev libperl-dev \
+    libevent-dev ncurses-dev build-essential bison \
+    cmake pkg-config libfreetype6-dev libfontconfig1-dev \
+    libxcb-xfixes0-dev python3 -y
 
   echo "${yellow}Installing Zip and Rar${reset}"
   sudo apt-get install zip unzip rar gzip -y
 
   echo "${yellow}Installing Tmux${reset}"
-  sudo apt-get install tmux -y
-  git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
+  source $dotfilesDirectory/update-tmux.sh
 
   echo "${yellow}Installing Rust${reset}"
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
@@ -110,11 +111,12 @@ install_dotfiles() {
   fi
 
   echo "${yellow}Appending global variables to .bashrc${reset}"
-  echo "dotfilesDirectory=$dotfilesDirectory" >> $HOME/.bashrc
-  echo "vimDirectory=$vimDirectory" >> $HOME/.bashrc
-  echo "srceryterminalDirectory=$srceryterminalDirectory" >> $HOME/.bashrc
-  echo "alacrittyDirectory=$alacrittyDirectory" >> $HOME/.bashrc
-  echo "nerdfontsDirectory=$nerdfontsDirectory" >> $HOME/.bashrc
+  echo "export dotfilesDirectory=$dotfilesDirectory" >> $HOME/.bashrc
+  echo "export vimDirectory=$vimDirectory" >> $HOME/.bashrc
+  echo "export srceryterminalDirectory=$srceryterminalDirectory" >> $HOME/.bashrc
+  echo "export alacrittyDirectory=$alacrittyDirectory" >> $HOME/.bashrc
+  echo "export tmuxDirectory=$tmuxDirectory" >> $HOME/.bashrc
+  echo "export nerdfontsDirectory=$nerdfontsDirectory" >> $HOME/.bashrc
 }
 
 install_dotfiles

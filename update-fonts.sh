@@ -6,11 +6,11 @@ update_fonts() {
   local currentDirectory=$(pwd)
 
   echo "${yellow}Updating fonts${reset}"
-  builtin cd $nerdfontsDirectory
+  command cd $nerdfontsDirectory
   git pull
   ./install.sh
 
-  builtin cd $currentDirectory
+  command cd $currentDirectory
 }
 
 update_fonts

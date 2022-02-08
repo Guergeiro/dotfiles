@@ -7,7 +7,7 @@ update_vim() {
 
   echo "${yellow}Updating vim${reset}"
   sudo apt-get purge vim* gvim* -y
-  builtin cd $vimDirectory
+  command cd $vimDirectory
   git pull
   ./configure --with-features=huge \
               --enable-multibyte \
@@ -25,7 +25,7 @@ update_vim() {
   sudo update-alternatives --install /usr/bin/vi vi /usr/local/bin/vim 1
   sudo update-alternatives --set vi /usr/local/bin/vim
 
-  builtin cd $currentDirectory
+  command cd $currentDirectory
 }
 
 update_vim

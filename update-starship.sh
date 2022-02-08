@@ -8,7 +8,7 @@ update_starship() {
   echo "${yellow}Updating starship${reset}"
   sh -c "$(curl -fsSL https://starship.rs/install.sh)"
 
-  builtin cd $currentDirectory
+  command cd $currentDirectory
 }
 
 update_starship

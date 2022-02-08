@@ -95,46 +95,53 @@ shopt -s autocd
 # Automatically tries it's best to correct misspell
 shopt -s cdspell
 
+# Make sure correct ENV variables are set
+export XDG_DATA_HOME=${XDG_DATA_HOME:="$HOME/.local/share"}
+export XDG_CACHE_HOME=${XDG_CACHE_HOME:="$HOME/.cache"}
+export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:="$HOME/.config"}
+
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
-if [ -f ~/.bash_aliases ]; then
-  . ~/.bash_aliases
+if [ -f "$XDG_CONFIG_HOME/bash/.bash_aliases" ]; then
+  . "$XDG_CONFIG_HOME/bash/.bash_aliases"
 fi
 
 # Functions definitions
-if [ -f ~/.bash_functions ]; then
-  . ~/.bash_functions
+if [ -f "$XDG_CONFIG_HOME/bash/.bash_functions" ]; then
+  . "$XDG_CONFIG_HOME/bash/.bash_functions"
 fi
 
 # Tmux definitions
-if [ -f ~/.config/tmux/.bash_functions ]; then
-  . ~/.config/tmux/.bash_functions
+if [ -f "$XDG_CONFIG_HOME/tmux/.bash_functions" ]; then
+  . "$XDG_CONFIG_HOME/tmux/.bash_functions"
 fi
 
 # Starship definitions
-if [ -f ~/.config/starship/.bash_functions ]; then
-  . ~/.config/starship/.bash_functions
+if [ -f "$XDG_CONFIG_HOME/starship/.bash_functions" ]; then
+  . "$XDG_CONFIG_HOME/starship/.bash_functions"
 fi
 
 # Docker definitions
-if [ -f ~/.config/docker/.bash_functions ]; then
-  . ~/.config/docker/.bash_functions
+if [ -f "$XDG_CONFIG_HOME/docker/.bash_functions" ]; then
+  . "$XDG_CONFIG_HOME/docker/.bash_functions"
 fi
 
 # Private work scripts
-if [ -f ~/.config/dotfiles-work/.bashrc ]; then
-  . ~/.config/dotfiles-work/.bashrc
+if [ -f "$XDG_CONFIG_HOME/dotfiles-work/.bashrc" ]; then
+  . "$XDG_CONFIG_HOME/dotfiles-work/.bashrc"
 fi
 
 # Rust
 if [ -f ~/.cargo/env ]; then
   . ~/.cargo/env
 fi
-dotfilesDirectory=/home/breno/Documents/guergeiro/dotfiles
-vimDirectory=/home/breno/Documents/vim/vim
-srceryterminalDirectory=/home/breno/Documents/srcery-colors/srcery-terminal
-alacrittyDirectory=/home/breno/Documents/alacritty/alacritty
-nerdfontsDirectory=/home/breno/Documents/ryanoasis/nerd-fonts
+
+export dotfilesDirectory="$HOME/Documents/guergeiro/dotfiles"
+export vimDirectory="$HOME/Documents/vim/vim"
+export srceryterminalDirectory="$HOME/Documents/srcery-colors/srcery-terminal"
+export alacrittyDirectory="$HOME/Documents/alacritty/alacritty"
+export tmuxDirectory="$HOME/Documents/tmux/tmux"
+export nerdfontsDirectory="$HOME/Documents/ryanoasis/nerd-fonts"

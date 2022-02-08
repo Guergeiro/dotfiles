@@ -11,7 +11,7 @@ update_deno() {
   sudo mv deno_completions /etc/bash_completion.d/
   sudo rm deno_completions
 
-  builtin cd $currentDirectory
+  command cd $currentDirectory
 }
 
 update_deno

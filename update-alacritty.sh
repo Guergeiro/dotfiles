@@ -6,7 +6,7 @@ update_alacritty() {
   local currentDirectory=$(pwd)
 
   echo "${yellow}Updating alacritty${reset}"
-  builtin cd $alacrittyDirectory
+  command cd $alacrittyDirectory
   git pull
   cargo build --release
   # Terminfo
@@ -22,7 +22,7 @@ update_alacritty() {
   # Shell completions
   sudo cp extra/completions/alacritty.bash /etc/bash_completion.d/alacritty
 
-  builtin cd $currentDirectory
+  command cd $currentDirectory
 }
 
 update_alacritty

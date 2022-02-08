@@ -143,7 +143,7 @@ if !exists('*s:ddcinit')
           \   'converters': ['converter_remove_overlap']
           \   },
           \ 'vim-lsp': {
-          \   'minAutoCompleteLength': 2,
+          \   'minAutoCompleteLength': 4,
           \   'mark': 'lsp',
           \   'matchers': ['matcher_head']
           \   },
@@ -161,7 +161,7 @@ if !exists('*s:ddcinit')
           \   'matchers': ['matcher_fuzzy']
           \   },
           \ 'rg': {
-          \   'minAutoCompleteLength': 4,
+          \   'minAutoCompleteLength': 2,
           \   'matchers': ['matcher_fuzzy'],
           \   'mark': 'rg'
           \   }

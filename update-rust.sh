@@ -8,7 +8,7 @@ update_rust() {
   echo "${yellow}Updating rust${reset}"
   rustup update stable
 
-  builtin cd $currentDirectory
+  command cd $currentDirectory
 }
 
 update_rust

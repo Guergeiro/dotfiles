@@ -6,10 +6,10 @@ update_colors() {
   local currentDirectory=$(pwd)
 
   echo "${yellow}Updating srcery-colors${reset}"
-  builtin cd $srceryterminalDirectory
+  command cd $srceryterminalDirectory
   git pull
 
-  builtin cd $currentDirectory
+  command cd $currentDirectory
 }
 
 update_colors
