@@ -9,6 +9,7 @@ install_dotfiles() {
   local srceryterminalDirectory=$HOME/Documents/srcery-colors/srcery-terminal
   local alacrittyDirectory=$HOME/Documents/alacritty/alacritty
   local tmuxDirectory=$HOME/Documents/tmux/tmux
+  local pagraphControl=$HOME/Documents/futpib/pagraphcontrol
   local nerdfontsDirectory=$HOME/Documents/ryanoasis/nerd-fonts
 
   echo "${yellow}Updating/Cleaning Packages${reset}"
@@ -27,6 +28,7 @@ install_dotfiles() {
   git clone https://github.com/srcery-colors/srcery-terminal.git $srceryterminalDirectory
   git clone https://github.com/alacritty/alacritty.git $alacrittyDirectory
   git clone https://github.com/tmux/tmux.git $tmuxDirectory
+  git clone https://github.com/futpib/pagraphcontrol.git $pagraphControl
   if [ "$1" = "-with-fonts" ]; then
     git clone https://github.com/ryanoasis/nerd-fonts.git $nerdfontsDirectory
   fi
@@ -103,6 +105,8 @@ install_dotfiles() {
 
   source $dotfilesDirectory/update-stow.sh
 
+  source $dotfilesDirectory/update-pagraphcontrol.sh
+
   if [ "$1" = "-with-fonts" ]; then
     source $dotfilesDirectory/update-fonts.sh
   fi
@@ -113,6 +117,7 @@ install_dotfiles() {
   echo "export srceryterminalDirectory=$srceryterminalDirectory" >> $HOME/.bashrc
   echo "export alacrittyDirectory=$alacrittyDirectory" >> $HOME/.bashrc
   echo "export tmuxDirectory=$tmuxDirectory" >> $HOME/.bashrc
+  echo "export pagraphControl=$pagraphControl" >> $HOME/.bashrc
   echo "export nerdfontsDirectory=$nerdfontsDirectory" >> $HOME/.bashrc
 }
 
