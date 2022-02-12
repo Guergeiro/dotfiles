@@ -296,8 +296,6 @@ function grip() {
   local port=$(__docker_port)
   local args+=" --env PORT=$port"
 
-  echo $@
-
   docker run \
     $args \
     python:$version \
