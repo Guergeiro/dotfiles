@@ -49,3 +49,6 @@ alias DELETE="curl --include --request DELETE --header \"Content-Type: applicati
 alias PATCH="curl --include --request PATCH --header \"Content-Type: application/json \"";
 # Bat is awesome
 alias cat="batcat";
+
+alias wget="wget --hsts-file=\"$XDG_CACHE_HOME/wget-hsts\"";
+alias yarn="yarn --use-yarnrc \"$XDG_CONFIG_HOME/yarn/config\""

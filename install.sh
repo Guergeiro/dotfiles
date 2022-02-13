@@ -29,9 +29,14 @@ install_dotfiles() {
   git clone https://github.com/alacritty/alacritty.git $alacrittyDirectory
   git clone https://github.com/tmux/tmux.git $tmuxDirectory
   git clone https://github.com/futpib/pagraphcontrol.git $pagraphControl
-  if [ "$1" = "-with-fonts" ]; then
-    git clone https://github.com/ryanoasis/nerd-fonts.git $nerdfontsDirectory
-  fi
+  git clone https://github.com/ryanoasis/nerd-fonts.git $nerdfontsDirectory
+
+
+  echo "${yellow}Installing stow${reset}"
+  sudo apt-get install stow -y
+  command rm -rdf $HOME/.bashrc
+  . $dotfilesDirectory/update-stow.sh
+  . $HOME/.bashrc
 
   echo "${yellow}Installing extra packages${reset}"
   # https://github.com/ycm-core/YouCompleteMe/wiki/Building-Vim-from-source
@@ -46,17 +51,17 @@ install_dotfiles() {
   sudo apt-get install zip unzip rar gzip -y
 
   echo "${yellow}Installing Tmux${reset}"
-  source $dotfilesDirectory/update-tmux.sh
+  . $dotfilesDirectory/update-tmux.sh
 
   echo "${yellow}Installing Rust${reset}"
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-  source $HOME/.cargo/env
+  . $CARGO_HOME/env
   rustup override set stable
-  source $dotfilesDirectory/update-rust.sh
+  . $dotfilesDirectory/update-rust.sh
 
   echo "${yellow}Installing Deno${reset}"
-  curl -fsSL https://deno.land/x/install/install.sh | sudo DENO_INSTALL=/usr/bin sh
-  source $dotfilesDirectory/update-deno.sh
+  curl -fsSL https://deno.land/x/install/install.sh | sudo DENO_INSTALL=/usr sh
+  . $dotfilesDirectory/update-deno.sh
 
   echo "${yellow}Installing NodeJS (Current)${reset}"
   curl -sL https://deb.nodesource.com/setup_current.x | sudo -E bash -
@@ -81,9 +86,6 @@ install_dotfiles() {
   echo "${yellow}Installing XCLIP${reset}"
   sudo apt-get install xclip -y
 
-  echo "${yellow}Installing stow${reset}"
-  sudo apt-get install stow -y
-
   echo "${yellow}Installing Docker${reset}"
   sudo groupadd docker
   sudo usermod -aG docker $USER
@@ -97,19 +99,15 @@ install_dotfiles() {
   echo "${yellow}Installing pnpm${reset}"
   sudo npx pnpm add -g pnpm
 
-  source $dotfilesDirectory/update-vim.sh
+  . $dotfilesDirectory/update-vim.sh
 
-  source $dotfilesDirectory/update-alacritty.sh
+  . $dotfilesDirectory/update-alacritty.sh
 
-  source $dotfilesDirectory/update-starship.sh
+  . $dotfilesDirectory/update-starship.sh
 
-  source $dotfilesDirectory/update-stow.sh
+  . $dotfilesDirectory/update-pagraphcontrol.sh
 
-  source $dotfilesDirectory/update-pagraphcontrol.sh
-
-  if [ "$1" = "-with-fonts" ]; then
-    source $dotfilesDirectory/update-fonts.sh
-  fi
+  . $dotfilesDirectory/update-fonts.sh
 
   echo "${yellow}Appending global variables to .bashrc${reset}"
   echo "export dotfilesDirectory=$dotfilesDirectory" >> $HOME/.bashrc

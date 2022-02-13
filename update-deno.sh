@@ -7,9 +7,8 @@ update_deno() {
 
   echo "${yellow}Updating deno${reset}"
   sudo deno upgrade
-  deno completions > deno_completions
+  sudo deno completions bash > deno_completions
   sudo mv deno_completions /etc/bash_completion.d/
-  sudo rm deno_completions
 
   command cd $currentDirectory
 }

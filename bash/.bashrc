@@ -99,6 +99,23 @@ shopt -s cdspell
 export XDG_DATA_HOME=${XDG_DATA_HOME:="$HOME/.local/share"}
 export XDG_CACHE_HOME=${XDG_CACHE_HOME:="$HOME/.cache"}
 export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:="$HOME/.config"}
+export XDG_STATE_HOME=${XDG_STATE_HOME:="$HOME/.local/state"}
+
+export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
+export CARGO_HOME="$XDG_DATA_HOME/cargo"
+export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
+export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
+export NODE_REPL_HISTORY="$XDG_DATA_HOME/node_repl_history"
+export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
+export RIPGREP_CONFIG_PATH="$XDG_CONFIG_HOME/ripgrep/config"
+export SCREENRC="$XDG_CONFIG_HOME/screen/screenrc"
+export WGETRC="$XDG_CONFIG_HOME/wgetrc"
+export XINITRC="$XDG_CONFIG_HOME/X11/xinitrc"
+export XSERVERRC="$XDG_CONFIG_HOME/X11/xserverrc"
+export XSERVERRC="$XDG_CONFIG_HOME/X11/xserverrc"
+export GNUPGHOME="$XDG_DATA_HOME/gnupg"
+export GOPATH="$XDG_DATA_HOME/go"
+export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc"
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
@@ -135,8 +152,8 @@ if [ -f "$XDG_CONFIG_HOME/dotfiles-work/.bashrc" ]; then
 fi
 
 # Rust
-if [ -f ~/.cargo/env ]; then
-  . ~/.cargo/env
+if [ -f $CARGO_HOME/env ]; then
+  . $CARGO_HOME/env
 fi
 
 export dotfilesDirectory="$HOME/Documents/guergeiro/dotfiles"
