@@ -97,7 +97,10 @@ install_dotfiles() {
   sudo chmod +x /usr/local/bin/docker-compose
 
   echo "${yellow}Installing pnpm${reset}"
-  sudo npx pnpm add -g pnpm
+  sudo npm install -g pnpm
+
+  echo "${yellow}Installing yarn${reset}"
+  sudo npm install -g yarn
 
   . $dotfilesDirectory/update-vim.sh
 
