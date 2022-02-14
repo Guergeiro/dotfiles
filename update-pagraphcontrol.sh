@@ -9,6 +9,11 @@ update_alacritty() {
   command cd $pagraphControl
   git pull
 
+  yarn install
+  yarn -- build
+
+  ln -s $pagraphControl/dist/pagraphcontrol-linux-x64/pagraphcontrol /usr/local/bin/pagraphcontrol
+
   command cd $currentDirectory
 }
 

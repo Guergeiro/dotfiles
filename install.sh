@@ -108,15 +108,6 @@ install_dotfiles() {
   . $dotfilesDirectory/update-pagraphcontrol.sh
 
   . $dotfilesDirectory/update-fonts.sh
-
-  echo "${yellow}Appending global variables to .bashrc${reset}"
-  echo "export dotfilesDirectory=$dotfilesDirectory" >> $HOME/.bashrc
-  echo "export vimDirectory=$vimDirectory" >> $HOME/.bashrc
-  echo "export srceryterminalDirectory=$srceryterminalDirectory" >> $HOME/.bashrc
-  echo "export alacrittyDirectory=$alacrittyDirectory" >> $HOME/.bashrc
-  echo "export tmuxDirectory=$tmuxDirectory" >> $HOME/.bashrc
-  echo "export pagraphControl=$pagraphControl" >> $HOME/.bashrc
-  echo "export nerdfontsDirectory=$nerdfontsDirectory" >> $HOME/.bashrc
 }
 
 install_dotfiles
