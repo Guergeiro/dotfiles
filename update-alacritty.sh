@@ -12,7 +12,8 @@ update_alacritty() {
   # Terminfo
   sudo tic -xe alacritty,alacritty-direct extra/alacritty.info
   # Desktop entry
-  sudo cp target/release/alacritty /usr/bin
+  sudo rm /usr/bin/alacritty
+  sudo ln -s $alacrittyDirectory/target/release/alacritty /usr/bin/alacritty
   sudo cp extra/logo/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
   sudo desktop-file-install extra/linux/Alacritty.desktop
   sudo update-desktop-database

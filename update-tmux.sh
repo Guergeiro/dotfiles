@@ -7,6 +7,9 @@ update_tmux() {
 
   echo "${yellow}Updating tmux${reset}"
   sudo apt-get purge tmux* -y
+  sudo apt-get install autoconf -y
+  sudo apt-get install automake -y
+  sudo apt-get install pkg-config -y
   command cd $tmuxDirectory
   git pull
   sh autogen.sh

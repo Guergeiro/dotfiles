@@ -17,6 +17,8 @@ function update() {
     . $dotfilesDirectory/update-starship.sh
   elif [ "$1" = "vim" ]; then
     . $dotfilesDirectory/update-vim.sh
+  elif [ "$1" = "tmux" ]; then
+    . $dotfilesDirectory/update-tmux.sh
   elif [ "$1" = "all" ]; then
     . $dotfilesDirectory/update-alacritty.sh
     . $dotfilesDirectory/update-colors.sh
@@ -24,6 +26,7 @@ function update() {
     . $dotfilesDirectory/update-fonts.sh
     . $dotfilesDirectory/update-rust.sh
     . $dotfilesDirectory/update-starship.sh
+    . $dotfilesDirectory/update-tmux.sh
     . $dotfilesDirectory/update-vim.sh
   else
     sudo apt-get update

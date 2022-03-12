@@ -133,44 +133,55 @@ if !exists('*s:ddcinit')
           \   'buffer',
           \   'around',
           \   'file',
-          \   'rg'
+          \   'rg',
+          \   'tabnine'
           \ ])
     call ddc#custom#patch_global('sourceOptions', {
           \ '_': {
-          \   'ignoreCase': v:true,
+          \   'smartCase': v:true,
           \   'minAutoCompleteLength': 1,
           \   'sorters': ['sorter_rank'],
+          \   'matchers': ['matcher_fuzzy'],
           \   'converters': ['converter_remove_overlap']
           \   },
           \ 'vim-lsp': {
-          \   'minAutoCompleteLength': 4,
           \   'mark': 'lsp',
+          \   'minAutoCompleteLength': 4,
           \   'matchers': ['matcher_head']
           \   },
           \ 'file': {
           \   'mark': 'file',
-          \   'matchers': ['matcher_fuzzy'],
+          \   'maxCandidates': 5,
           \   'isVolatile': v:true,
           \   },
           \ 'buffer': {
           \   'mark': 'b',
-          \   'matchers': ['matcher_fuzzy']
+          \   'maxCandidates': 5
           \   },
           \ 'around': {
           \   'mark': 'a',
-          \   'matchers': ['matcher_fuzzy']
+          \   'maxCandidates': 5
           \   },
           \ 'rg': {
+          \   'mark': 'rg',
+          \   'maxCandidates': 5,
           \   'minAutoCompleteLength': 2,
-          \   'matchers': ['matcher_fuzzy'],
-          \   'mark': 'rg'
+          \   },
+          \ 'tabnine': {
+          \   'mark': 'tab',
+          \   'maxCandidates': 5,
+          \   'isVolatile': v:true
           \   }
           \ })
+
     call ddc#custom#patch_global('filterParams', {
           \ 'matcher_fuzzy': {
           \   'camelcase': v:true
           \   },
           \ })
+    call ddc#custom#patch_global('postFilters', [
+          \ "postfilter_score"
+          \ ])
     inoremap <silent> <expr> <tab>
           \ pum#visible() ?
           \ '<cmd>call pum#map#select_relative(+1)<cr>' : '<tab>'
