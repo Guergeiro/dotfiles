@@ -11,6 +11,7 @@ install_dotfiles() {
   local tmuxDirectory=$HOME/Documents/tmux/tmux
   local pagraphControl=$HOME/Documents/futpib/pagraphcontrol
   local nerdfontsDirectory=$HOME/Documents/ryanoasis/nerd-fonts
+  local cursorDirectory=$HOME/Documents/keeferrourke/capitaine-cursors
 
   echo "${yellow}Updating/Cleaning Packages${reset}"
   sudo apt-get update
@@ -30,6 +31,7 @@ install_dotfiles() {
   git clone https://github.com/tmux/tmux.git $tmuxDirectory
   git clone https://github.com/futpib/pagraphcontrol.git $pagraphControl
   git clone https://github.com/ryanoasis/nerd-fonts.git $nerdfontsDirectory
+  git clone https://github.com/keeferrourke/capitaine-cursors.git $cursorDirectory
 
 
   echo "${yellow}Installing stow${reset}"
@@ -111,6 +113,8 @@ install_dotfiles() {
   . $dotfilesDirectory/update-pagraphcontrol.sh
 
   . $dotfilesDirectory/update-fonts.sh
+
+  . $dotfilesDirectory/update-cursor.sh
 }
 
 install_dotfiles
