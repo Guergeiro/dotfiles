@@ -33,7 +33,8 @@ function __docker_default_args(){
   local args+=" --tty"
   local args+=" --rm"
   local args+=" --volume $PWD:$(__docker_home)/app"
-  local args+=" --volume $HOME/.deno:/deno-dir"
+  local args+=" --volume $XDG_CACHE_HOME/deno:/deno-dir"
+  local args+=" --volume $XDG_CACHE_HOME/go:/go"
   local args+=" --volume $HOME/.m2:$(__docker_home)/.m2"
   local args+=" --workdir $(__docker_home)/app"
   local args+=" --network host"
@@ -67,6 +68,30 @@ function deno() {
     $args \
     denoland/deno:$version \
     deno "$@"
+}
+
+function go() {
+  if [ "$1" = "--" ]; then
+    shift
+    __execute_default_command "go" "$@"
+    return
+  fi
+  local version="latest"
+  # Check for flag version
+  if [ "$1" = "--docker" ]; then
+    shift
+    local version="$1"
+    shift
+  fi
+  local port=$(__docker_port)
+  local args=$(__docker_default_args)
+  local args+=" --env PORT=$port"
+  local args+=" --user $(__docker_user):$(__docker_group)"
+
+  docker run \
+    $args \
+    golang:$version \
+    go "$@"
 }
 
 function node() {
@@ -300,6 +325,22 @@ function grip() {
     $args \
     python:$version \
     /bin/sh -c "pip install --no-cache-dir grip && grip \"$@\" 0.0.0.0:\"$port\""
+}
+
+function wireguard() {
+  docker run \
+    --rm \
+    --name=wireguard \
+    --cap-add=NET_ADMIN \
+    --cap-add=SYS_MODULE \
+    -e PUID=$(__docker_user) \
+    -e PGID=$(__docker_group) \
+    -e TZ=Europe/Lisbon \
+    -p 51820:51820/udp \
+    --volume "$PWD/config:/config" \
+    --volume "$PWD/modules:/lib/modules" \
+    --sysctl="net.ipv4.conf.all.src_valid_mark=1" \
+    linuxserver/wireguard:latest
 }
 
 function docker-compose() {

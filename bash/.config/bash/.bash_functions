@@ -94,7 +94,3 @@ function __execute_default_command() {
   shift
   command $command "$@"
 }
-
-function pnpx() {
-  __execute_default_command "pnpm exec" "$@"
-}

@@ -81,12 +81,11 @@ let g:highlightedyank_highlight_duration = 250
 " vim-highlightedyank }}} "
 
 " vim-lsp {{{ "
-if !isdirectory(expand('$HOME') . '/.local/vim-lsp-settings/servers')
-  call mkdir(expand('$HOME') . '/.local/vim-lsp-settings/servers', 'p')
-endif
-let g:lsp_settings_servers_dir=expand('$XDG_DATA_HOME') . '/vim-lsp-settings/servers'
 let g:lsp_fold_enabled = 0
+let g:lsp_use_event_queue = 1
+let g:lsp_untitled_buffer_enabled = 0
 let g:lsp_document_highlight_enabled = 0
+let g:lsp_document_code_action_signs_enabled = 0
 let g:lsp_diagnostics_float_cursor = 1
 let g:lsp_diagnostics_float_delay = 250
 let g:lsp_diagnostics_highlights_enabled = 0
