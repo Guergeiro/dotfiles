@@ -35,6 +35,7 @@ function __docker_default_args(){
   local args+=" --volume $PWD:$(__docker_home)/app"
   local args+=" --volume $XDG_CACHE_HOME/deno:/deno-dir"
   local args+=" --volume $XDG_CACHE_HOME/go:/go"
+  local args+=" --volume $XDG_CACHE_HOME/go-build:/.cache/go-build"
   local args+=" --volume $HOME/.m2:$(__docker_home)/.m2"
   local args+=" --workdir $(__docker_home)/app"
   local args+=" --network host"
@@ -64,6 +65,8 @@ function deno() {
   local args+=" --env PORT=$port"
   local args+=" --user $(__docker_user):$(__docker_group)"
 
+  docker pull denoland/deno:$version
+
   docker run \
     $args \
     denoland/deno:$version \
@@ -87,6 +90,8 @@ function go() {
   local args=$(__docker_default_args)
   local args+=" --env PORT=$port"
   local args+=" --user $(__docker_user):$(__docker_group)"
+
+  docker pull golang:$version
 
   docker run \
     $args \
@@ -112,6 +117,8 @@ function node() {
   local args+=" --env PORT=$port"
   local args+=" --user $(__docker_user):$(__docker_group)"
 
+  docker pull node:$version
+
   docker run \
     $args \
     node:$version \
@@ -135,6 +142,8 @@ function python() {
   local args=$(__docker_default_args)
   local args+=" --env PORT=$port"
   local args+=" --user $(__docker_user):$(__docker_group)"
+
+  docker pull python:$version
 
   docker run \
     $args \
@@ -160,6 +169,8 @@ function pip() {
   local args+=" --env PORT=$port"
   local args+=" --user $(__docker_user):$(__docker_group)"
 
+  docker pull python:$version
+
   docker run \
     $args \
     python:$version \
@@ -183,6 +194,8 @@ function npm() {
   local args=$(__docker_default_args)
   local args+=" --env PORT=$port"
   local args+=" --user $(__docker_user):$(__docker_group)"
+
+  docker pull node:$version
 
   docker run \
     $args \
@@ -208,6 +221,8 @@ function yarn() {
   local args+=" --env PORT=$port"
   local args+=" --user $(__docker_user):$(__docker_group)"
 
+  docker pull node:$version
+
   docker run \
     $args \
     node:$version \
@@ -232,6 +247,8 @@ function mvn() {
   local args+=" --env PORT=$port"
   local args+=" --user $(__docker_user):$(__docker_group)"
   local args+=" --env MAVEN_CONFIG=$(__docker_home)/.m2"
+
+  docker pull maven:$version
 
   if [ "$1" = "run" ]; then
     shift
@@ -274,6 +291,8 @@ function gradle() {
   local args+=" --env PORT=$port"
   local args+=" --user $(__docker_user):$(__docker_group)"
 
+  docker pull gradle:$version
+
   docker run \
     $args \
     gradle:$version \
@@ -298,6 +317,8 @@ function java() {
   local args+=" --env PORT=$port"
   local args+=" --user $(__docker_user):$(__docker_group)"
 
+  docker pull openjdk:$version
+
   docker run \
     $args \
     openjdk:$version \
@@ -321,26 +342,12 @@ function grip() {
   local port=$(__docker_port)
   local args+=" --env PORT=$port"
 
+  docker pull python:$version
+
   docker run \
     $args \
     python:$version \
     /bin/sh -c "pip install --no-cache-dir grip && grip \"$@\" 0.0.0.0:\"$port\""
-}
-
-function wireguard() {
-  docker run \
-    --rm \
-    --name=wireguard \
-    --cap-add=NET_ADMIN \
-    --cap-add=SYS_MODULE \
-    -e PUID=$(__docker_user) \
-    -e PGID=$(__docker_group) \
-    -e TZ=Europe/Lisbon \
-    -p 51820:51820/udp \
-    --volume "$PWD/config:/config" \
-    --volume "$PWD/modules:/lib/modules" \
-    --sysctl="net.ipv4.conf.all.src_valid_mark=1" \
-    linuxserver/wireguard:latest
 }
 
 function docker-compose() {
