@@ -21,6 +21,10 @@ nnoremap <silent> <c-w>\ :TmuxNavigatePrevious<cr>
 let g:CoolTotalMatches = 1
 " vim-cool }}}
 
+" md-img-paste {{{
+let g:mdip_imgdir = '.assets'
+" }}}
+
 " Undotree {{{
 inoremap <silent> <leader>u <esc>:UndotreeToggle<cr>
 nnoremap <silent> <leader>u :UndotreeToggle<cr>
