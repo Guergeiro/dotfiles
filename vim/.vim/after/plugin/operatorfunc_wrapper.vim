@@ -5,6 +5,8 @@ endif
 if !exists('*s:operator')
   " Execute operatorfunc
   function! s:operator(type, operator) abort
+    execute(':w')
+    edit!
     if a:0  " Invoked from Visual mode, use '< and '> marks.
       silent exe "normal! `<" . a:type . "`>" . a:operator
     elseif a:type == "line"

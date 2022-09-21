@@ -1,18 +1,6 @@
-if !exists('*s:projectDir')
-  function! s:projectDir() abort
-    let l:projectDir = getcwd()
-    let l:isGitDir = system('git rev-parse --is-inside-work-tree')
-    if (l:isGitDir)
-      let l:projectDir = system('git rev-parse --show-toplevel')
-      let l:projectDir = substitute(l:projectDir, '\n', '', 'g')
-    endif
-    return l:projectDir
-  endfunction
-endif
-
 if !exists('*s:projectFmt')
   function! s:projectFmt() abort
-    let l:projectDir = <sid>projectDir()
+    let l:projectDir = getcwd()
     let l:formatprg = 'deno fmt -'
     if filereadable(l:projectDir . '/package.json')
       let l:formatprg = 'npx prettier --stdin-filepath %'

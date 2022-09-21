@@ -7,8 +7,16 @@ update_vim() {
 
   echo "${yellow}Updating vim${reset}"
   sudo apt-get purge vim* gvim* -y
+  # https://github.com/ycm-core/YouCompleteMe/wiki/Building-Vim-from-source
+  sudo apt-get install libncurses5-dev libgtk2.0-dev libatk1.0-dev \
+    libcairo2-dev libx11-dev libxpm-dev libxt-dev python2-dev \
+    python3-dev ruby-dev lua5.2 liblua5.2-dev libperl-dev \
+    libevent-dev ncurses-dev build-essential bison \
+    cmake pkg-config libfreetype6-dev libfontconfig1-dev \
+    libxcb-xfixes0-dev python3 -y
   command cd $vimDirectory
   git pull
+  make distclean
   ./configure --with-features=huge \
               --enable-multibyte \
               --enable-rubyinterp=yes \
