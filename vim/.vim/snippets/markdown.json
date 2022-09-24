@@ -1,0 +1,14 @@
+{
+  "author": {
+    "prefix": "author",
+    "body": ["[_metadata_:author]:- \"$1\""],
+    "description": "-"
+  },
+  "timestamp": {
+    "prefix": "timestamp",
+    "body": [
+      "[_metadata_:timestamp]:- \"${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}T${CURRENT_HOUR}:${CURRENT_MINUTE}:${CURRENT_SECOND}.000+01:00\""
+    ],
+    "description": "-"
+  }
+}

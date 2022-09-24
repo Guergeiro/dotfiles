@@ -9,9 +9,12 @@
 
 ## About and Disclaimer
 
-This repository is merely for personal use. It's not private since someone might find it useful and, even for me, it saves the pain of login while in a strangers computer.
+This repository is merely for personal use. It's not private since someone might
+find it useful and, even for me, it saves the pain of login while in a strangers
+computer.
 
-The purpose of this reposity is when I start a freshly Linux image, a bit more than just dotfiles. If you want to use it, do it at your own risk.
+The purpose of this reposity is when I start a freshly Linux image, a bit more
+than just dotfiles. If you want to use it, do it at your own risk.
 
 ## Steps
 

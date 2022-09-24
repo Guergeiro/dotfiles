@@ -12,6 +12,7 @@ install_dotfiles() {
   local pagraphControl=$HOME/Documents/futpib/pagraphcontrol
   local nerdfontsDirectory=$HOME/Documents/ryanoasis/nerd-fonts
   local cursorDirectory=$HOME/Documents/keeferrourke/capitaine-cursors
+  local notesDirectory=$HOME/Brain
 
   echo "${yellow}Updating/Cleaning Packages${reset}"
   sudo apt-get update
@@ -32,6 +33,7 @@ install_dotfiles() {
   git clone https://github.com/futpib/pagraphcontrol.git $pagraphControl
   git clone https://github.com/ryanoasis/nerd-fonts.git $nerdfontsDirectory
   git clone https://github.com/keeferrourke/capitaine-cursors.git $cursorDirectory
+  git clone https://github.com/Guergeiro/Brain.git $notesDirectory
 
 
   echo "${yellow}Installing stow${reset}"

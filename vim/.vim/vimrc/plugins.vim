@@ -38,6 +38,12 @@ inoremap <leader>tt <esc>:FloatermToggle<cr>
 nnoremap <leader>nt :FloatermNew<cr>
 inoremap <leader>nt <esc>:FloatermNew<cr>
 " Floaterm }}}
+" vim-vsnip {{{
+let g:vsnip_snippet_dirs = [
+  \ expand('$HOME') . '/.vim/snippets',
+  \ g:plug_home . '/friendly-snippets/snippets'
+  \ ]
+" }}}
 
 " Vim-select {{{
 let g:select_no_ignore_vcs = 0
@@ -137,15 +143,16 @@ if !exists('*s:ddcinit')
           \   'around',
           \   'file',
           \   'rg',
-          \   'tabnine'
+          \   'tabnine',
+          \   'vsnip'
           \ ])
     call ddc#custom#patch_global('sourceOptions', {
           \ '_': {
           \   'smartCase': v:true,
           \   'minAutoCompleteLength': 1,
-          \   'sorters': ['sorter_rank'],
+          \   'sorters': ['sorter_rank', 'sorter_fuzzy'],
           \   'matchers': ['matcher_fuzzy'],
-          \   'converters': ['converter_remove_overlap']
+          \   'converters': ['converter_remove_overlap', 'converter_fuzzy']
           \   },
           \ 'vim-lsp': {
           \   'mark': 'lsp',
@@ -174,27 +181,36 @@ if !exists('*s:ddcinit')
           \   'mark': 'tab',
           \   'maxCandidates': 5,
           \   'isVolatile': v:true
+          \   },
+          \ 'vsnip': {
+          \   'mark': 'vsnip',
+          \   'dup': 'keep'
           \   }
           \ })
 
-    call ddc#custom#patch_global('filterParams', {
-          \ 'matcher_fuzzy': {
-          \   'camelcase': v:true
-          \   },
-          \ })
     call ddc#custom#patch_global('postFilters', [
           \ "postfilter_score"
           \ ])
     inoremap <silent> <expr> <tab>
           \ pum#visible() ?
-          \ '<cmd>call pum#map#select_relative(+1)<cr>' : '<tab>'
+          \ '<cmd>call pum#map#select_relative(+1)<cr>' :
+          \ vsnip#jumpable(1) ? '<plug>(vsnip-jump-next)' :
+          \ '<tab>'
     inoremap <silent> <expr> <s-tab>
           \ pum#visible() ?
-          \ '<cmd>call pum#map#select_relative(-1)<cr>' : '<s-tab>'
+          \ '<cmd>call pum#map#select_relative(-1)<cr>' :
+          \ vsnip#jumpable(-1) ? '<plug>(vsnip-jump-prev)' :
+          \ '<s-tab>'
     inoremap <silent> <expr> <cr>
           \ pum#visible() ?
           \ '<cmd>call pum#map#confirm()<cr>' : '<cr>'
     inoremap <silent> <expr> <c-@> ddc#manual_complete()
+    snoremap <silent> <expr> <tab> vsnip#jumpable(1) ?
+          \ '<plug>(vsnip-jump-next)' :
+          \ '<tab>'
+    snoremap <silent> <expr> <s-tab> vsnip#jumpable(1) ?
+          \ '<plug>(vsnip-jump-prev)' :
+          \ '<s-tab>'
     call ddc#enable()
   endfunction
 endif
@@ -202,6 +218,7 @@ endif
 augroup Ddc
   autocmd!
   autocmd User DenopsReady call s:ddcinit()
+  autocmd User PumCompleteDone call vsnip_integ#on_complete_done(g:pum#completed_item)
 augroup END
 " ddc.vim }}}
 
