@@ -2,18 +2,25 @@
 if exists('g:loaded_grep_quickfix')
   finish
 endif
-if !exists('*s:Grep')
-  function! s:Grep(...)
-    return system(join([&grepprg] + [expandcmd(join(a:000, ' '))], ' '))
+if !exists('GrepFunction')
+  function! GrepFunction(args)
+    return system(join([&grepprg] + [a:args], ' '))
+  endfunction
+endif
+if !exists('*s:ExpandArgs')
+  function! s:ExpandArgs(...)
+    return expandcmd(join(a:000, ' '))
   endfunction
 endif
 if !exists(':Grep')
-  command! -nargs=+ -complete=file_in_path -bar Grep  cgetexpr <sid>Grep(<f-args>)
+  command! -nargs=+ -complete=file_in_path -bar Grep
+        \ cgetexpr GrepFunction(<sid>ExpandArgs(<f-args>))
 endif
 if !exists(':LGrep')
-  command! -nargs=+ -complete=file_in_path -bar LGrep lgetexpr <sid>Grep(<f-args>)
+  command! -nargs=+ -complete=file_in_path -bar LGrep
+        \ lgetexpr GrepFunction(<sid>ExpandArgs(<f-args>))
 endif
-cnoreabbrev <expr> grep  (getcmdtype() ==# ':' && getcmdline() ==# 'grep')  ? 'Grep'  : 'grep'
+cnoreabbrev <expr> grep (getcmdtype() ==# ':' && getcmdline() ==# 'grep') ? 'Grep' : 'grep'
 cnoreabbrev <expr> lgrep (getcmdtype() ==# ':' && getcmdline() ==# 'lgrep') ? 'LGrep' : 'lgrep'
 
 augroup Grep
