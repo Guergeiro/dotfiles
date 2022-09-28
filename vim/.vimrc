@@ -165,12 +165,14 @@ if executable('rg')
   set grepformat=%f:%l:%c:%m
 endif
 " Remove extra white spaces
-function! <sid>trimWhitespace() abort
-  let l = line('.')
-  let c = col('.')
-  keepp %s/\s\+$//e
-  call cursor(l, c)
-endfunction
+if !exists('*s:TrimWhitespace')
+  function! s:TrimWhitespace() abort
+    let l = line('.')
+    let c = col('.')
+    keepp %s/\s\+$//e
+    call cursor(l, c)
+  endfunction
+endif
 " Sudo write
 command! Write write !sudo tee % >/dev/null
 " Auto closes brackets
@@ -183,21 +185,23 @@ inoremap ` ``<esc>i
 " Terminal escape
 tnoremap <leader><esc> <c-\><c-n>
 " Show documentation
-function! <sid>show_documentation()
-  if (index(['vim', 'help'], &filetype) >= 0)
-    execute 'h ' . expand('<cword>')
-  elseif get(g:, 'lsp_server_loaded', 0) == 1
-    execute 'LspHover'
-  else
-    execute '!' . &keywordprg . ' ' . expand('<cword>')
-  endif
-endfunction
-nnoremap <silent> K :call <sid>show_documentation()<cr>
+if !exists('*s:ShowDocumentation')
+  function! s:ShowDocumentation()
+    if (index(['vim', 'help'], &filetype) >= 0)
+      execute 'h ' . expand('<cword>')
+    elseif get(g:, 'lsp_server_loaded', 0) == 1
+      execute 'LspHover'
+    else
+      execute '!' . &keywordprg . ' ' . expand('<cword>')
+    endif
+  endfunction
+endif
+nnoremap <silent> K :call <sid>ShowDocumentation()<cr>
 " AutoCommands {{{ "
 augroup Autocmd
   autocmd!
   " Remove extra spaces on save
-  autocmd BufWritePre,FileWritePre * :call <sid>trimWhitespace()
+  autocmd BufWritePre,FileWritePre * :call <sid>TrimWhitespace()
   " Close the completion window when done
   autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
 augroup END

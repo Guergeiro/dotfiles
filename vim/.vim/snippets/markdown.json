@@ -2,19 +2,40 @@
   "author": {
     "prefix": "author",
     "body": ["[_metadata_:author]:- \"$1\""],
-    "description": "-"
+    "description": "Metadata for the author"
   },
   "timestamp": {
     "prefix": "timestamp",
     "body": [
       "[_metadata_:timestamp]:- \"${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}T${CURRENT_HOUR}:${CURRENT_MINUTE}:${CURRENT_SECOND}.000+01:00\""
     ],
-    "description": "-"
+    "description": "Metadata for the current timestamp"
   },
   "tag": {
     "prefix": "tag",
     "body": [
       "[_metadata_:tag]:- \"$1\""
+    ],
+    "description": "Metadata for the tag"
+  },
+  "atomic-note": {
+    "prefix": "atomic-note",
+    "body": [
+      "$1",
+      "# $TM_FILENAME_BASE",
+      "$0",
+      "## References",
+      "- $2"
+    ]
+  },
+  "reference-note": {
+    "prefix": "reference-note",
+    "body": [
+      "$1",
+      "# $TM_FILENAME_BASE",
+      "$0",
+      "## Referenced by",
+      "- $2"
     ]
   }
 }

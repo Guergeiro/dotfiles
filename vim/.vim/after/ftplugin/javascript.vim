@@ -1,14 +1,18 @@
 if !exists('*s:projectFmt')
   function! s:projectFmt() abort
     let l:projectDir = getcwd()
-    let l:formatprg = 'deno fmt -'
+    let projectfmt = 'deno fmt'
+    if &filetype == 'javascript'
+      let projectfmt .= ' --ext js'
+    endif
+      let projectfmt .= ' -'
     if filereadable(l:projectDir . '/package.json')
-      let l:formatprg = 'npx prettier --stdin-filepath %'
+      let projectfmt = 'npx prettier --stdin-filepath %'
     endif
     if isdirectory(l:projectDir . '/node_modules/')
-      let l:formatprg = 'npx prettier --stdin-filepath %'
+      let projectfmt = 'npx prettier --stdin-filepath %'
     endif
-    return l:formatprg
+    return projectfmt
   endfunction
 endif
 
@@ -22,6 +26,7 @@ if has('eval')
   setlocal formatexpr=
 endif
 let &l:formatprg=<sid>projectFmt()
+let &l:equalprg=&l:formatprg
 set path-=node_modules/**
 set path-=./node_modules/**
 if !exists('g:smartpairs_loaded')

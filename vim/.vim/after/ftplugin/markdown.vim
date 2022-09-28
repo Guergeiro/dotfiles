@@ -1,5 +1,6 @@
 source <sfile>:h/prettier-config.vim
-let &l:formatprg='deno fmt -'
+let &l:formatprg='deno fmt --ext md  -'
+let &l:equalprg=&l:formatprg
 if !exists(':GrepTag')
   command! -nargs=+ -complete=file_in_path -bar -buffer GrepTag
         \ cgetexpr GrepFunction('\\[_metadata_:' . <q-args> . '\\]')

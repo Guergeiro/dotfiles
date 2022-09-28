@@ -1,4 +1,5 @@
-setlocal formatprg=npx\ prettier\ --stdin-filepath\ %
+let &l:formatprg='npx prettier --stdin-filepath %'
+let &l:equalprg=&l:formatprg
 if has('eval')
   setlocal formatexpr=
 endif
