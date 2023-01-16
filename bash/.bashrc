@@ -116,6 +116,8 @@ export XSERVERRC="$XDG_CONFIG_HOME/X11/xserverrc"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 export GOPATH="$XDG_DATA_HOME/go"
 export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc"
+export PNPM_HOME="$XDG_DATA_HOME/pnpm"
+export PATH="$PNPM_HOME:$PATH"
 
 export PATH="$PATH:/usr/local/go/bin"
 

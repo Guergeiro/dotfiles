@@ -1,7 +1,7 @@
 {
   "author": {
     "prefix": "author",
-    "body": ["[_metadata_:author]:- \"$1\""],
+    "body": ["[_metadata_:author]: ($1)"],
     "description": "Metadata for the author"
   },
   "timestamp": {
@@ -13,29 +13,48 @@
   },
   "tag": {
     "prefix": "tag",
-    "body": [
-      "[_metadata_:tag]:- \"$1\""
-    ],
+    "body": ["[_metadata_:tag]:- #$1"],
     "description": "Metadata for the tag"
   },
   "atomic-note": {
     "prefix": "atomic-note",
     "body": [
-      "$1",
+      "<!-- deno-fmt-ignore-start -->",
+      "${1:author}",
+      "${2:timestamp}",
+      "<!-- deno-fmt-ignore-end -->",
       "# $TM_FILENAME_BASE",
       "$0",
       "## References",
-      "- $2"
+      "- [$3]($4)"
     ]
   },
   "reference-note": {
     "prefix": "reference-note",
     "body": [
-      "$1",
+      "<!-- deno-fmt-ignore-start -->",
+      "${1:author}",
+      "${2:timestamp}",
+      "<!-- deno-fmt-ignore-end -->",
       "# $TM_FILENAME_BASE",
       "$0",
       "## Referenced by",
-      "- $2"
+      "- [$3]($4)"
     ]
+  },
+  "article-note": {
+    "prefix": "article-note",
+    "body": [
+      "<!-- deno-fmt-ignore-start -->",
+      "${4:author}",
+      "<!-- deno-fmt-ignore-end -->",
+      "# [$1]($2)",
+      "## Abstract",
+      "$3"
+    ]
+  },
+  "article-author": {
+    "prefix": "article-author",
+    "body": ["# $1", "## Literature", "- [$2]($3)"]
   }
 }

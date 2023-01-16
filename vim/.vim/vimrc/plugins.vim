@@ -1,6 +1,15 @@
 if exists('g:loaded_plugins')
   finish
 endif
+
+" Vimtex {{{
+let g:vimtex_format_enabled = 1
+" }}}
+
+" Scorpeon {{{
+let g:scorpeon_extensions_path = [g:packages_home . '/vscode/extensions']
+" }}}
+
 " ColorScheme {{{
 let g:srcery_italic = 1
 let g:gruvbox_italic = 1
@@ -30,18 +39,10 @@ inoremap <silent> <leader>u <esc>:UndotreeToggle<cr>
 nnoremap <silent> <leader>u :UndotreeToggle<cr>
 " Undotree }}}
 
-" Floaterm {{{
-let g:floaterm_wintype = 'vsplit'
-let g:floaterm_width = 0.5
-nnoremap <leader>tt :FloatermToggle<cr>
-inoremap <leader>tt <esc>:FloatermToggle<cr>
-nnoremap <leader>nt :FloatermNew<cr>
-inoremap <leader>nt <esc>:FloatermNew<cr>
-" Floaterm }}}
 " vim-vsnip {{{
 let g:vsnip_snippet_dirs = [
   \ expand('$HOME') . '/.vim/snippets',
-  \ g:plug_home . '/friendly-snippets/snippets'
+  \ g:packages_home . '/friendly-snippets/snippets'
   \ ]
 " }}}
 
@@ -58,6 +59,8 @@ inoremap <silent><leader>sg <esc>:Select gitfile<cr>
 nnoremap <silent><leader>sg :Select gitfile<cr>
 inoremap <silent><leader>s/ <esc>:Select bufline<cr>
 nnoremap <silent><leader>s/ :Select bufline<cr>
+inoremap <silent><leader>sn <esc>:Select note<cr>
+nnoremap <silent><leader>sn :Select note<cr>
 " Vim-select }}}
 
 " Scalpel {{{
@@ -93,17 +96,16 @@ let g:highlightedyank_highlight_duration = 250
 " vim-lsp {{{
 let g:lsp_fold_enabled = 0
 let g:lsp_use_event_queue = 1
+let g:lsp_use_native_client = 1
 let g:lsp_untitled_buffer_enabled = 0
 let g:lsp_document_highlight_enabled = 0
 let g:lsp_document_code_action_signs_enabled = 0
-let g:lsp_diagnostics_float_cursor = 1
-let g:lsp_diagnostics_float_delay = 250
 let g:lsp_diagnostics_highlights_enabled = 0
+let g:lsp_diagnostics_float_insert_mode_enabled = 0
 let g:lsp_diagnostics_signs_error = {'text': ''}
 let g:lsp_diagnostics_signs_warning = {'text': ''}
 let g:lsp_diagnostics_signs_info = {'text': ''}
 let g:lsp_diagnostics_signs_hint = {'text': ''}
-let g:lsp_diagnostics_signs_delay = 250
 nmap gd <plug>(lsp-definition)
 nmap gr <plug>(lsp-references)
 nmap gi <plug>(lsp-implementation)
@@ -131,11 +133,27 @@ let g:lightline.colorscheme = g:colors_name
 let &path.=cleanpath#setpath()
 let &wildignore.=cleanpath#setwildignore()
 " clean-path.vim }}}
-"
+
+" copilot.vim {{{
+let g:copilot_enabled = v:false
+let g:copilot_no_maps = v:true
+let g:copilot_node_command = '/usr/bin/node'
+" }}}
+
+
+" pum.vim {{{
+call pum#set_option(
+  \ {
+  \   'max_height': 10,
+  \   'padding': v:true
+  \ })
+" }}}
+
 " ddc.vim {{{
 if !exists('*s:ddcinit')
   function! s:ddcinit() abort
-    call ddc#custom#patch_global('completionMenu', 'pum.vim')
+
+    call ddc#custom#patch_global('ui', 'pum')
     call ddc#custom#patch_global('sources',
           \ [
           \   'vim-lsp',
@@ -144,12 +162,14 @@ if !exists('*s:ddcinit')
           \   'file',
           \   'rg',
           \   'tabnine',
+          \   'copilot',
           \   'vsnip'
           \ ])
     call ddc#custom#patch_global('sourceOptions', {
           \ '_': {
           \   'smartCase': v:true,
           \   'minAutoCompleteLength': 1,
+          \   'maxCandidates': 5,
           \   'sorters': ['sorter_rank', 'sorter_fuzzy'],
           \   'matchers': ['matcher_fuzzy'],
           \   'converters': ['converter_remove_overlap', 'converter_fuzzy']
@@ -161,26 +181,27 @@ if !exists('*s:ddcinit')
           \   },
           \ 'file': {
           \   'mark': 'file',
-          \   'maxCandidates': 5,
           \   'isVolatile': v:true,
           \   },
           \ 'buffer': {
           \   'mark': 'b',
-          \   'maxCandidates': 5
           \   },
           \ 'around': {
           \   'mark': 'a',
-          \   'maxCandidates': 5
           \   },
           \ 'rg': {
           \   'mark': 'rg',
-          \   'maxCandidates': 5,
           \   'minAutoCompleteLength': 2,
           \   },
           \ 'tabnine': {
           \   'mark': 'tab',
-          \   'maxCandidates': 5,
           \   'isVolatile': v:true
+          \   },
+          \ 'input': {
+          \   'mark': 'gh',
+          \   'matchers': [],
+          \   'isVolatile': v:true,
+          \   'minAutoCompleteLength': 0,
           \   },
           \ 'vsnip': {
           \   'mark': 'vsnip',
@@ -204,22 +225,27 @@ if !exists('*s:ddcinit')
     inoremap <silent> <expr> <cr>
           \ pum#visible() ?
           \ '<cmd>call pum#map#confirm()<cr>' : '<cr>'
-    inoremap <silent> <expr> <c-@> ddc#manual_complete()
+    inoremap <silent> <expr> <c-@> ddc#map#manual_complete()
     snoremap <silent> <expr> <tab> vsnip#jumpable(1) ?
           \ '<plug>(vsnip-jump-next)' :
           \ '<tab>'
-    snoremap <silent> <expr> <s-tab> vsnip#jumpable(1) ?
+    snoremap <silent> <expr> <s-tab> vsnip#jumpable(-1) ?
+          \ '<plug>(vsnip-jump-prev)' :
+          \ '<s-tab>'
+    nnoremap <silent> <expr> <tab> vsnip#jumpable(1) ?
+          \ '<plug>(vsnip-jump-next)' :
+          \ '<tab>'
+    nnoremap <silent> <expr> <s-tab> vsnip#jumpable(-1) ?
           \ '<plug>(vsnip-jump-prev)' :
           \ '<s-tab>'
     call ddc#enable()
   endfunction
 endif
-
-augroup Ddc
+" ddc.vim }}}
+augroup Autocomplete
   autocmd!
   autocmd User DenopsReady call s:ddcinit()
   autocmd User PumCompleteDone call vsnip_integ#on_complete_done(g:pum#completed_item)
 augroup END
-" ddc.vim }}}
 
 let g:loaded_plugins = 1

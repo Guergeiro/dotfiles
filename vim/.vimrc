@@ -131,6 +131,8 @@ set lazyredraw
 set nojoinspaces
 " Complete menu options
 set completeopt=menuone,noinsert,noselect,preview
+" Allow vim to use interactive shell (loads user .bashrc)
+set shellcmdflag=-ic
 " Custom quit command
 if !exists(':Q')
   command! Q q!
@@ -197,7 +199,7 @@ if !exists('*s:ShowDocumentation')
   endfunction
 endif
 nnoremap <silent> K :call <sid>ShowDocumentation()<cr>
-" AutoCommands {{{ "
+" AutoCommands {{{
 augroup Autocmd
   autocmd!
   " Remove extra spaces on save
@@ -205,8 +207,9 @@ augroup Autocmd
   " Close the completion window when done
   autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
 augroup END
-" AutoCommands }}} "
-" Install minpac automatically
+" AutoCommands }}}
+let g:packages_home = expand('$HOME') . '/.vim/plugged'
+" Install plugins automatically
 if empty(glob(expand('$HOME') . '/.vim/autoload/plug.vim'))
   if has('dialog_con')
     let choice = confirm("Install VimPlug?", "&Yes\n&No", 2)
@@ -214,60 +217,70 @@ if empty(glob(expand('$HOME') . '/.vim/autoload/plug.vim'))
       silent execute '!curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
     endif
   else
-    echo 'Install vim plug to ~/.vim/autoload/plug.vim'
+    echo 'Install VimPlug to ~/.vim/autoload/plug.vim'
   endif
 else
-  " Vim-Polyglot {{{ "
+  " Vim-Polyglot {{{
   let g:polyglot_disabled = ['autoindent']
-  " Vim-Polyglot }}} "
-  "
-  call plug#begin('~/.vim/plugged')
-  Plug 'christoomey/vim-tmux-navigator'
+  " Vim-Polyglot }}}
+  call plug#begin(g:packages_home)
+  Plug 'christoomey/vim-tmux-navigator', { 'on':
+        \ [
+        \   'TmuxNavigateLeft',
+        \   'TmuxNavigateDown',
+        \   'TmuxNavigateUp',
+        \   'TmuxNavigateRight',
+        \   'TmuxNavigatePrevious'
+        \ ] }
   Plug 'fcpg/vim-altscreen'
-  Plug 'ferrine/md-img-paste.vim'
+  Plug 'ferrine/md-img-paste.vim', { 'for': 'markdown' }
   Plug 'Guergeiro/clean-path.vim'
   Plug 'Guergeiro/vim-smartpairs'
   Plug 'gruvbox-community/gruvbox'
-  Plug 'habamax/vim-select'
-  Plug 'habamax/vim-select-more'
+  Plug 'habamax/vim-select', { 'on': ['Select'] }
+  Plug 'habamax/vim-select-more', { 'on': ['Select'] }
   Plug 'hrsh7th/vim-vsnip'
   Plug 'hrsh7th/vim-vsnip-integ'
   Plug 'itchyny/lightline.vim'
   Plug 'itchyny/vim-gitbranch'
-  Plug 'lambdalisue/fern.vim'
-  Plug 'lambdalisue/fern-git-status.vim'
+  Plug 'lambdalisue/fern.vim', { 'on': 'Fern' }
+  Plug 'lambdalisue/fern-git-status.vim', { 'on': 'Fern' }
   Plug 'lambdalisue/fern-hijack.vim'
-  Plug 'lambdalisue/fern-renderer-nerdfont.vim'
+  Plug 'lambdalisue/fern-renderer-nerdfont.vim', { 'on': 'Fern' }
   Plug 'lambdalisue/nerdfont.vim'
   Plug 'machakann/vim-highlightedyank'
-  Plug 'mbbill/undotree'
+  Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
   Plug 'rafamadriz/friendly-snippets'
   Plug 'rhysd/committia.vim'
   Plug 'romainl/vim-cool'
-  Plug 'tommcdo/vim-exchange'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-surround'
   Plug 'sheerun/vim-polyglot'
   Plug 'srcery-colors/srcery-vim'
   Plug 'whiteinge/diffconflicts'
-  Plug 'wincent/scalpel'
+  Plug 'wincent/scalpel', { 'on': '<plug>(Scalpel)' }
 
   Plug 'mattn/emmet-vim', { 'for':
         \ [
         \   'html',
         \   'typescriptreact',
-        \   'javascriptreact'
+        \   'javascriptreact',
+        \   'tex'
         \ ] }
   Plug 'mattn/vim-lsp-settings'
   Plug 'prabirshrestha/vim-lsp'
   Plug 'prabirshrestha/async.vim'
 
+  Plug 'github/copilot.vim'
+
   Plug 'Shougo/ddc.vim'
-  Plug 'Shougo/ddc-around'
+  Plug 'Shougo/ddc-converter_remove_overlap'
   Plug 'Shougo/ddc-matcher_head'
   Plug 'Shougo/ddc-sorter_rank'
-  Plug 'Shougo/ddc-converter_remove_overlap'
-  Plug 'Shougo/ddc-rg'
+  Plug 'Shougo/ddc-source-around'
+  Plug 'Shougo/ddc-source-copilot'
+  Plug 'Shougo/ddc-source-rg'
+  Plug 'Shougo/ddc-ui-pum'
   Plug 'Shougo/pum.vim'
   Plug 'LumaKernel/ddc-file'
   Plug 'LumaKernel/ddc-tabnine'
@@ -277,6 +290,16 @@ else
   Plug 'matsui54/denops-popup-preview.vim'
   Plug 'shun/ddc-vim-lsp'
   Plug 'vim-denops/denops.vim'
+
+  Plug 'uga-rosa/scorpeon.vim'
+  Plug 'microsoft/vscode', { 'branch': 'main' }
+
+  Plug 'dracula/vim'
+  Plug 'lervag/vimtex', { 'for': 'tex' }
+
+  if has('nvim')
+    Plug 'nvim-treesitter/nvim-treesitter'
+  endif
   call plug#end()
 
   source $HOME/.vim/vimrc/plugins.vim

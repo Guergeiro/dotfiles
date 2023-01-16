@@ -28,6 +28,11 @@ function __docker_home() {
 }
 
 function __docker_default_args(){
+  mkdir -p "$XDG_CACHE_HOME/deno"
+  mkdir -p "$XDG_CACHE_HOME/go"
+  mkdir -p "$XDG_CACHE_HOME/go-build"
+  mkdir -p "$HOME/.m2"
+
   # Default args
   local args="--interactive"
   local args+=" --tty"
@@ -299,31 +304,31 @@ function gradle() {
     gradle "$@"
 }
 
-function java() {
-  if [ "$1" = "--" ]; then
-    shift
-    __execute_default_command "java" "$@"
-    return
-  fi
-  local version="latest"
-  # Check for flag version
-  if [ "$1" = "--docker" ]; then
-    shift
-    local version="$1"
-    shift
-  fi
-  local args=$(__docker_default_args)
-  local port=$(__docker_port)
-  local args+=" --env PORT=$port"
-  local args+=" --user $(__docker_user):$(__docker_group)"
+# function java() {
+#   if [ "$1" = "--" ]; then
+#     shift
+#     __execute_default_command "java" "$@"
+#     return
+#   fi
+#   local version="latest"
+#   # Check for flag version
+#   if [ "$1" = "--docker" ]; then
+#     shift
+#     local version="$1"
+#     shift
+#   fi
+#   local args=$(__docker_default_args)
+#   local port=$(__docker_port)
+#   local args+=" --env PORT=$port"
+#   local args+=" --user $(__docker_user):$(__docker_group)"
 
-  docker pull openjdk:$version
+#   docker pull openjdk:$version
 
-  docker run \
-    $args \
-    openjdk:$version \
-    java "$@"
-}
+#   docker run \
+#     $args \
+#     openjdk:$version \
+#     java "$@"
+# }
 
 function grip() {
   if [ "$1" = "--" ]; then

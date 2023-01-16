@@ -3,6 +3,7 @@ if exists('g:loaded_select_more_guergeiro')
 endif
 if exists('g:loaded_plugins')
   if executable('rg')
+    let g:select_info = get(g:, "select_info", {})
     let g:select_info.note = {}
     let g:select_info.note.data = {"job": 'rg --vimgrep "(NOTE):" .'}
     let g:select_info.note.sink = {

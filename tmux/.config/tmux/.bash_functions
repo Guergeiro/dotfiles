@@ -44,29 +44,3 @@ function goTmux() {
     tmux attach -t $arg
   fi
 }
-
-function __create_note() {
-  local current_date=$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")
-  local name="$current_date.md"
-
-  local subDir=$1
-  shift
-
-  if [ "$#" -ne 0 ]; then
-    local name="$1.md"
-    shift
-  fi
-
-  vim -c "cd $notesDirectory" "$notesDirectory/$subDir/$name"
-}
-
-function note() {
-  local subDir="zettelkasten"
-
-  __create_note "$subDir" "$@"
-}
-
-function reference-note() {
-  local subDir="reference-notes"
-  __create_note "$subDir" "$@"
-}

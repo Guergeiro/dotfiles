@@ -60,6 +60,10 @@ function git() {
   elif [ "$1" = "branch" ] && [ "$#" -eq 1 ]; then
     shift
     command git branch -a
+  elif [ "$1" = "commit" ] && [ "$2" = "timestamp" ]; then
+    shift
+    local current_date=$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")
+    command git commit -m "$current_date"
   else
     command git "$@"
   fi
@@ -89,8 +93,45 @@ function ping() {
   fi
 }
 
+function note() {
+  local subDir="zettelkasten"
+
+  __create_note "$subDir" "$@"
+}
+
+function reference-note() {
+  local subDir="reference-notes"
+  __create_note "$subDir" "$@"
+}
+
+function __create_note() {
+  local current_date=$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")
+  local name="$current_date.md"
+
+  local subDir=$1
+  shift
+
+  if [ "$#" -ne 0 ]; then
+    local name="$1.md"
+    shift
+  fi
+
+  vim -c "cd $notesDirectory" "$notesDirectory/$subDir/$name"
+}
+
 function __execute_default_command() {
   local command="$1"
   shift
   command $command "$@"
+}
+
+function textype() {
+  file=$(readlink -f "$1")
+  command="pdflatex"
+  ( head -n5 "$file" | grep -qi 'xelatex' ) && command="xelatex"
+    $command --output-directory="${file%/*}" "${file%.*}"
+    grep -qi addbibresource "$file" &&
+    biber --input-directory "${file%/*}" "${file%.*}" &&
+    $command --output-directory="${file%/*}" "${file%.*}" &&
+    $command --output-directory="${file%/*}" "${file%.*}"
 }

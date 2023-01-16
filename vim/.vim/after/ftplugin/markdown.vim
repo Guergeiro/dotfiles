@@ -1,5 +1,5 @@
 source <sfile>:h/prettier-config.vim
-let &l:formatprg='deno fmt --ext md  -'
+let &l:formatprg='deno -- fmt --ext md  -'
 let &l:equalprg=&l:formatprg
 if !exists(':GrepTag')
   command! -nargs=+ -complete=file_in_path -bar -buffer GrepTag
@@ -11,3 +11,5 @@ if !exists(':LGrepTag')
 endif
 cnoreabbrev <expr> <buffer> greptag (getcmdtype() ==# ':' && getcmdline() ==# 'greptag') ? 'GrepTag' : 'grep'
 cnoreabbrev <expr> <buffer> lgreptag (getcmdtype() ==# ':' && getcmdline() ==# 'lgreptag') ? 'LGrepTag' : 'lgrep'
+
+nnoremap <buffer><leader>p :call mdip#MarkdownClipboardImage()<cr>
