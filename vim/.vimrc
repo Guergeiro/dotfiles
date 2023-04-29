@@ -259,13 +259,15 @@ else
   Plug 'srcery-colors/srcery-vim'
   Plug 'whiteinge/diffconflicts'
   Plug 'wincent/scalpel', { 'on': '<plug>(Scalpel)' }
+  Plug 'wuelnerdotexe/vim-astro'
 
   Plug 'mattn/emmet-vim', { 'for':
         \ [
         \   'html',
         \   'typescriptreact',
         \   'javascriptreact',
-        \   'tex'
+        \   'tex',
+        \   'astro'
         \ ] }
   Plug 'mattn/vim-lsp-settings'
   Plug 'prabirshrestha/vim-lsp'
@@ -293,8 +295,10 @@ else
 
   Plug 'uga-rosa/scorpeon.vim'
   Plug 'microsoft/vscode', { 'branch': 'main' }
+  Plug 'dracula/visual-studio-code',
+        \ { 'as': 'vscode-dracula', 'do': 'pnpm install && pnpm build' }
 
-  Plug 'dracula/vim'
+  Plug 'dracula/vim', { 'as': 'dracula' }
   Plug 'lervag/vimtex', { 'for': 'tex' }
 
   if has('nvim')

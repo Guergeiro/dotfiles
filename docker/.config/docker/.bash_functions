@@ -52,262 +52,10 @@ function __docker_default_args(){
   echo "$args"
 }
 
-function deno() {
-  if [ "$1" = "--" ]; then
-    shift
-    __execute_default_command "deno" "$@"
-    return
-  fi
-  local version="latest"
-  # Check for flag version
-  if [ "$1" = "--docker" ]; then
-    shift
-    local version="$1"
-    shift
-  fi
-  local port=$(__docker_port)
-  local args=$(__docker_default_args)
-  local args+=" --env PORT=$port"
-  local args+=" --user $(__docker_user):$(__docker_group)"
-
-  docker pull denoland/deno:$version
-
-  docker run \
-    $args \
-    denoland/deno:$version \
-    deno "$@"
-}
-
-function go() {
-  if [ "$1" = "--" ]; then
-    shift
-    __execute_default_command "go" "$@"
-    return
-  fi
-  local version="latest"
-  # Check for flag version
-  if [ "$1" = "--docker" ]; then
-    shift
-    local version="$1"
-    shift
-  fi
-  local port=$(__docker_port)
-  local args=$(__docker_default_args)
-  local args+=" --env PORT=$port"
-  local args+=" --user $(__docker_user):$(__docker_group)"
-
-  docker pull golang:$version
-
-  docker run \
-    $args \
-    golang:$version \
-    go "$@"
-}
-
-function node() {
-  if [ "$1" = "--" ]; then
-    shift
-    __execute_default_command "node" "$@"
-    return
-  fi
-  local version="latest"
-  # Check for flag version
-  if [ "$1" = "--docker" ]; then
-    shift
-    local version="$1"
-    shift
-  fi
-  local port=$(__docker_port)
-  local args=$(__docker_default_args)
-  local args+=" --env PORT=$port"
-  local args+=" --user $(__docker_user):$(__docker_group)"
-
-  docker pull node:$version
-
-  docker run \
-    $args \
-    node:$version \
-    node "$@"
-}
-
-function python() {
-  if [ "$1" = "--" ]; then
-    shift
-    __execute_default_command "python" "$@"
-    return
-  fi
-  local version="latest"
-  # Check for flag version
-  if [ "$1" = "--docker" ]; then
-    shift
-    local version="$1"
-    shift
-  fi
-  local port=$(__docker_port)
-  local args=$(__docker_default_args)
-  local args+=" --env PORT=$port"
-  local args+=" --user $(__docker_user):$(__docker_group)"
-
-  docker pull python:$version
-
-  docker run \
-    $args \
-    python:$version \
-    python "$@"
-}
-
-function pip() {
-  if [ "$1" = "--" ]; then
-    shift
-    __execute_default_command "pip3" "$@"
-    return
-  fi
-  local version="latest"
-  # Check for flag version
-  if [ "$1" = "--docker" ]; then
-    shift
-    local version="$1"
-    shift
-  fi
-  local port=$(__docker_port)
-  local args=$(__docker_default_args)
-  local args+=" --env PORT=$port"
-  local args+=" --user $(__docker_user):$(__docker_group)"
-
-  docker pull python:$version
-
-  docker run \
-    $args \
-    python:$version \
-    pip "$@"
-}
-
-function npm() {
-  if [ "$1" = "--" ]; then
-    shift
-    __execute_default_command "npm" "$@"
-    return
-  fi
-  local version="latest"
-  # Check for flag version
-  if [ "$1" = "--docker" ]; then
-    shift
-    local version="$1"
-    shift
-  fi
-  local port=$(__docker_port)
-  local args=$(__docker_default_args)
-  local args+=" --env PORT=$port"
-  local args+=" --user $(__docker_user):$(__docker_group)"
-
-  docker pull node:$version
-
-  docker run \
-    $args \
-    node:$version \
-    npm "$@"
-}
-
-function yarn() {
-  if [ "$1" = "--" ]; then
-    shift
-    __execute_default_command "yarn" "$@"
-    return
-  fi
-  local version="latest"
-  # Check for flag version
-  if [ "$1" = "--docker" ]; then
-    shift
-    local version="$1"
-    shift
-  fi
-  local port=$(__docker_port)
-  local args=$(__docker_default_args)
-  local args+=" --env PORT=$port"
-  local args+=" --user $(__docker_user):$(__docker_group)"
-
-  docker pull node:$version
-
-  docker run \
-    $args \
-    node:$version \
-    yarn "$@"
-}
-
-function mvn() {
-  if [ "$1" = "--" ]; then
-    shift
-    __execute_default_command "mvn" "$@"
-    return
-  fi
-  local version="latest"
-  # Check for flag version
-  if [ "$1" = "--docker" ]; then
-    shift
-    local version="$1"
-    shift
-  fi
-  local port=$(__docker_port)
-  local args=$(__docker_default_args)
-  local args+=" --env PORT=$port"
-  local args+=" --user $(__docker_user):$(__docker_group)"
-  local args+=" --env MAVEN_CONFIG=$(__docker_home)/.m2"
-
-  docker pull maven:$version
-
-  if [ "$1" = "run" ]; then
-    shift
-    docker run \
-      $args \
-      maven:$version \
-      mvn -Duser.home="$(__docker_home)" exec:java "$@"
-  elif [ "$1" = "init" ]; then
-    shift
-    docker run \
-      $args \
-      maven:$version \
-      mvn archetype:generate \
-      -DarchetypeArtifactId=maven-archetype-quickstart \
-      -DarchetypeVersion=RELEASE \
-      -Duser.home="$(__docker_home)" "$@"
-  else
-    docker run \
-      $args \
-      maven:$version \
-      mvn -Duser.home="$(__docker_home)" "$@"
-  fi
-}
-
-function gradle() {
-  if [ "$1" = "--" ]; then
-    shift
-    __execute_default_command "gradle" "$@"
-    return
-  fi
-  local version="latest"
-  # Check for flag version
-  if [ "$1" = "--docker" ]; then
-    shift
-    local version="$1"
-    shift
-  fi
-  local args=$(__docker_default_args)
-  local port=$(__docker_port)
-  local args+=" --env PORT=$port"
-  local args+=" --user $(__docker_user):$(__docker_group)"
-
-  docker pull gradle:$version
-
-  docker run \
-    $args \
-    gradle:$version \
-    gradle "$@"
-}
-
-# function java() {
+# function deno() {
 #   if [ "$1" = "--" ]; then
 #     shift
-#     __execute_default_command "java" "$@"
+#     __execute_default_command "deno" "$@"
 #     return
 #   fi
 #   local version="latest"
@@ -317,17 +65,173 @@ function gradle() {
 #     local version="$1"
 #     shift
 #   fi
-#   local args=$(__docker_default_args)
 #   local port=$(__docker_port)
+#   local args=$(__docker_default_args)
 #   local args+=" --env PORT=$port"
 #   local args+=" --user $(__docker_user):$(__docker_group)"
 
-#   docker pull openjdk:$version
+#   docker pull denoland/deno:$version
 
 #   docker run \
 #     $args \
-#     openjdk:$version \
-#     java "$@"
+#     denoland/deno:$version \
+#     deno "$@"
+# }
+
+# function go() {
+#   if [ "$1" = "--" ]; then
+#     shift
+#     __execute_default_command "go" "$@"
+#     return
+#   fi
+#   local version="latest"
+#   # Check for flag version
+#   if [ "$1" = "--docker" ]; then
+#     shift
+#     local version="$1"
+#     shift
+#   fi
+#   local port=$(__docker_port)
+#   local args=$(__docker_default_args)
+#   local args+=" --env PORT=$port"
+#   local args+=" --user $(__docker_user):$(__docker_group)"
+
+#   docker pull golang:$version
+
+#   docker run \
+#     $args \
+#     golang:$version \
+#     go "$@"
+# }
+
+# function node() {
+#   if [ "$1" = "--" ]; then
+#     shift
+#     __execute_default_command "node" "$@"
+#     return
+#   fi
+#   local version="latest"
+#   # Check for flag version
+#   if [ "$1" = "--docker" ]; then
+#     shift
+#     local version="$1"
+#     shift
+#   fi
+#   local port=$(__docker_port)
+#   local args=$(__docker_default_args)
+#   local args+=" --env PORT=$port"
+#   local args+=" --user $(__docker_user):$(__docker_group)"
+
+#   docker pull node:$version
+
+#   docker run \
+#     $args \
+#     node:$version \
+#     node "$@"
+# }
+
+# function python() {
+#   if [ "$1" = "--" ]; then
+#     shift
+#     __execute_default_command "python" "$@"
+#     return
+#   fi
+#   local version="latest"
+#   # Check for flag version
+#   if [ "$1" = "--docker" ]; then
+#     shift
+#     local version="$1"
+#     shift
+#   fi
+#   local port=$(__docker_port)
+#   local args=$(__docker_default_args)
+#   local args+=" --env PORT=$port"
+#   local args+=" --user $(__docker_user):$(__docker_group)"
+
+#   docker pull python:$version
+
+#   docker run \
+#     $args \
+#     python:$version \
+#     python "$@"
+# }
+
+# function pip() {
+#   if [ "$1" = "--" ]; then
+#     shift
+#     __execute_default_command "pip3" "$@"
+#     return
+#   fi
+#   local version="latest"
+#   # Check for flag version
+#   if [ "$1" = "--docker" ]; then
+#     shift
+#     local version="$1"
+#     shift
+#   fi
+#   local port=$(__docker_port)
+#   local args=$(__docker_default_args)
+#   local args+=" --env PORT=$port"
+#   local args+=" --user $(__docker_user):$(__docker_group)"
+
+#   docker pull python:$version
+
+#   docker run \
+#     $args \
+#     python:$version \
+#     pip "$@"
+# }
+
+# function npm() {
+#   if [ "$1" = "--" ]; then
+#     shift
+#     __execute_default_command "npm" "$@"
+#     return
+#   fi
+#   local version="latest"
+#   # Check for flag version
+#   if [ "$1" = "--docker" ]; then
+#     shift
+#     local version="$1"
+#     shift
+#   fi
+#   local port=$(__docker_port)
+#   local args=$(__docker_default_args)
+#   local args+=" --env PORT=$port"
+#   local args+=" --user $(__docker_user):$(__docker_group)"
+
+#   docker pull node:$version
+
+#   docker run \
+#     $args \
+#     node:$version \
+#     npm "$@"
+# }
+
+# function yarn() {
+#   if [ "$1" = "--" ]; then
+#     shift
+#     __execute_default_command "yarn" "$@"
+#     return
+#   fi
+#   local version="latest"
+#   # Check for flag version
+#   if [ "$1" = "--docker" ]; then
+#     shift
+#     local version="$1"
+#     shift
+#   fi
+#   local port=$(__docker_port)
+#   local args=$(__docker_default_args)
+#   local args+=" --env PORT=$port"
+#   local args+=" --user $(__docker_user):$(__docker_group)"
+
+#   docker pull node:$version
+
+#   docker run \
+#     $args \
+#     node:$version \
+#     yarn "$@"
 # }
 
 function grip() {

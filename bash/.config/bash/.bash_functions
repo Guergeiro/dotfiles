@@ -76,13 +76,13 @@ function cd() {
 
 function man() {
   LESS_TERMCAP_md=$'\e[01;31m' \
-  LESS_TERMCAP_me=$'\e[0m' \
-  LESS_TERMCAP_se=$'\e[0m' \
-  LESS_TERMCAP_so=$'\e[01;44;33m' \
-  LESS_TERMCAP_ue=$'\e[0m' \
-  LESS_TERMCAP_us=$'\e[01;32m' \
-  command man "$@"
-}
+    LESS_TERMCAP_me=$'\e[0m' \
+    LESS_TERMCAP_se=$'\e[0m' \
+    LESS_TERMCAP_so=$'\e[01;44;33m' \
+    LESS_TERMCAP_ue=$'\e[0m' \
+    LESS_TERMCAP_us=$'\e[01;32m' \
+    command man "$@"
+  }
 
 # Check if internet is working
 function ping() {
@@ -93,6 +93,22 @@ function ping() {
   fi
 }
 
+function __battery-notify() {
+  while true
+  do
+    export DISPLAY=:0.0
+    local battery_percent=$(acpi -b | command grep -P -o '[0-9]+(?=%)')
+    if [ "$battery_percent" -gt $1 ]; then
+      notify-send "Level: ${battery_percent}% "
+    fi
+    sleep 300 # (5 minutes)
+  done
+}
+
+function high-battery() {
+  __battery-notify 80
+}
+
 function note() {
   local subDir="zettelkasten"
 
@@ -100,8 +116,8 @@ function note() {
 }
 
 function reference-note() {
-  local subDir="reference-notes"
-  __create_note "$subDir" "$@"
+local subDir="reference-notes"
+__create_note "$subDir" "$@"
 }
 
 function __create_note() {
@@ -129,9 +145,9 @@ function textype() {
   file=$(readlink -f "$1")
   command="pdflatex"
   ( head -n5 "$file" | grep -qi 'xelatex' ) && command="xelatex"
-    $command --output-directory="${file%/*}" "${file%.*}"
-    grep -qi addbibresource "$file" &&
+  $command --output-directory="${file%/*}" "${file%.*}"
+  grep -qi addbibresource "$file" &&
     biber --input-directory "${file%/*}" "${file%.*}" &&
     $command --output-directory="${file%/*}" "${file%.*}" &&
     $command --output-directory="${file%/*}" "${file%.*}"
-}
+  }

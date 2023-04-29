@@ -9,6 +9,11 @@ update_colors() {
   command cd $srceryterminalDirectory
   git pull
 
+  echo "${yellow}Updating dracula${reset}"
+  command cd $draculaterminalDirectory
+  git pull
+
+
   command cd $currentDirectory
 }
 

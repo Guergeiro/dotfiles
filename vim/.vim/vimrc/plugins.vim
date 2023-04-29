@@ -6,15 +6,32 @@ endif
 let g:vimtex_format_enabled = 1
 " }}}
 
+" vim-astro {{{
+let g:astro_typescript = 'enable'
+" }}}
+
 " Scorpeon {{{
-let g:scorpeon_extensions_path = [g:packages_home . '/vscode/extensions']
+let g:scorpeon_extensions_path = [
+      \ g:packages_home . '/vscode/extensions',
+      \ g:packages_home . '/vscode-dracula'
+      \ ]
+let g:scorpeon_highlight = {
+      \ 'enable': v:true
+      \}
+augroup Scorpeon
+  autocmd!
+  autocmd InsertEnter * ScorpeonHighlightDisable
+  autocmd InsertLeave * ScorpeonHighlightEnable
+augroup END
 " }}}
 
 " ColorScheme {{{
 let g:srcery_italic = 1
 let g:gruvbox_italic = 1
+let g:dracula_colorterm = 0
+let g:dracula_full_special_attrs_support = 1
 set background=dark
-colorscheme srcery
+colorscheme dracula
 " ColorScheme }}}
 
 " vim-tmux-navigator {{{
@@ -100,8 +117,9 @@ let g:lsp_use_native_client = 1
 let g:lsp_untitled_buffer_enabled = 0
 let g:lsp_document_highlight_enabled = 0
 let g:lsp_document_code_action_signs_enabled = 0
-let g:lsp_diagnostics_highlights_enabled = 0
+let g:lsp_diagnostics_float_cursor = 1
 let g:lsp_diagnostics_float_insert_mode_enabled = 0
+let g:lsp_diagnostics_virtual_text_enabled = 0
 let g:lsp_diagnostics_signs_error = {'text': ''}
 let g:lsp_diagnostics_signs_warning = {'text': ''}
 let g:lsp_diagnostics_signs_info = {'text': ''}
@@ -115,6 +133,11 @@ nmap <f2> <plug>(lsp-rename)
 nmap <silent> <c-h> <plug>(lsp-previous-diagnostic)
 nmap <silent> <c-l> <plug>(lsp-next-diagnostic)
 " vim-lsp }}}
+
+" vim-lsp-settings {{{
+let g:markdown_fenced_languages = ['ts=typescript']
+let g:lsp_settings_filetype_typescript = ['typescript-language-server', 'eslint-language-server', 'deno']
+" }}}
 
 " Lightline {{{
 let g:lightline = {
@@ -167,9 +190,8 @@ if !exists('*s:ddcinit')
           \ ])
     call ddc#custom#patch_global('sourceOptions', {
           \ '_': {
-          \   'smartCase': v:true,
           \   'minAutoCompleteLength': 1,
-          \   'maxCandidates': 5,
+          \   'maxItems': 5,
           \   'sorters': ['sorter_rank', 'sorter_fuzzy'],
           \   'matchers': ['matcher_fuzzy'],
           \   'converters': ['converter_remove_overlap', 'converter_fuzzy']
@@ -200,7 +222,6 @@ if !exists('*s:ddcinit')
           \ 'input': {
           \   'mark': 'gh',
           \   'matchers': [],
-          \   'isVolatile': v:true,
           \   'minAutoCompleteLength': 0,
           \   },
           \ 'vsnip': {
