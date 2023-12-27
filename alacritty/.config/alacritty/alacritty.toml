@@ -1,0 +1,32 @@
+import = ["/home/breno/Documents/dracula/alacritty/dracula.toml"]
+
+[cursor.style]
+blinking = "Always"
+
+[font]
+size = 14
+
+[font.bold]
+family = "FantasqueSansMono Nerd Font Mono"
+style = "Bold"
+
+[font.bold_italic]
+family = "FantasqueSansMono Nerd Font Mono"
+style = "Bold Italic"
+
+[font.italic]
+family = "FantasqueSansMono Nerd Font Mono"
+style = "Bold Italic"
+
+[font.normal]
+family = "FantasqueSansMono Nerd Font Mono"
+style = "Bold"
+
+[mouse]
+hide_when_typing = true
+
+[window]
+decorations = "none"
+dynamic_padding = true
+dynamic_title = true
+startup_mode = "Fullscreen"

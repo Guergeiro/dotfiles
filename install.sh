@@ -7,6 +7,7 @@ install_dotfiles() {
   local dotfilesDirectory=$HOME/Documents/guergeiro/dotfiles
   local vimDirectory=$HOME/Documents/vim/vim
   local srceryterminalDirectory=$HOME/Documents/srcery-colors/srcery-terminal
+  local draculaterminalDirectory=$HOME/Documents/dracula/alacritty
   local alacrittyDirectory=$HOME/Documents/alacritty/alacritty
   local tmuxDirectory=$HOME/Documents/tmux/tmux
   local pagraphControl=$HOME/Documents/futpib/pagraphcontrol
@@ -28,6 +29,7 @@ install_dotfiles() {
   git clone https://github.com/Guergeiro/dotfiles.git $dotfilesDirectory
   git clone https://github.com/vim/vim.git $vimDirectory
   git clone https://github.com/srcery-colors/srcery-terminal.git $srceryterminalDirectory
+  git clone https://github.com/dracula/alacritty.git $draculaterminalDirectory
   git clone https://github.com/alacritty/alacritty.git $alacrittyDirectory
   git clone https://github.com/tmux/tmux.git $tmuxDirectory
   git clone https://github.com/futpib/pagraphcontrol.git $pagraphControl

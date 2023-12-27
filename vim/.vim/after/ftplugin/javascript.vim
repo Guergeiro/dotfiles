@@ -1,7 +1,7 @@
 if !exists('*s:projectFmt')
   function! s:projectFmt() abort
     let l:projectDir = getcwd()
-    let projectfmt = 'deno -- fmt'
+    let projectfmt = 'deno fmt -'
     if &filetype == 'javascript'
       let projectfmt .= ' --ext js'
     endif

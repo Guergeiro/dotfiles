@@ -10,21 +10,6 @@ let g:vimtex_format_enabled = 1
 let g:astro_typescript = 'enable'
 " }}}
 
-" Scorpeon {{{
-let g:scorpeon_extensions_path = [
-      \ g:packages_home . '/vscode/extensions',
-      \ g:packages_home . '/vscode-dracula'
-      \ ]
-let g:scorpeon_highlight = {
-      \ 'enable': v:true
-      \}
-augroup Scorpeon
-  autocmd!
-  autocmd InsertEnter * ScorpeonHighlightDisable
-  autocmd InsertLeave * ScorpeonHighlightEnable
-augroup END
-" }}}
-
 " ColorScheme {{{
 let g:srcery_italic = 1
 let g:gruvbox_italic = 1
@@ -49,6 +34,18 @@ let g:CoolTotalMatches = 1
 
 " md-img-paste {{{
 let g:mdip_imgdir = '.assets'
+" }}}
+
+" Vimspector {{{
+nmap <leader>dc <plug>VimspectorContinue
+nmap <leader>ds <plug>VimspectorStop
+nmap <leader>dr <plug>VimspectorRestart
+nmap <leader>db <plug>VimspectorToggleBreakpoint
+nmap <leader>dj <plug>VimspectorStepOver
+nmap <leader>dl <plug>VimspectorStepInto
+nmap <leader>dh <plug>VimspectorStepOut
+nmap <leader>di <plug>VimspectorBalloonEval
+xmap <leader>di <plug>VimspectorBalloonEval
 " }}}
 
 " Undotree {{{
@@ -78,6 +75,8 @@ inoremap <silent><leader>s/ <esc>:Select bufline<cr>
 nnoremap <silent><leader>s/ :Select bufline<cr>
 inoremap <silent><leader>sn <esc>:Select note<cr>
 nnoremap <silent><leader>sn :Select note<cr>
+inoremap <silent><leader>sG <esc>:Select my_grep<cr>
+nnoremap <silent><leader>sG :Select my_grep<cr>
 " Vim-select }}}
 
 " Scalpel {{{
@@ -124,6 +123,8 @@ let g:lsp_diagnostics_signs_error = {'text': ''}
 let g:lsp_diagnostics_signs_warning = {'text': ''}
 let g:lsp_diagnostics_signs_info = {'text': ''}
 let g:lsp_diagnostics_signs_hint = {'text': ''}
+let g:lsp_semantic_enabled = 0
+let g:lsp_format_sync_timeout = 1000
 nmap gd <plug>(lsp-definition)
 nmap gr <plug>(lsp-references)
 nmap gi <plug>(lsp-implementation)
@@ -157,13 +158,6 @@ let &path.=cleanpath#setpath()
 let &wildignore.=cleanpath#setwildignore()
 " clean-path.vim }}}
 
-" copilot.vim {{{
-let g:copilot_enabled = v:false
-let g:copilot_no_maps = v:true
-let g:copilot_node_command = '/usr/bin/node'
-" }}}
-
-
 " pum.vim {{{
 call pum#set_option(
   \ {
@@ -171,6 +165,7 @@ call pum#set_option(
   \   'padding': v:true
   \ })
 " }}}
+
 
 " ddc.vim {{{
 if !exists('*s:ddcinit')
@@ -185,21 +180,17 @@ if !exists('*s:ddcinit')
           \   'file',
           \   'rg',
           \   'tabnine',
-          \   'copilot',
           \   'vsnip'
           \ ])
     call ddc#custom#patch_global('sourceOptions', {
           \ '_': {
-          \   'minAutoCompleteLength': 1,
           \   'maxItems': 5,
-          \   'sorters': ['sorter_rank', 'sorter_fuzzy'],
-          \   'matchers': ['matcher_fuzzy'],
-          \   'converters': ['converter_remove_overlap', 'converter_fuzzy']
+          \   'sorters': ['sorter_fuzzy', 'sorter_rank'],
+          \   'matchers': ['matcher_fuzzy', 'matcher_head'],
+          \   'converters': ['converter_fuzzy', 'converter_remove_overlap']
           \   },
           \ 'vim-lsp': {
           \   'mark': 'lsp',
-          \   'minAutoCompleteLength': 4,
-          \   'matchers': ['matcher_head']
           \   },
           \ 'file': {
           \   'mark': 'file',
@@ -213,16 +204,10 @@ if !exists('*s:ddcinit')
           \   },
           \ 'rg': {
           \   'mark': 'rg',
-          \   'minAutoCompleteLength': 2,
           \   },
           \ 'tabnine': {
           \   'mark': 'tab',
-          \   'isVolatile': v:true
-          \   },
-          \ 'input': {
-          \   'mark': 'gh',
-          \   'matchers': [],
-          \   'minAutoCompleteLength': 0,
+          \   'isVolatile': v:true,
           \   },
           \ 'vsnip': {
           \   'mark': 'vsnip',
@@ -230,9 +215,6 @@ if !exists('*s:ddcinit')
           \   }
           \ })
 
-    call ddc#custom#patch_global('postFilters', [
-          \ "postfilter_score"
-          \ ])
     inoremap <silent> <expr> <tab>
           \ pum#visible() ?
           \ '<cmd>call pum#map#select_relative(+1)<cr>' :
@@ -266,7 +248,7 @@ endif
 augroup Autocomplete
   autocmd!
   autocmd User DenopsReady call s:ddcinit()
-  autocmd User PumCompleteDone call vsnip_integ#on_complete_done(g:pum#completed_item)
+  " autocmd User PumCompleteDone call vsnip_integ#on_complete_done(g:pum#completed_item)
 augroup END
 
 let g:loaded_plugins = 1

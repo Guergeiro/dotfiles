@@ -232,6 +232,7 @@ else
         \   'TmuxNavigateRight',
         \   'TmuxNavigatePrevious'
         \ ] }
+  Plug 'dracula/vim', { 'as': 'dracula' }
   Plug 'fcpg/vim-altscreen'
   Plug 'ferrine/md-img-paste.vim', { 'for': 'markdown' }
   Plug 'Guergeiro/clean-path.vim'
@@ -240,7 +241,6 @@ else
   Plug 'habamax/vim-select', { 'on': ['Select'] }
   Plug 'habamax/vim-select-more', { 'on': ['Select'] }
   Plug 'hrsh7th/vim-vsnip'
-  Plug 'hrsh7th/vim-vsnip-integ'
   Plug 'itchyny/lightline.vim'
   Plug 'itchyny/vim-gitbranch'
   Plug 'lambdalisue/fern.vim', { 'on': 'Fern' }
@@ -248,8 +248,18 @@ else
   Plug 'lambdalisue/fern-hijack.vim'
   Plug 'lambdalisue/fern-renderer-nerdfont.vim', { 'on': 'Fern' }
   Plug 'lambdalisue/nerdfont.vim'
+  Plug 'lervag/vimtex', { 'for': 'tex' }
   Plug 'machakann/vim-highlightedyank'
+  Plug 'mattn/emmet-vim', { 'for':
+        \ [
+        \   'html',
+        \   'typescriptreact',
+        \   'javascriptreact',
+        \   'tex',
+        \   'astro'
+        \ ] }
   Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
+  Plug 'puremourning/vimspector'
   Plug 'rafamadriz/friendly-snippets'
   Plug 'rhysd/committia.vim'
   Plug 'romainl/vim-cool'
@@ -261,45 +271,27 @@ else
   Plug 'wincent/scalpel', { 'on': '<plug>(Scalpel)' }
   Plug 'wuelnerdotexe/vim-astro'
 
-  Plug 'mattn/emmet-vim', { 'for':
-        \ [
-        \   'html',
-        \   'typescriptreact',
-        \   'javascriptreact',
-        \   'tex',
-        \   'astro'
-        \ ] }
   Plug 'mattn/vim-lsp-settings'
   Plug 'prabirshrestha/vim-lsp'
   Plug 'prabirshrestha/async.vim'
 
-  Plug 'github/copilot.vim'
-
+  Plug 'hrsh7th/vim-vsnip-integ'
+  Plug 'LumaKernel/ddc-file'
+  Plug 'LumaKernel/ddc-tabnine'
+  Plug 'matsui54/ddc-buffer'
+  Plug 'matsui54/denops-popup-preview.vim'
   Plug 'Shougo/ddc.vim'
-  Plug 'Shougo/ddc-converter_remove_overlap'
-  Plug 'Shougo/ddc-matcher_head'
-  Plug 'Shougo/ddc-sorter_rank'
+  Plug 'Shougo/ddc-filter-converter_remove_overlap'
+  Plug 'Shougo/ddc-filter-matcher_head'
+  Plug 'Shougo/ddc-filter-sorter_rank'
   Plug 'Shougo/ddc-source-around'
-  Plug 'Shougo/ddc-source-copilot'
   Plug 'Shougo/ddc-source-rg'
   Plug 'Shougo/ddc-ui-pum'
   Plug 'Shougo/pum.vim'
-  Plug 'LumaKernel/ddc-file'
-  Plug 'LumaKernel/ddc-tabnine'
-  Plug 'tani/ddc-fuzzy'
-  Plug 'matsui54/ddc-buffer'
-  Plug 'matsui54/ddc-postfilter_score'
-  Plug 'matsui54/denops-popup-preview.vim'
   Plug 'shun/ddc-vim-lsp'
+  Plug 'tani/ddc-fuzzy'
+  Plug 'uga-rosa/ddc-source-vsnip'
   Plug 'vim-denops/denops.vim'
-
-  Plug 'uga-rosa/scorpeon.vim'
-  Plug 'microsoft/vscode', { 'branch': 'main' }
-  Plug 'dracula/visual-studio-code',
-        \ { 'as': 'vscode-dracula', 'do': 'pnpm install && pnpm build' }
-
-  Plug 'dracula/vim', { 'as': 'dracula' }
-  Plug 'lervag/vimtex', { 'for': 'tex' }
 
   if has('nvim')
     Plug 'nvim-treesitter/nvim-treesitter'

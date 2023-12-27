@@ -116,10 +116,23 @@ export XSERVERRC="$XDG_CONFIG_HOME/X11/xserverrc"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 export GOPATH="$XDG_DATA_HOME/go"
 export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc"
+
+export ANDROID_HOME="$HOME/Android/Sdk"
+export GRADLE_HOME="/opt/gradle/gradle-8.5"
+export PATH="${GRADLE_HOME}/bin:${PATH}"
+
+# pnpm
 export PNPM_HOME="$XDG_DATA_HOME/pnpm"
-export PATH="$PNPM_HOME:$PATH"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
 
 export PATH="$PATH:/usr/local/go/bin"
+export PATH="$HOME/.local/bin:$PATH"
+
+export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
@@ -170,11 +183,3 @@ export pagraphControl="$HOME/Documents/futpib/pagraphcontrol"
 export nerdfontsDirectory="$HOME/Documents/ryanoasis/nerd-fonts"
 export cursorDirectory="$HOME/Documents/keeferrourke/capitaine-cursors"
 export notesDirectory="$HOME/brain"
-
-# pnpm
-export PNPM_HOME="/home/breno/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end

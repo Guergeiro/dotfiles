@@ -39,8 +39,6 @@ function __docker_default_args(){
   local args+=" --rm"
   local args+=" --volume $PWD:$(__docker_home)/app"
   local args+=" --volume $XDG_CACHE_HOME/deno:/deno-dir"
-  local args+=" --volume $XDG_CACHE_HOME/go:/go"
-  local args+=" --volume $XDG_CACHE_HOME/go-build:/.cache/go-build"
   local args+=" --volume $HOME/.m2:$(__docker_home)/.m2"
   local args+=" --workdir $(__docker_home)/app"
   local args+=" --network host"
@@ -50,6 +48,35 @@ function __docker_default_args(){
     local args+=" --env-file $file"
   fi
   echo "$args"
+}
+
+function air() {
+  if [ "$1" = "--" ]; then
+    shift
+    __execute_default_command "air" "$@"
+    return
+  fi
+  local version="latest"
+  # Check for flag version
+  if [ "$1" = "--docker" ]; then
+    shift
+    local version="$1"
+    shift
+  fi
+
+  docker pull cosmtrek/air:$version
+
+  local port=$(__docker_port)
+  local args=$(__docker_default_args)
+  local args+=" --env PORT=$port"
+  local args+=" --env air_wd=$(__docker_home)/app"
+
+  echo "http://0.0.0.0:$port"
+
+  docker run \
+    $args \
+    cosmtrek/air:$version \
+    "$@"
 }
 
 # function deno() {
@@ -208,31 +235,31 @@ function __docker_default_args(){
 #     npm "$@"
 # }
 
-# function yarn() {
-#   if [ "$1" = "--" ]; then
-#     shift
-#     __execute_default_command "yarn" "$@"
-#     return
-#   fi
-#   local version="latest"
-#   # Check for flag version
-#   if [ "$1" = "--docker" ]; then
-#     shift
-#     local version="$1"
-#     shift
-#   fi
-#   local port=$(__docker_port)
-#   local args=$(__docker_default_args)
-#   local args+=" --env PORT=$port"
-#   local args+=" --user $(__docker_user):$(__docker_group)"
+function yarn() {
+  if [ "$1" = "--" ]; then
+    shift
+    __execute_default_command "yarn" "$@"
+    return
+  fi
+  local version="latest"
+  # Check for flag version
+  if [ "$1" = "--docker" ]; then
+    shift
+    local version="$1"
+    shift
+  fi
+  local port=$(__docker_port)
+  local args=$(__docker_default_args)
+  local args+=" --env PORT=$port"
+  local args+=" --user $(__docker_user):$(__docker_group)"
 
-#   docker pull node:$version
+  docker pull node:$version
 
-#   docker run \
-#     $args \
-#     node:$version \
-#     yarn "$@"
-# }
+  docker run \
+    $args \
+    node:$version \
+    yarn "$@"
+}
 
 function grip() {
   if [ "$1" = "--" ]; then
