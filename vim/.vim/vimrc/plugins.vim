@@ -2,6 +2,13 @@ if exists('g:loaded_plugins')
   finish
 endif
 
+" Emmet {{{
+augroup Emmet
+  autocmd!
+  " autocmd FileType html,typescriptreact,javascriptreact,text,astro imap
+augroup END
+" }}}
+
 " Vimtex {{{
 let g:vimtex_format_enabled = 1
 " }}}
@@ -17,7 +24,7 @@ let g:dracula_colorterm = 0
 let g:dracula_full_special_attrs_support = 1
 set background=dark
 colorscheme dracula
-" ColorScheme }}}
+" }}}
 
 " vim-tmux-navigator {{{
 let g:tmux_navigator_no_mappings = 1
@@ -26,11 +33,11 @@ nnoremap <silent> <c-w>j :TmuxNavigateDown<cr>
 nnoremap <silent> <c-w>k :TmuxNavigateUp<cr>
 nnoremap <silent> <c-w>l :TmuxNavigateRight<cr>
 nnoremap <silent> <c-w>\ :TmuxNavigatePrevious<cr>
-" vim-tmux-navigator }}}
+" }}}
 
 " vim-cool {{{
 let g:CoolTotalMatches = 1
-" vim-cool }}}
+" }}}
 
 " md-img-paste {{{
 let g:mdip_imgdir = '.assets'
@@ -51,7 +58,7 @@ xmap <leader>di <plug>VimspectorBalloonEval
 " Undotree {{{
 inoremap <silent> <leader>u <esc>:UndotreeToggle<cr>
 nnoremap <silent> <leader>u :UndotreeToggle<cr>
-" Undotree }}}
+" }}}
 
 " vim-vsnip {{{
 let g:vsnip_snippet_dirs = [
@@ -60,29 +67,10 @@ let g:vsnip_snippet_dirs = [
   \ ]
 " }}}
 
-" Vim-select {{{
-let g:select_no_ignore_vcs = 0
-" A bunch of fuzzy
-inoremap <silent><leader>sp <esc>:Select projectfile<cr>
-nnoremap <silent><leader>sp :Select projectfile<cr>
-inoremap <silent><leader>sb <esc>:Select buffer<cr>
-nnoremap <silent><leader>sb :Select buffer<cr>
-inoremap <silent><leader>sd <esc>:Select todo<cr>
-nnoremap <silent><leader>sd :Select todo<cr>
-inoremap <silent><leader>sg <esc>:Select gitfile<cr>
-nnoremap <silent><leader>sg :Select gitfile<cr>
-inoremap <silent><leader>s/ <esc>:Select bufline<cr>
-nnoremap <silent><leader>s/ :Select bufline<cr>
-inoremap <silent><leader>sn <esc>:Select note<cr>
-nnoremap <silent><leader>sn :Select note<cr>
-inoremap <silent><leader>sG <esc>:Select my_grep<cr>
-nnoremap <silent><leader>sG :Select my_grep<cr>
-" Vim-select }}}
-
 " Scalpel {{{
 let g:ScalpelMap=0
 nmap <leader><f2> <plug>(Scalpel)
-" Scalpel }}}
+" }}}
 
 " Vim-smartpairs {{{
 " Removes basic autoclose
@@ -91,7 +79,8 @@ iunmap (
 iunmap [
 iunmap "
 iunmap `
-" Vim-smartpairs }}}
+let g:smartpairs_hijack_return = 0
+" }}}
 
 " Fern {{{
 let g:fern#disable_default_mappings = 1
@@ -103,11 +92,11 @@ inoremap <silent><c-b>v <esc>:wincmd v<cr>:Fern . -reveal=%<cr>
 nnoremap <silent><c-b>v :wincmd v<cr>:Fern . -reveal=%<cr>
 inoremap <silent><c-b>s <esc>:wincmd s<cr>:Fern . -reveal=%<cr>
 nnoremap <silent><c-b>s :wincmd s<cr>:Fern . -reveal=%<cr>
-" Fern }}}
+" }}}
 
 " vim-highlightedyank {{{
 let g:highlightedyank_highlight_duration = 250
-" vim-highlightedyank }}}
+" }}}
 
 " vim-lsp {{{
 let g:lsp_fold_enabled = 0
@@ -133,11 +122,6 @@ nmap <c-@> <plug>(lsp-code-action)
 nmap <f2> <plug>(lsp-rename)
 nmap <silent> <c-h> <plug>(lsp-previous-diagnostic)
 nmap <silent> <c-l> <plug>(lsp-next-diagnostic)
-" vim-lsp }}}
-
-" vim-lsp-settings {{{
-let g:markdown_fenced_languages = ['ts=typescript']
-let g:lsp_settings_filetype_typescript = ['typescript-language-server', 'eslint-language-server', 'deno']
 " }}}
 
 " Lightline {{{
@@ -151,12 +135,12 @@ let g:lightline = {
           \   },
           \ }
 let g:lightline.colorscheme = g:colors_name
-" Lightline }}}
+" }}}
 
 " clean-path.vim {{{
 let &path.=cleanpath#setpath()
 let &wildignore.=cleanpath#setwildignore()
-" clean-path.vim }}}
+" }}}
 
 " pum.vim {{{
 call pum#set_option(
@@ -179,7 +163,6 @@ if !exists('*s:ddcinit')
           \   'around',
           \   'file',
           \   'rg',
-          \   'tabnine',
           \   'vsnip'
           \ ])
     call ddc#custom#patch_global('sourceOptions', {
@@ -201,6 +184,9 @@ if !exists('*s:ddcinit')
           \   },
           \ 'around': {
           \   'mark': 'a',
+          \   },
+          \ 'omni': {
+          \   'mark': 'o',
           \   },
           \ 'rg': {
           \   'mark': 'rg',
@@ -244,11 +230,92 @@ if !exists('*s:ddcinit')
     call ddc#enable()
   endfunction
 endif
-" ddc.vim }}}
 augroup Autocomplete
   autocmd!
   autocmd User DenopsReady call s:ddcinit()
-  " autocmd User PumCompleteDone call vsnip_integ#on_complete_done(g:pum#completed_item)
 augroup END
+" }}}
+
+if has('nvim')
+  " vim-lsp {{{
+  nmap <c-space> <plug>(lsp-code-action)
+  " }}}
+
+  " ddc.vim {{{
+  inoremap <silent> <expr> <c-@> ddc#map#manual_complete()
+  " }}}
+
+  " Telescope {{{
+  inoremap <silent><leader>sp <esc>:Telescope find_files<cr>
+  nnoremap <silent><leader>sp :Telescope find_files<cr>
+  inoremap <silent><leader>sb <esc>:Telescope buffers<cr>
+  nnoremap <silent><leader>sb :Telescope buffers<cr>
+  inoremap <silent><leader>sg <esc>:Telescope git_files<cr>
+  nnoremap <silent><leader>sg :Telescope git_files<cr>
+  inoremap <silent><leader>sG <esc>:Telescope live_grep<cr>
+  nnoremap <silent><leader>sG :Telescope live_grep<cr>
+
+lua << EOF
+local actions = require("telescope.actions")
+local actions_layout = require("telescope.actions.layout")
+require('telescope').setup({
+  defaults = {
+    layout_strategy='vertical',
+    layout_config={
+      prompt_position='bottom',
+      width=0.95,
+      height=0.5,
+      anchor='S',
+    },
+    dynamic_preview_title = true,
+    results_title = false,
+    prompt_title = false,
+    vimgrep_arguments = {
+      "rg",
+      "--color=never",
+      "--no-heading",
+      "--with-filename",
+      "--line-number",
+      "--column",
+      "--smart-case",
+      "--trim"
+    },
+    preview = {
+      hide_on_startup = true
+    },
+    default_mappings = {
+      i = {
+        ["<tab>"] = actions.move_selection_next,
+        ["<s-tab>"] = actions.move_selection_previous,
+        ["<cr>"] = actions.select_default,
+        ["<c-s>"] = actions.select_horizontal,
+        ["<c-v>"] = actions.select_vertical,
+        ["<c-u>"] = actions.preview_scrolling_up,
+        ["<c-d>"] = actions.preview_scrolling_down,
+        ["<c-j>"] = actions.results_scrolling_up,
+        ["<c-k>"] = actions.results_scrolling_down,
+        ["<esc>"] = actions.close,
+        ["<c-p>"] = actions_layout.toggle_preview
+      },
+    },
+  }
+})
+EOF
+
+  " Telescope }}}
+  " Treesitter {{{
+  " lua require'nvim-treesitter.configs'.setup({highlight={enable=true}})
+  " }}}
+
+  " Tabnine {{{
+lua << EOF
+require('tabnine').setup({
+    accept_keymap="<c-y>",
+    disable_auto_comment=true
+  })
+EOF
+  " }}}
+endif
+
 
 let g:loaded_plugins = 1

@@ -22,12 +22,13 @@ function update() {
   elif [ "$1" = "all" ]; then
     . $dotfilesDirectory/update-alacritty.sh
     . $dotfilesDirectory/update-colors.sh
+    . $dotfilesDirectory/update-cursor.sh
     . $dotfilesDirectory/update-deno.sh
     . $dotfilesDirectory/update-fonts.sh
     . $dotfilesDirectory/update-rust.sh
     . $dotfilesDirectory/update-starship.sh
+    . $dotfilesDirectory/update-stow.sh
     . $dotfilesDirectory/update-tmux.sh
-    . $dotfilesDirectory/update-vim.sh
   else
     sudo apt-get update
     sudo apt-get upgrade -y

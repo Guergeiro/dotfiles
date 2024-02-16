@@ -1,6 +1,7 @@
 #!/bin/bash
 # You remember Vi? It's just faster to type
-alias vi="vim";
+alias vi="nvim";
+alias vim="nvim";
 # Force tmux UTF-8
 alias tmux="tmux -u"
 # Sometimes I forget I'm not in VIM, but still want to quit :>

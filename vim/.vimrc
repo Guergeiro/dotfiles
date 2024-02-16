@@ -41,6 +41,7 @@ if has('syntax')
   set cursorline
   set colorcolumn=80
 endif
+set guicursor=
 " Make default clipboard the OS X clipboard (and unnamedplus for Linux)
 if has('clipboard')
   set clipboard=unnamed,unnamedplus
@@ -57,6 +58,8 @@ if has('smartindent')
 endif
 " Start scrolling 10 lines before the end
 set scrolloff=10
+" Fill
+set fillchars=vert:\|,fold:-,eob:~,lastline:@
 " Folding
 if has('folding')
   set foldmethod=indent
@@ -184,8 +187,6 @@ inoremap [ []<esc>i
 " Auto closes marks
 inoremap " ""<esc>i
 inoremap ` ``<esc>i
-" Terminal escape
-tnoremap <leader><esc> <c-\><c-n>
 " Show documentation
 if !exists('*s:ShowDocumentation')
   function! s:ShowDocumentation()
@@ -236,10 +237,8 @@ else
   Plug 'fcpg/vim-altscreen'
   Plug 'ferrine/md-img-paste.vim', { 'for': 'markdown' }
   Plug 'Guergeiro/clean-path.vim'
-  Plug 'Guergeiro/vim-smartpairs'
+  Plug 'gosukiwi/vim-smartpairs'
   Plug 'gruvbox-community/gruvbox'
-  Plug 'habamax/vim-select', { 'on': ['Select'] }
-  Plug 'habamax/vim-select-more', { 'on': ['Select'] }
   Plug 'hrsh7th/vim-vsnip'
   Plug 'itchyny/lightline.vim'
   Plug 'itchyny/vim-gitbranch'
@@ -275,7 +274,6 @@ else
   Plug 'prabirshrestha/vim-lsp'
   Plug 'prabirshrestha/async.vim'
 
-  Plug 'hrsh7th/vim-vsnip-integ'
   Plug 'LumaKernel/ddc-file'
   Plug 'LumaKernel/ddc-tabnine'
   Plug 'matsui54/ddc-buffer'
@@ -294,7 +292,10 @@ else
   Plug 'vim-denops/denops.vim'
 
   if has('nvim')
-    Plug 'nvim-treesitter/nvim-treesitter'
+    Plug 'codota/tabnine-nvim', { 'do': './dl_binaries.sh && cd chat && cargo build --release' }
+    " Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
   endif
   call plug#end()
 

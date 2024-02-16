@@ -4,16 +4,14 @@ install_dotfiles() {
   local yellow=`tput setaf 3`
   local reset=`tput sgr0`
 
-  local dotfilesDirectory=$HOME/Documents/guergeiro/dotfiles
-  local vimDirectory=$HOME/Documents/vim/vim
-  local srceryterminalDirectory=$HOME/Documents/srcery-colors/srcery-terminal
-  local draculaterminalDirectory=$HOME/Documents/dracula/alacritty
-  local alacrittyDirectory=$HOME/Documents/alacritty/alacritty
-  local tmuxDirectory=$HOME/Documents/tmux/tmux
-  local pagraphControl=$HOME/Documents/futpib/pagraphcontrol
-  local nerdfontsDirectory=$HOME/Documents/ryanoasis/nerd-fonts
-  local cursorDirectory=$HOME/Documents/keeferrourke/capitaine-cursors
-  local notesDirectory=$HOME/Brain
+  local dotfilesDirectory="$HOME/Documents/guergeiro/dotfiles"
+  local srceryterminalDirectory="$HOME/Documents/srcery-colors/srcery-terminal"
+  local draculaterminalDirectory="$HOME/Documents/dracula/alacritty"
+  local alacrittyDirectory="$HOME/Documents/alacritty/alacritty"
+  local tmuxDirectory="$HOME/Documents/tmux/tmux"
+  local nerdfontsDirectory="$HOME/Documents/ryanoasis/nerd-fonts"
+  local cursorDirectory="$HOME/Documents/keeferrourke/capitaine-cursors"
+  local notesDirectory="$HOME/Brain"
 
   echo "${yellow}Updating/Cleaning Packages${reset}"
   sudo apt-get update
@@ -27,12 +25,10 @@ install_dotfiles() {
 
   echo "${yellow}Cloning Git Repos${reset}"
   git clone https://github.com/Guergeiro/dotfiles.git $dotfilesDirectory
-  git clone https://github.com/vim/vim.git $vimDirectory
   git clone https://github.com/srcery-colors/srcery-terminal.git $srceryterminalDirectory
   git clone https://github.com/dracula/alacritty.git $draculaterminalDirectory
   git clone https://github.com/alacritty/alacritty.git $alacrittyDirectory
   git clone https://github.com/tmux/tmux.git $tmuxDirectory
-  git clone https://github.com/futpib/pagraphcontrol.git $pagraphControl
   git clone https://github.com/ryanoasis/nerd-fonts.git $nerdfontsDirectory
   git clone https://github.com/keeferrourke/capitaine-cursors.git $cursorDirectory
   git clone https://github.com/Guergeiro/Brain.git $notesDirectory
@@ -43,15 +39,6 @@ install_dotfiles() {
   command rm -rdf $HOME/.bashrc
   . $dotfilesDirectory/update-stow.sh
   . $HOME/.bashrc
-
-  echo "${yellow}Installing extra packages${reset}"
-  # https://github.com/ycm-core/YouCompleteMe/wiki/Building-Vim-from-source
-  sudo apt-get install libncurses5-dev libgtk2.0-dev libatk1.0-dev \
-    libcairo2-dev libx11-dev libxpm-dev libxt-dev python2-dev \
-    python3-dev ruby-dev lua5.2 liblua5.2-dev libperl-dev \
-    libevent-dev ncurses-dev build-essential bison \
-    cmake pkg-config libfreetype6-dev libfontconfig1-dev \
-    libxcb-xfixes0-dev python3 -y
 
   echo "${yellow}Installing Zip and Rar${reset}"
   sudo apt-get install zip unzip rar gzip -y
@@ -68,10 +55,6 @@ install_dotfiles() {
   echo "${yellow}Installing Deno${reset}"
   curl -fsSL https://deno.land/x/install/install.sh | sudo DENO_INSTALL=/usr sh
   . $dotfilesDirectory/update-deno.sh
-
-  echo "${yellow}Installing NodeJS (Current)${reset}"
-  curl -sL https://deb.nodesource.com/setup_current.x | sudo -E bash -
-  sudo apt-get install nodejs -y
 
   echo "${yellow}Installing Python3${reset}"
   sudo apt-get install python3 -y
@@ -99,26 +82,28 @@ install_dotfiles() {
   curl -fsSL https://get.docker.com | sh
 
   echo "${yellow}Installing Docker Compose${reset}"
-  sudo curl -SL https://github.com/docker/compose/releases/download/v2.2.3/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
-  sudo chmod +x /usr/local/bin/docker-compose
+  sudo apt-get update
+  sudo apt-get install docker-compose-plugin -y
 
   echo "${yellow}Installing pnpm${reset}"
-  sudo npm install -g pnpm
+  curl -fsSL https://get.pnpm.io/install.sh | sh -
 
-  echo "${yellow}Installing yarn${reset}"
-  sudo npm install -g yarn
-
-  . $dotfilesDirectory/update-vim.sh
+  echo "${yellow}Installing neovim${reset}"
+  sudo apt-get install software-properties-common python-dev python-pip \
+    python3-dev python3-pip -y
+  sudo add-apt-repository ppa:neovim-ppa/stable
+  sudo apt-get update
+  sudo apt-get install neovim -y
 
   . $dotfilesDirectory/update-alacritty.sh
-
-  . $dotfilesDirectory/update-starship.sh
-
-  . $dotfilesDirectory/update-pagraphcontrol.sh
-
-  . $dotfilesDirectory/update-fonts.sh
-
+  . $dotfilesDirectory/update-colors.sh
   . $dotfilesDirectory/update-cursor.sh
+  . $dotfilesDirectory/update-deno.sh
+  . $dotfilesDirectory/update-fonts.sh
+  . $dotfilesDirectory/update-rust.sh
+  . $dotfilesDirectory/update-starship.sh
+  . $dotfilesDirectory/update-stow.sh
+  . $dotfilesDirectory/update-tmux.sh
 }
 
 install_dotfiles

@@ -174,12 +174,10 @@ if [ -f $CARGO_HOME/env ]; then
 fi
 
 export dotfilesDirectory="$HOME/Documents/guergeiro/dotfiles"
-export vimDirectory="$HOME/Documents/vim/vim"
 export srceryterminalDirectory="$HOME/Documents/srcery-colors/srcery-terminal"
 export draculaterminalDirectory="$HOME/Documents/dracula/alacritty"
 export alacrittyDirectory="$HOME/Documents/alacritty/alacritty"
 export tmuxDirectory="$HOME/Documents/tmux/tmux"
-export pagraphControl="$HOME/Documents/futpib/pagraphcontrol"
 export nerdfontsDirectory="$HOME/Documents/ryanoasis/nerd-fonts"
 export cursorDirectory="$HOME/Documents/keeferrourke/capitaine-cursors"
-export notesDirectory="$HOME/brain"
+export notesDirectory="$HOME/Brain"
