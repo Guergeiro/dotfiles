@@ -7,19 +7,19 @@ blinking = "Always"
 size = 14
 
 [font.bold]
-family = "FantasqueSansMono Nerd Font Mono"
+family = "FantasqueSansM Nerd Font"
 style = "Bold"
 
 [font.bold_italic]
-family = "FantasqueSansMono Nerd Font Mono"
+family = "FantasqueSansM Nerd Font"
 style = "Bold Italic"
 
 [font.italic]
-family = "FantasqueSansMono Nerd Font Mono"
+family = "FantasqueSansM Nerd Font"
 style = "Bold Italic"
 
 [font.normal]
-family = "FantasqueSansMono Nerd Font Mono"
+family = "FantasqueSansM Nerd Font"
 style = "Bold"
 
 [mouse]

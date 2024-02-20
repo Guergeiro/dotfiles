@@ -5,12 +5,10 @@ install_dotfiles() {
   local reset=`tput sgr0`
 
   local dotfilesDirectory="$HOME/Documents/guergeiro/dotfiles"
-  local srceryterminalDirectory="$HOME/Documents/srcery-colors/srcery-terminal"
   local draculaterminalDirectory="$HOME/Documents/dracula/alacritty"
   local alacrittyDirectory="$HOME/Documents/alacritty/alacritty"
   local tmuxDirectory="$HOME/Documents/tmux/tmux"
   local nerdfontsDirectory="$HOME/Documents/ryanoasis/nerd-fonts"
-  local cursorDirectory="$HOME/Documents/keeferrourke/capitaine-cursors"
   local notesDirectory="$HOME/Brain"
 
   echo "${yellow}Updating/Cleaning Packages${reset}"
@@ -25,12 +23,10 @@ install_dotfiles() {
 
   echo "${yellow}Cloning Git Repos${reset}"
   git clone https://github.com/Guergeiro/dotfiles.git $dotfilesDirectory
-  git clone https://github.com/srcery-colors/srcery-terminal.git $srceryterminalDirectory
   git clone https://github.com/dracula/alacritty.git $draculaterminalDirectory
   git clone https://github.com/alacritty/alacritty.git $alacrittyDirectory
   git clone https://github.com/tmux/tmux.git $tmuxDirectory
   git clone https://github.com/ryanoasis/nerd-fonts.git $nerdfontsDirectory
-  git clone https://github.com/keeferrourke/capitaine-cursors.git $cursorDirectory
   git clone https://github.com/Guergeiro/Brain.git $notesDirectory
 
 
@@ -97,7 +93,6 @@ install_dotfiles() {
 
   . $dotfilesDirectory/update-alacritty.sh
   . $dotfilesDirectory/update-colors.sh
-  . $dotfilesDirectory/update-cursor.sh
   . $dotfilesDirectory/update-deno.sh
   . $dotfilesDirectory/update-fonts.sh
   . $dotfilesDirectory/update-rust.sh

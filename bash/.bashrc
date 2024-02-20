@@ -130,7 +130,18 @@ esac
 # pnpm end
 
 export PATH="$PATH:/usr/local/go/bin"
-export PATH="$HOME/.local/bin:$PATH"
+
+# Deno
+export DENO_INSTALL="$XDG_DATA_HOME/deno"
+export PATH="$DENO_INSTALL/bin:$PATH"
+
+# Neovim
+export NEOVIM_HOME="$XDG_DATA_HOME/neovim"
+export PATH="$NEOVIM_HOME/nvim-linux64/bin:$PATH"
+
+# Alacritty
+export ALACRITTY_HOME="$XDG_DATA_HOME/alacritty"
+export PATH="$ALACRITTY_HOME/bin:$PATH"
 
 export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 
@@ -174,10 +185,8 @@ if [ -f $CARGO_HOME/env ]; then
 fi
 
 export dotfilesDirectory="$HOME/Documents/guergeiro/dotfiles"
-export srceryterminalDirectory="$HOME/Documents/srcery-colors/srcery-terminal"
 export draculaterminalDirectory="$HOME/Documents/dracula/alacritty"
 export alacrittyDirectory="$HOME/Documents/alacritty/alacritty"
 export tmuxDirectory="$HOME/Documents/tmux/tmux"
 export nerdfontsDirectory="$HOME/Documents/ryanoasis/nerd-fonts"
-export cursorDirectory="$HOME/Documents/keeferrourke/capitaine-cursors"
 export notesDirectory="$HOME/Brain"

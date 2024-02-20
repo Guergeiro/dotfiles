@@ -2,14 +2,14 @@
   email = git@brenosalles.com
   name = Breno Salles
 [core]
-  editor = vim
+  editor = nvim
 [merge]
   tool = diffconflicts
 [mergetool]
   keepBackup = false
   keepTemporaries =
 [mergetool "diffconflicts"]
-  cmd = vim \
+  cmd = nvim \
     -c DiffConflicts \"$MERGED\" \"$BASE\" \"$LOCAL\" \"$REMOTE\"
   trustExitCode = true
 [checkout]
@@ -21,6 +21,6 @@
 [difftool]
   prompt = false
 [difftool "customdiff"]
-  cmd = vim -R -f -d \
+  cmd = nvim -R -f -d \
     -c 'wincmd h' \
     -c 'cd $GIT_PREFIX' "$REMOTE" "$LOCAL" \
