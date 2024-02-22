@@ -117,31 +117,44 @@ export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 export GOPATH="$XDG_DATA_HOME/go"
 export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc"
 
+# Function to automatically update PATH if not exists
+function __path_update() {
+  case ":$PATH:" in
+    *":$1:"*) ;;
+    *) export PATH="$1:$PATH" ;;
+  esac
+}
+
 export ANDROID_HOME="$HOME/Android/Sdk"
 export GRADLE_HOME="/opt/gradle/gradle-8.5"
-export PATH="${GRADLE_HOME}/bin:${PATH}"
+__path_update "$GRADLE_HOME/bin"
 
 # pnpm
 export PNPM_HOME="$XDG_DATA_HOME/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
+__path_update "$PNPM_HOME"
 # pnpm end
 
 export PATH="$PATH:/usr/local/go/bin"
 
 # Deno
 export DENO_INSTALL="$XDG_DATA_HOME/deno"
-export PATH="$DENO_INSTALL/bin:$PATH"
+__path_update "$DENO_INSTALL/bin"
 
 # Neovim
 export NEOVIM_HOME="$XDG_DATA_HOME/neovim"
-export PATH="$NEOVIM_HOME/nvim-linux64/bin:$PATH"
+__path_update "$NEOVIM_HOME/nvim-linux64/bin"
 
 # Alacritty
 export ALACRITTY_HOME="$XDG_DATA_HOME/alacritty"
-export PATH="$ALACRITTY_HOME/bin:$PATH"
+__path_update "$ALACRITTY_HOME/bin"
+
+# Tmux
+export TMUX_HOME="$XDG_DATA_HOME/tmux"
+__path_update "$TMUX_HOME/bin"
+
+# Starship
+export STARSHIP_HOME="$XDG_DATA_HOME/starship"
+__path_update "$STARSHIP_HOME"
 
 export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 
@@ -185,8 +198,4 @@ if [ -f $CARGO_HOME/env ]; then
 fi
 
 export dotfilesDirectory="$HOME/Documents/guergeiro/dotfiles"
-export draculaterminalDirectory="$HOME/Documents/dracula/alacritty"
-export alacrittyDirectory="$HOME/Documents/alacritty/alacritty"
-export tmuxDirectory="$HOME/Documents/tmux/tmux"
-export nerdfontsDirectory="$HOME/Documents/ryanoasis/nerd-fonts"
 export notesDirectory="$HOME/Brain"

@@ -135,7 +135,7 @@ set nojoinspaces
 " Complete menu options
 set completeopt=menuone,noinsert,noselect,preview
 " Allow vim to use interactive shell (loads user .bashrc)
-set shellcmdflag=-ic
+" set shellcmdflag=-ic
 " Custom quit command
 if !exists(':Q')
   command! Q q!
