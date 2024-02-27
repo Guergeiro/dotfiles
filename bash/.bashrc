@@ -156,6 +156,10 @@ __path_update "$TMUX_HOME/bin"
 export STARSHIP_HOME="$XDG_DATA_HOME/starship"
 __path_update "$STARSHIP_HOME"
 
+# Pip
+export PIP_HOME="$XDG_DATA_HOME/pip"
+__path_update "$PIP_HOME/bin"
+
 export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 
 # Alias definitions.
