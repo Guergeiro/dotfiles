@@ -102,8 +102,6 @@ export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:="$HOME/.config"}
 export XDG_STATE_HOME=${XDG_STATE_HOME:="$HOME/.local/state"}
 
 export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
-export CARGO_HOME="$XDG_DATA_HOME/cargo"
-export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
 export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
 export NODE_REPL_HISTORY="$XDG_DATA_HOME/node_repl_history"
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
@@ -114,7 +112,6 @@ export XINITRC="$XDG_CONFIG_HOME/X11/xinitrc"
 export XSERVERRC="$XDG_CONFIG_HOME/X11/xserverrc"
 export XSERVERRC="$XDG_CONFIG_HOME/X11/xserverrc"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
-export GOPATH="$XDG_DATA_HOME/go"
 export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc"
 
 # Function to automatically update PATH if not exists
@@ -126,15 +123,20 @@ function __path_update() {
 }
 
 export ANDROID_HOME="$HOME/Android/Sdk"
-export GRADLE_HOME="/opt/gradle/gradle-8.5"
+
+# Gradle
+export GRADLE_HOME="$XDG_DATA_HOME/gradle"
 __path_update "$GRADLE_HOME/bin"
+export GRADLE_USER_HOME="$XDG_CONFIG_HOME/gradle"
+__path_update "$GRADLE_USER_HOME"
 
 # pnpm
-export PNPM_HOME="$XDG_DATA_HOME/pnpm"
-__path_update "$PNPM_HOME"
+export PNPM_HOME="/home/breno/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
 # pnpm end
-
-export PATH="$PATH:/usr/local/go/bin"
 
 # Deno
 export DENO_INSTALL="$XDG_DATA_HOME/deno"
@@ -159,6 +161,17 @@ __path_update "$STARSHIP_HOME"
 # Pip
 export PIP_HOME="$XDG_DATA_HOME/pip"
 __path_update "$PIP_HOME/bin"
+
+# Go
+export GOPATH="$XDG_DATA_HOME/go/workspace"
+__path_update "$GOPATH"
+export GOROOT="$XDG_DATA_HOME/go"
+__path_update "$GOROOT/bin"
+
+# Rust
+export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
+export CARGO_HOME="$XDG_DATA_HOME/cargo"
+__path_update "$GARGO_HOME/bin"
 
 export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 
@@ -194,11 +207,6 @@ fi
 # Private work scripts
 if [ -f "$XDG_CONFIG_HOME/dotfiles-work/.bashrc" ]; then
   . "$XDG_CONFIG_HOME/dotfiles-work/.bashrc"
-fi
-
-# Rust
-if [ -f $CARGO_HOME/env ]; then
-  . $CARGO_HOME/env
 fi
 
 export dotfilesDirectory="$HOME/Documents/guergeiro/dotfiles"

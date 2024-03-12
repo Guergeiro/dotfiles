@@ -1,6 +1,12 @@
-function! s:lsp_server_commands() abort
-  let g:lsp_server_loaded = 1
-endfunction
+if exists('g:lsp_server_loaded')
+  finish
+endif
+
+if !exists('*s:lsp_server_commands')
+  function! s:lsp_server_commands() abort
+    let g:lsp_server_loaded = 1
+  endfunction
+endif
 " AutoCommands
 augroup General
   autocmd!
