@@ -131,12 +131,8 @@ export GRADLE_USER_HOME="$XDG_CONFIG_HOME/gradle"
 __path_update "$GRADLE_USER_HOME"
 
 # pnpm
-export PNPM_HOME="/home/breno/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end
+export PNPM_HOME="$XDG_CONFIG_HOME/pnpm"
+__path_update "$PNPM_HOME"
 
 # Deno
 export DENO_INSTALL="$XDG_DATA_HOME/deno"
