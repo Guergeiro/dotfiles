@@ -18,55 +18,42 @@ than just dotfiles. If you want to use it, do it at your own risk.
 
 ## Steps
 
-1. Create ssh key for your git provider (GitHub in this example)
+_It is recommended that you use my
+[iac repository](https://github.com/guergeiro/iac)._
+
+1. Install stow
 
    ```bash
-   ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
-   # Save it to /home/{your-user-here}/.ssh/GitHub
+   sudo apt-get install stow
    ```
 
-   ```
-   # Have .ssh/config with the following
-   Host github.com
-       IdentityFile ~/.ssh/GitHub
-   ```
-
-2. Install [Python3](https://www.python.org/)
-
+2. Unstow for each directory
    ```bash
-   sudo apt-get install python3 -y
+   stow --target $HOME --stow {dirname} # this should be scripted
    ```
-3. Install Ansible
 
+3. Remove original `.bashrc`
    ```bash
-   python3 -m pip install --user ansible-core
+   /bin/rm $HOME/.bashrc
    ```
 
-4. Navigate to a place of your choice
-
+4. Stow for each directory
    ```bash
-   cd $HOME/Documents/guergeiro
+   stow --target $HOME --stow {dirname} # this should be scripted
    ```
 
-5. Clone the my Infrastructure as Code
-   [repository](https://github.com/guergeiro/iac)
+### Note
 
-   ```bash
-   git clone git@github.com:Guergeiro/iac.git
-   ```
+```bash
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+# Save it to /home/{your-user-here}/.ssh/GitHub
+```
 
-6. Install playbook dependencies
-
-   ```bash
-   ansible-galaxy install -r requirements.yml --force
-   ```
-
-7. Run the playbook
-
-   ```bash
-   ansible-playbook localhost.yml --ask-vault-password --ask-become-pass \
-       --vault-id @prompt
-   ```
+```
+# Have .ssh/config with the following
+Host github.com
+   IdentityFile ~/.ssh/GitHub
+```
 
 ## Author
 
