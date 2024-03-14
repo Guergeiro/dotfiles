@@ -122,7 +122,12 @@ function __path_update() {
   esac
 }
 
-export ANDROID_HOME="$HOME/Android/Sdk"
+# Sdkman (nvm for java)
+export SDKMAN_DIR="$XDG_DATA_HOME/sdkman"
+__path_update "$SDKMAN_DIR/bin"
+if [ -f "$SDKMAN_DIR/bin/sdkman-init.sh" ]; then
+  . "$SDKMAN_DIR/bin/sdkman-init.sh"
+fi
 
 # Gradle
 export GRADLE_HOME="$XDG_DATA_HOME/gradle"
