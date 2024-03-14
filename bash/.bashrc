@@ -138,6 +138,7 @@ __path_update "$GRADLE_USER_HOME"
 # pnpm
 export PNPM_HOME="$XDG_CONFIG_HOME/pnpm"
 __path_update "$PNPM_HOME"
+# pnpm end
 
 # Deno
 export DENO_INSTALL="$XDG_DATA_HOME/deno"
@@ -172,7 +173,7 @@ __path_update "$GOROOT/bin"
 # Rust
 export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
-__path_update "$GARGO_HOME/bin"
+__path_update "$CARGO_HOME/bin"
 
 export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 
