@@ -1,32 +1,35 @@
-import = ["/home/breno/Documents/dracula/alacritty/dracula.toml"]
+import = [
+  "~/Documents/dracula/alacritty/dracula.toml",
+  # "~/.config/alacritty/alacritty-wsl.toml"
+]
 
 [cursor.style]
-blinking = "Always"
+  blinking = "Always"
 
 [font]
-size = 14
+  size = 14
 
 [font.bold]
-family = "FantasqueSansM Nerd Font"
-style = "Bold"
+  family = "FantasqueSansM Nerd Font"
+  style = "Bold"
 
 [font.bold_italic]
-family = "FantasqueSansM Nerd Font"
-style = "Bold Italic"
+  family = "FantasqueSansM Nerd Font"
+  style = "Bold Italic"
 
 [font.italic]
-family = "FantasqueSansM Nerd Font"
-style = "Bold Italic"
+  family = "FantasqueSansM Nerd Font"
+  style = "Bold Italic"
 
 [font.normal]
-family = "FantasqueSansM Nerd Font"
-style = "Bold"
+  family = "FantasqueSansM Nerd Font"
+  style = "Bold"
 
 [mouse]
-hide_when_typing = true
+  hide_when_typing = true
 
 [window]
-decorations = "none"
-dynamic_padding = true
-dynamic_title = true
-startup_mode = "Fullscreen"
+  decorations = "none"
+  dynamic_padding = true
+  dynamic_title = true
+  startup_mode = "Fullscreen"
