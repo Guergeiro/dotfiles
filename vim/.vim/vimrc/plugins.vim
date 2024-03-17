@@ -304,16 +304,49 @@ EOF
 
   " Telescope }}}
   " Treesitter {{{
-  " lua require'nvim-treesitter.configs'.setup({highlight={enable=true}})
+lua << EOF
+require('nvim-treesitter.configs').setup {
+  -- Automatically install missing parsers when entering buffer
+  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+  auto_install = true,
+  highlight = {
+    enable = true,
+    disable = function(lang, buf)
+        local max_filesize = 100 * 1024 -- 100 KB
+        local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+        if ok and stats and stats.size > max_filesize then
+            return true
+        end
+    end,
+  },
+}
+EOF
   " }}}
 
-  " Tabnine {{{
+  " AI {{{
+  if !exists('*s:loadAI')
+    function! s:loadAI(...)
+      for ai in a:000
+        if ai == 'tabnine'
+          call plug#load('tabnine-nvim')
 lua << EOF
 require('tabnine').setup({
     accept_keymap="<c-y>",
     disable_auto_comment=true
   })
 EOF
+        elseif ai == 'copilot'
+          let g:copilot_no_tab_map = v:true
+          call plug#load('copilot.vim')
+          imap <silent><script><expr> <c-y> copilot#Accept("\<CR>")
+        endif
+      endfor
+    endfunction
+  endif
+
+  if !exists(':LoadAI')
+    command! -nargs=+ LoadAI call <sid>loadAI(<f-args>)
+  endif
   " }}}
 endif
 

@@ -275,7 +275,6 @@ else
   Plug 'prabirshrestha/async.vim'
 
   Plug 'LumaKernel/ddc-file'
-  Plug 'LumaKernel/ddc-tabnine'
   Plug 'matsui54/ddc-buffer'
   Plug 'matsui54/denops-popup-preview.vim'
   Plug 'Shougo/ddc.vim'
@@ -291,9 +290,12 @@ else
   Plug 'uga-rosa/ddc-source-vsnip'
   Plug 'vim-denops/denops.vim'
 
+
   if has('nvim')
-    Plug 'codota/tabnine-nvim', { 'do': './dl_binaries.sh && cd chat && cargo build --release' }
-    " Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+    Plug 'codota/tabnine-nvim', { 'do': './dl_binaries.sh && cd chat && cargo build --release', 'on': [] }
+    Plug 'github/copilot.vim', { 'on': [] }
+
+    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
     Plug 'nvim-lua/plenary.nvim'
     Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
   endif
