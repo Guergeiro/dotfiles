@@ -118,7 +118,11 @@ nmap gd <plug>(lsp-definition)
 nmap gr <plug>(lsp-references)
 nmap gi <plug>(lsp-implementation)
 nmap gt <plug>(lsp-type-definition)
-nmap <c-@> <plug>(lsp-code-action)
+if has('nvim')
+  nmap <c-space> <plug>(lsp-code-action)
+else
+  nmap <c-@> <plug>(lsp-code-action)
+endif
 nmap <f2> <plug>(lsp-rename)
 nmap <silent> <c-h> <plug>(lsp-previous-diagnostic)
 nmap <silent> <c-l> <plug>(lsp-next-diagnostic)
@@ -214,7 +218,12 @@ if !exists('*s:ddcinit')
     inoremap <silent> <expr> <cr>
           \ pum#visible() ?
           \ '<cmd>call pum#map#confirm()<cr>' : '<cr>'
-    inoremap <silent> <expr> <c-@> ddc#map#manual_complete()
+
+    if has('nvim')
+      inoremap <silent> <expr> <c-space> ddc#map#manual_complete()
+    else
+      inoremap <silent> <expr> <c-@> ddc#map#manual_complete()
+    endif
     snoremap <silent> <expr> <tab> vsnip#jumpable(1) ?
           \ '<plug>(vsnip-jump-next)' :
           \ '<tab>'
