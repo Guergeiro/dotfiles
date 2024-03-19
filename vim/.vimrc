@@ -47,10 +47,10 @@ if has('clipboard')
   set clipboard=unnamed,unnamedplus
 endif
 " Formats stuff as I want, TAB=2spaces, but intelligent
+" set expandtab
 set autoindent
 set tabstop=2
 set softtabstop=2
-set expandtab
 set shiftwidth=2
 set smarttab
 if has('smartindent')
