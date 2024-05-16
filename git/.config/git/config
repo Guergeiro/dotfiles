@@ -1,26 +1,31 @@
 [user]
-  email = git@brenosalles.com
-  name = Breno Salles
+	email = git@brenosalles.com
+	name = Breno Salles
+	signingkey = /home/breno/.ssh/SignKey.pub
 [core]
-  editor = nvim
+	editor = nvim
 [merge]
-  tool = diffconflicts
+	tool = diffconflicts
 [mergetool]
-  keepBackup = false
-  keepTemporaries =
+	keepBackup = false
+	keepTemporaries =
 [mergetool "diffconflicts"]
-  cmd = nvim \
-    -c DiffConflicts \"$MERGED\" \"$BASE\" \"$LOCAL\" \"$REMOTE\"
-  trustExitCode = true
+	cmd = nvim \
+		-c DiffConflicts "$MERGED" "$BASE" "$LOCAL" "$REMOTE"
+
+	trustExitCode = true
 [checkout]
-  defaultRemote = origin
+	defaultRemote = origin
 [commit]
-  verbose = true
+	verbose = true
+	gpgsign = true
+[gpg]
+	format = ssh
 [diff]
-  tool = customdiff
+	tool = customdiff
 [difftool]
-  prompt = false
+	prompt = false
 [difftool "customdiff"]
-  cmd = nvim -R -f -d \
-    -c 'wincmd h' \
-    -c 'cd $GIT_PREFIX' "$REMOTE" "$LOCAL" \
+	cmd = nvim -R -f -d \
+		-c 'wincmd h' \
+		-c 'cd $GIT_PREFIX' "$REMOTE" "$LOCAL"
