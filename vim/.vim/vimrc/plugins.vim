@@ -322,7 +322,7 @@ require('nvim-treesitter.configs').setup {
     enable = true,
     disable = function(lang, buf)
         -- manual disable
-        local manualDisable = {"yaml", "markdown"}
+        local manualDisable = {"yaml", "markdown", "json", "astro"}
         for _, v in ipairs(manualDisable) do
           if v == lang then
             return true

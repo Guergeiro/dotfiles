@@ -13,8 +13,6 @@ symbol = " "
 symbol = " "
 [git_status]
 disabled = true
-[line_break]
-disabled = true
 [nodejs]
 detect_extensions = []
 not_capable_style = "bold yellow"
