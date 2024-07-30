@@ -101,6 +101,11 @@ export XDG_CACHE_HOME=${XDG_CACHE_HOME:="$HOME/.cache"}
 export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:="$HOME/.config"}
 export XDG_STATE_HOME=${XDG_STATE_HOME:="$HOME/.local/state"}
 
+export USERXSESSION="$XDG_CACHE_HOME/X11/xsession"
+export USERXSESSIONRC="$XDG_CACHE_HOME/X11/xsessionrc"
+export ALTUSERXSESSION="$XDG_CACHE_HOME/X11/Xsession"
+export ERRFILE="$XDG_CACHE_HOME/X11/xsession-errors"
+
 export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
 export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
 export NODE_REPL_HISTORY="$XDG_DATA_HOME/node_repl_history"
@@ -109,7 +114,6 @@ export RIPGREP_CONFIG_PATH="$XDG_CONFIG_HOME/ripgrep/config"
 export SCREENRC="$XDG_CONFIG_HOME/screen/screenrc"
 export WGETRC="$XDG_CONFIG_HOME/wgetrc"
 export XINITRC="$XDG_CONFIG_HOME/X11/xinitrc"
-export XSERVERRC="$XDG_CONFIG_HOME/X11/xserverrc"
 export XSERVERRC="$XDG_CONFIG_HOME/X11/xserverrc"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc"
