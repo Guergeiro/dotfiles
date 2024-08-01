@@ -93,7 +93,7 @@ local mylauncher = awful.widget.launcher({
 function left_bar(s)
 	return {
 		layout = wibox.layout.fixed.horizontal,
-		widgets.logout.icon,
+		mylauncher,
 		s.mytaglist,
 		s.mypromptbox
 	}
@@ -138,26 +138,41 @@ awful.screen.connect_for_each_screen(function(s)
 		)
 	)
 	-- Create a taglist widget
-	s.mytaglist = awful.widget.taglist {
-		screen = s,
-		filter = function (t)
-			-- ignore "0" tag
-			return t.name ~= "0"
-		end,
-		buttons = taglist_buttons
+	s.mytaglist = {
+		awful.widget.taglist {
+			screen = s,
+			filter = function (t)
+				-- ignore "0" tag
+				return t.name ~= "0"
+			end,
+			buttons = taglist_buttons,
+		},
+		shape = gears.shape.rect,
+		shape_clip = true,
+		widget = wibox.container.background,
 	}
 
 	-- Create a tasklist widget
-	s.mytasklist = awful.widget.tasklist {
-		screen = s,
-		filter = function (c, s)
-			if awful.widget.tasklist.filter.currenttags(c, s) then
-				-- only show maximed in tasklist
-				return c.maximized
-			end
-			return false
-		end,
-		buttons = tasklist_buttons
+	s.mytasklist = {
+		{
+			awful.widget.tasklist({
+				screen = s,
+				filter = function (c, s)
+					if awful.widget.tasklist.filter.currenttags(c, s) then
+						-- only show maximed in tasklist
+						return c.maximized
+					end
+					return false
+				end,
+				buttons = tasklist_buttons,
+			}),
+			shape = gears.shape.rounded_rect,
+			shape_clip = true,
+			widget = wibox.container.background,
+		},
+		widget = wibox.container.margin,
+		left = 10,
+		right = 10,
 	}
 
 	-- Add widgets to the wibox
