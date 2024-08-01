@@ -69,7 +69,15 @@ local clientkeys = gears.table.join(
 			utils.toggle_titlebar(c)
 			c:raise()
 		end ,
-		{ description = "(un)maximize", group = "client" }
+		{ description = "(un)maximize client", group = "client" }
+	),
+	awful.key(
+		{ global.modkey },
+		"f",
+		function (c)
+			c.floating = not c.floating
+		end ,
+		{ description = "(un)float client", group = "client" }
 	),
 	awful.key(
 		{ global.modkey, "Control" },
