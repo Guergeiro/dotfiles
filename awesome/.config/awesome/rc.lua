@@ -12,12 +12,6 @@ local beautiful = require("beautiful")
 local naughty = require("naughty")
 local menubar = require("menubar")
 
-local global = require("global")
-local layouts = require("layouts")
-local widgets = require("widgets")
-local tags = require("tags")
-local topbars = require("topbars")
-
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
 if awesome.startup_errors then
@@ -76,6 +70,9 @@ run_once({
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 
+local global = require("global")
+local layouts = require("layouts")
+
 awful.layout.layouts = layouts
 
 menubar.utils.terminal = global.terminal
@@ -105,4 +102,5 @@ root.keys(globalkeys)
 
 awful.rules.rules = require("rules")
 
+require("tags")
 require("client")
