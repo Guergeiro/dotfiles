@@ -51,4 +51,3 @@ alias PATCH="curl --include --request PATCH --header \"Content-Type: application
 # Bat is awesome
 alias cat="batcat";
 alias wget="wget --hsts-file=\"$XDG_CACHE_HOME/wget-hsts\"";
-alias pnpx="pnpm dlx"
