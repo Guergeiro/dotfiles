@@ -126,11 +126,18 @@ function __path_update() {
   esac
 }
 
-# Sdkman (nvm for java)
-export SDKMAN_DIR="$XDG_DATA_HOME/sdkman"
-__path_update "$SDKMAN_DIR/bin"
-if [ -f "$SDKMAN_DIR/bin/sdkman-init.sh" ]; then
-  . "$SDKMAN_DIR/bin/sdkman-init.sh"
+# Asdf
+export ASDF_DIR="$HOME/Documents/asdf-vm/asdf"
+if [ -f "$ASDF_DIR/asdf.sh" ]; then
+  . "$ASDF_DIR/asdf.sh"
+fi
+if [ -f "$ASDF_DIR/completions/asdf.bash" ]; then
+  . "$ASDF_DIR/completions/asdf.bash"
+fi
+export ASDF_DATA_DIR="$XDG_DATA_HOME/asdf"
+export ASDF_CONFIG_FILE="$XDG_CONFIG_HOME/asdf/.asdfrc"
+if [ -f "$ASDF_DATA_DIR/plugins/set-java-home.bash" ]; then
+  . "$ASDF_DATA_DIR/plugins/set-java-home.bash"
 fi
 
 # Gradle
@@ -139,8 +146,11 @@ __path_update "$GRADLE_HOME/bin"
 export GRADLE_USER_HOME="$XDG_CONFIG_HOME/gradle"
 __path_update "$GRADLE_USER_HOME"
 
+# npm user global packages
+__path_update "$XDG_DATA_HOME/npm/bin"
+
 # pnpm
-export PNPM_HOME="$XDG_CONFIG_HOME/pnpm"
+export PNPM_HOME="$XDG_DATA_HOME/pnpm"
 __path_update "$PNPM_HOME"
 # pnpm end
 
