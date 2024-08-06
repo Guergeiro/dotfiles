@@ -289,8 +289,8 @@ function grip() {
 function docker-compose() {
   if [ "$1" = "up" ]; then
     shift
-    command docker-compose up --remove-orphans --build "$@"
+    command docker compose up --remove-orphans --build "$@"
   else
-    command docker-compose "$@"
+    command docker compose "$@"
   fi
 }
