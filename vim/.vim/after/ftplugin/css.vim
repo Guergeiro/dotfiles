@@ -1,1 +1,1 @@
-source <sfile>:h/prettier-config.vim
+source <sfile>:h/deno_base.vim

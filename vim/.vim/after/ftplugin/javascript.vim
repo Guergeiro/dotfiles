@@ -1,43 +1,17 @@
-if !exists('*s:projectFmt')
-  function! s:projectFmt() abort
-    let l:projectDir = getcwd()
-    let projectfmt = 'deno fmt -'
-    if &filetype == 'javascript'
-      let projectfmt .= ' --ext js'
-    endif
-    let projectfmt .= ' -'
-    if filereadable(l:projectDir . '/package.json')
-      let projectfmt = 'pnpm --silent dlx prettier --stdin-filepath %'
-    endif
-    if isdirectory(l:projectDir . '/node_modules/')
-      let projectfmt = 'pnpm --silent dlx prettier --stdin-filepath %'
-    endif
-    return projectfmt
-  endfunction
-endif
-
-let &l:makeprg = 'pnpm --silent dlx eslint --format compact --fix'
+let &l:makeprg = 'deno lint --compact --fix --quiet'
 setlocal autoread
 nnoremap <buffer> <leader>m :make % <bar> cwindow<cr>
 if has('quickfix')
-  setlocal errorformat+=%f:\ line\ %l\\,\ col\ %c\\,\ %m,%-G%.%#
+	setlocal errorformat=file://%f:\ line\ %l\\,\ col\ %c\ -\ %m
 endif
-if has('eval')
-  setlocal formatexpr=
-endif
-let &l:formatprg=<sid>projectFmt()
-let &l:equalprg=&l:formatprg
+source <sfile>:h/deno_base.vim
 set path-=node_modules/**
 set path-=./node_modules/**
 if !exists('g:smartpairs_loaded')
   finish
 endif
 let g:smartpairs_pairs = get(g:, "smartpairs_pairs", {})
-let g:smartpairs_pairs[&filetype] = {
-      \ '(': ')',
-      \ '[': ']',
-      \ '{': '}',
-      \ "'": "'",
-      \ '`': '`',
-      \ '"': '"'
-      \ }
+let g:smartpairs_pairs[&filetype] = get(g:smartpairs_pairs, &filetype, g:smartpairs_default_pairs)
+let g:smartpairs_pairs[&filetype] = extendnew(g:smartpairs_pairs[&filetype], {
+			\ '`': '`',
+			\ })

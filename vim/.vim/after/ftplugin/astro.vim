@@ -1,11 +1,4 @@
-if has('eval')
- setlocal formatexpr=
-endif
-setlocal tabstop=4
-setlocal softtabstop=4
-setlocal shiftwidth=4
-let &l:formatprg='gofmt ' . expand('%')
-
+source <sfile>:h/deno_base.vim
 if !exists('g:smartpairs_loaded')
 	finish
 endif
