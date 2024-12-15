@@ -17,6 +17,7 @@ nmap <buffer> r <plug>(fern-action-reload:all)
 nmap <buffer> yy <plug>(fern-action-copy)
 nmap <buffer> dd <plug>(fern-action-trash)
 nmap <buffer> <f2> <plug>(fern-action-rename)
+nmap <buffer> xx <plug>(fern-action-ex)
 nmap <silent><buffer><expr>
       \ <plug>(fern-my-open-or-expand-or-collapse)
       \ fern#smart#leaf(
