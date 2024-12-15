@@ -124,8 +124,6 @@ else
   nmap <c-@> <plug>(lsp-code-action)
 endif
 nmap <f2> <plug>(lsp-rename)
-nmap <silent> <c-h> <plug>(lsp-previous-diagnostic)
-nmap <silent> <c-l> <plug>(lsp-next-diagnostic)
 " }}}
 
 " Lightline {{{
@@ -304,7 +302,8 @@ require('telescope').setup({
         ["<c-j>"] = actions.results_scrolling_up,
         ["<c-k>"] = actions.results_scrolling_down,
         ["<esc>"] = actions.close,
-        ["<c-p>"] = actions_layout.toggle_preview
+        ["<c-p>"] = actions_layout.toggle_preview,
+        ["<c-q>"] = actions.send_to_qflist + actions.open_qflist
       },
     },
   }

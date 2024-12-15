@@ -164,6 +164,22 @@ noremap <c-j> m`<c-d>
 noremap <c-k> m`<c-u>
 noremap <c-d> <nop>
 noremap <c-u> <nop>
+" Navigate through quickfix elements
+if !exists('*s:PrevNext')
+  function! s:PrevNext(qf_action, lsp_action)
+    if &buftype == 'quickfix'
+      silent execute a:qf_action
+    elseif len(filter(tabpagebuflist(), 'getbufvar(v:val, "&buftype") is "quickfix"')) > 0
+      silent execute a:qf_action
+    elseif get(g:, 'lsp_server_loaded', 0) == 1
+      silent execute a:lsp_action
+    else
+      silent execute a:qf_action
+    endif
+  endfunction
+endif
+nnoremap <silent> <c-h> :call <sid>PrevNext('cprev', 'LspPreviousDiagnostic')<cr>
+nnoremap <silent> <c-l> :call <sid>PrevNext('cnext', 'LspNextDiagnostic')<cr>
 " RipGrep to the rescue!
 if executable('rg')
   set grepprg=rg\ --smart-case\ --vimgrep\ --hidden
