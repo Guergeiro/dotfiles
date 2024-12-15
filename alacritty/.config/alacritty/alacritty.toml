@@ -1,7 +1,3 @@
-import = [
-  "~/Documents/dracula/alacritty/dracula.toml",
-  # "~/.config/alacritty/alacritty-wsl.toml"
-]
 
 [cursor.style]
   blinking = "Always"
@@ -33,3 +29,9 @@ import = [
   dynamic_padding = true
   dynamic_title = true
   startup_mode = "Fullscreen"
+
+[general]
+import = [
+  "~/Documents/dracula/alacritty/dracula.toml",
+  # "~/.config/alacritty/alacritty-wsl.toml"
+]
