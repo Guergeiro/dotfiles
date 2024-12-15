@@ -1,22 +1,40 @@
+format = """
+$hostname\
+$shlvl\
+$directory\
+$git_branch\
+$git_commit\
+$git_state\
+$git_metrics\
+$git_status\
+$guix_shell\
+$nix_shell\
+$memory_usage\
+$env_var\
+$custom\
+$sudo\
+$line_break\
+$jobs\
+$container\
+$shell\
+$character"""
+
 add_newline = true
 [character]
 success_symbol = "[➜](bold green)"
 error_symbol = "[➜](bold red)"
-[cmd_duration]
-disabled = true
 [directory]
 read_only = " "
 style = "bold blue"
-[docker_context]
-symbol = " "
 [git_branch]
 symbol = " "
 [git_status]
-disabled = true
-[nodejs]
-detect_extensions = []
-not_capable_style = "bold yellow"
-[package]
-disabled = true
-[username]
-disabled = true
+format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style)"
+style = "cyan"
+conflicted = ""
+stashed = "≡"
+untracked = "​"
+modified = "​"
+renamed = "​"
+deleted = "​"
+staged = "​"
