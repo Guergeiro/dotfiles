@@ -114,6 +114,7 @@ let g:lsp_diagnostics_signs_info = {'text': ''}
 let g:lsp_diagnostics_signs_hint = {'text': ''}
 let g:lsp_semantic_enabled = 0
 let g:lsp_format_sync_timeout = 1000
+
 nmap gd <plug>(lsp-definition)
 nmap gr <plug>(lsp-references)
 nmap gi <plug>(lsp-implementation)
@@ -124,6 +125,7 @@ else
   nmap <c-@> <plug>(lsp-code-action)
 endif
 nmap <f2> <plug>(lsp-rename)
+let g:lsp_settings_filetype_typescript = ['typescript-language-server', 'deno']
 " }}}
 
 " Lightline {{{
