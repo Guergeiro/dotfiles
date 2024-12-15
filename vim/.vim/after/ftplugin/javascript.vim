@@ -8,7 +8,7 @@ source <sfile>:h/deno_base.vim
 set path-=node_modules/**
 set path-=./node_modules/**
 if !exists('g:smartpairs_loaded')
-  finish
+	finish
 endif
 let g:smartpairs_pairs = get(g:, "smartpairs_pairs", {})
 let g:smartpairs_pairs[&filetype] = get(g:smartpairs_pairs, &filetype, g:smartpairs_default_pairs)

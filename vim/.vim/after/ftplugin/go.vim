@@ -1,5 +1,5 @@
 if has('eval')
- setlocal formatexpr=
+	setlocal formatexpr=
 endif
 setlocal tabstop=4
 setlocal softtabstop=4

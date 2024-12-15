@@ -1,11 +1,11 @@
 source <sfile>:h/deno_base.vim
 if !exists(':GrepTag')
-  command! -nargs=+ -complete=file_in_path -bar -buffer GrepTag
-        \ cgetexpr GrepFunction('\\[_metadata_:' . <q-args> . '\\]')
+	command! -nargs=+ -complete=file_in_path -bar -buffer GrepTag
+				\ cgetexpr GrepFunction('\\[_metadata_:' . <q-args> . '\\]')
 endif
 if !exists(':LGrepTag')
-  command! -nargs=+ -complete=file_in_path -bar -buffer LGrepTag
-        \ lgetexpr GrepFunction('\\[_metadata_:' . <q-args> . '\\]')
+	command! -nargs=+ -complete=file_in_path -bar -buffer LGrepTag
+				\ lgetexpr GrepFunction('\\[_metadata_:' . <q-args> . '\\]')
 endif
 cnoreabbrev <expr> <buffer> greptag (getcmdtype() ==# ':' && getcmdline() ==# 'greptag') ? 'GrepTag' : 'grep'
 cnoreabbrev <expr> <buffer> lgreptag (getcmdtype() ==# ':' && getcmdline() ==# 'lgreptag') ? 'LGrepTag' : 'lgrep'

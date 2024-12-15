@@ -1,11 +1,11 @@
 if exists('g:loaded_plugins')
-  finish
+	finish
 endif
 
 " Emmet {{{
 augroup Emmet
-  autocmd!
-  " autocmd FileType html,typescriptreact,javascriptreact,text,astro imap
+	autocmd!
+	" autocmd FileType html,typescriptreact,javascriptreact,text,astro imap
 augroup END
 " }}}
 
@@ -62,9 +62,9 @@ nnoremap <silent> <leader>u :UndotreeToggle<cr>
 
 " vim-vsnip {{{
 let g:vsnip_snippet_dirs = [
-  \ expand('$HOME') . '/.vim/snippets',
-  \ g:packages_home . '/friendly-snippets/snippets'
-  \ ]
+	\ expand('$HOME') . '/.vim/snippets',
+	\ g:packages_home . '/friendly-snippets/snippets'
+	\ ]
 " }}}
 
 " Scalpel {{{
@@ -120,9 +120,9 @@ nmap gr <plug>(lsp-references)
 nmap gi <plug>(lsp-implementation)
 nmap gt <plug>(lsp-type-definition)
 if has('nvim')
-  nmap <c-space> <plug>(lsp-code-action)
+	nmap <c-space> <plug>(lsp-code-action)
 else
-  nmap <c-@> <plug>(lsp-code-action)
+	nmap <c-@> <plug>(lsp-code-action)
 endif
 nmap <f2> <plug>(lsp-rename)
 let g:lsp_settings_filetype_typescript = ['typescript-language-server', 'deno']
@@ -130,14 +130,14 @@ let g:lsp_settings_filetype_typescript = ['typescript-language-server', 'deno']
 
 " Lightline {{{
 let g:lightline = {
-      \ 'active': {
-        \   'left': [['mode', 'paste'],
-        \           ['gitbranch', 'readonly', 'filename', 'modified']],
-        \   },
-        \ 'component_function': {
-          \   'gitbranch': 'gitbranch#name',
-          \   },
-          \ }
+			\ 'active': {
+				\	 'left': [['mode', 'paste'],
+				\					 ['gitbranch', 'readonly', 'filename', 'modified']],
+				\	 },
+				\ 'component_function': {
+					\	 'gitbranch': 'gitbranch#name',
+					\	 },
+					\ }
 let g:lightline.colorscheme = g:colors_name
 " }}}
 
@@ -148,224 +148,224 @@ let &wildignore.=cleanpath#setwildignore()
 
 " pum.vim {{{
 call pum#set_option(
-  \ {
-  \   'max_height': 10,
-  \   'padding': v:true
-  \ })
+	\ {
+	\	 'max_height': 10,
+	\	 'padding': v:true
+	\ })
 " }}}
 
 
 " ddc.vim {{{
 if !exists('*s:ddcinit')
-  function! s:ddcinit() abort
+	function! s:ddcinit() abort
 
-    call ddc#custom#patch_global('ui', 'pum')
-    call ddc#custom#patch_global('sources',
-          \ [
-          \   'vim-lsp',
-          \   'buffer',
-          \   'around',
-          \   'file',
-          \   'rg',
-          \   'vsnip'
-          \ ])
-    call ddc#custom#patch_global('sourceOptions', {
-          \ '_': {
-          \   'maxItems': 5,
-          \   'sorters': ['sorter_fuzzy', 'sorter_rank'],
-          \   'matchers': ['matcher_fuzzy', 'matcher_head'],
-          \   'converters': ['converter_fuzzy', 'converter_remove_overlap']
-          \   },
-          \ 'vim-lsp': {
-          \   'mark': 'lsp',
-          \   },
-          \ 'file': {
-          \   'mark': 'file',
-          \   'isVolatile': v:true,
-          \   },
-          \ 'buffer': {
-          \   'mark': 'b',
-          \   },
-          \ 'around': {
-          \   'mark': 'a',
-          \   },
-          \ 'omni': {
-          \   'mark': 'o',
-          \   },
-          \ 'rg': {
-          \   'mark': 'rg',
-          \   },
-          \ 'tabnine': {
-          \   'mark': 'tab',
-          \   'isVolatile': v:true,
-          \   },
-          \ 'vsnip': {
-          \   'mark': 'vsnip',
-          \   'dup': 'keep'
-          \   }
-          \ })
+		call ddc#custom#patch_global('ui', 'pum')
+		call ddc#custom#patch_global('sources',
+					\ [
+					\	 'vim-lsp',
+					\	 'buffer',
+					\	 'around',
+					\	 'file',
+					\	 'rg',
+					\	 'vsnip'
+					\ ])
+		call ddc#custom#patch_global('sourceOptions', {
+					\ '_': {
+					\	 'maxItems': 5,
+					\	 'sorters': ['sorter_fuzzy', 'sorter_rank'],
+					\	 'matchers': ['matcher_fuzzy', 'matcher_head'],
+					\	 'converters': ['converter_fuzzy', 'converter_remove_overlap']
+					\	 },
+					\ 'vim-lsp': {
+					\	 'mark': 'lsp',
+					\	 },
+					\ 'file': {
+					\	 'mark': 'file',
+					\	 'isVolatile': v:true,
+					\	 },
+					\ 'buffer': {
+					\	 'mark': 'b',
+					\	 },
+					\ 'around': {
+					\	 'mark': 'a',
+					\	 },
+					\ 'omni': {
+					\	 'mark': 'o',
+					\	 },
+					\ 'rg': {
+					\	 'mark': 'rg',
+					\	 },
+					\ 'tabnine': {
+					\	 'mark': 'tab',
+					\	 'isVolatile': v:true,
+					\	 },
+					\ 'vsnip': {
+					\	 'mark': 'vsnip',
+					\	 'dup': 'keep'
+					\	 }
+					\ })
 
-    inoremap <silent> <expr> <tab>
-          \ pum#visible() ?
-          \ '<cmd>call pum#map#select_relative(+1)<cr>' :
-          \ vsnip#jumpable(1) ? '<plug>(vsnip-jump-next)' :
-          \ '<tab>'
-    inoremap <silent> <expr> <s-tab>
-          \ pum#visible() ?
-          \ '<cmd>call pum#map#select_relative(-1)<cr>' :
-          \ vsnip#jumpable(-1) ? '<plug>(vsnip-jump-prev)' :
-          \ '<s-tab>'
-    inoremap <silent> <expr> <cr>
-          \ pum#visible() ?
-          \ '<cmd>call pum#map#confirm()<cr>' : '<cr>'
+		inoremap <silent> <expr> <tab>
+					\ pum#visible() ?
+					\ '<cmd>call pum#map#select_relative(+1)<cr>' :
+					\ vsnip#jumpable(1) ? '<plug>(vsnip-jump-next)' :
+					\ '<tab>'
+		inoremap <silent> <expr> <s-tab>
+					\ pum#visible() ?
+					\ '<cmd>call pum#map#select_relative(-1)<cr>' :
+					\ vsnip#jumpable(-1) ? '<plug>(vsnip-jump-prev)' :
+					\ '<s-tab>'
+		inoremap <silent> <expr> <cr>
+					\ pum#visible() ?
+					\ '<cmd>call pum#map#confirm()<cr>' : '<cr>'
 
-    if has('nvim')
-      inoremap <silent> <expr> <c-space> ddc#map#manual_complete()
-    else
-      inoremap <silent> <expr> <c-@> ddc#map#manual_complete()
-    endif
-    snoremap <silent> <expr> <tab> vsnip#jumpable(1) ?
-          \ '<plug>(vsnip-jump-next)' :
-          \ '<tab>'
-    snoremap <silent> <expr> <s-tab> vsnip#jumpable(-1) ?
-          \ '<plug>(vsnip-jump-prev)' :
-          \ '<s-tab>'
-    nnoremap <silent> <expr> <tab> vsnip#jumpable(1) ?
-          \ '<plug>(vsnip-jump-next)' :
-          \ '<tab>'
-    nnoremap <silent> <expr> <s-tab> vsnip#jumpable(-1) ?
-          \ '<plug>(vsnip-jump-prev)' :
-          \ '<s-tab>'
-    call ddc#enable()
-  endfunction
+		if has('nvim')
+			inoremap <silent> <expr> <c-space> ddc#map#manual_complete()
+		else
+			inoremap <silent> <expr> <c-@> ddc#map#manual_complete()
+		endif
+		snoremap <silent> <expr> <tab> vsnip#jumpable(1) ?
+					\ '<plug>(vsnip-jump-next)' :
+					\ '<tab>'
+		snoremap <silent> <expr> <s-tab> vsnip#jumpable(-1) ?
+					\ '<plug>(vsnip-jump-prev)' :
+					\ '<s-tab>'
+		nnoremap <silent> <expr> <tab> vsnip#jumpable(1) ?
+					\ '<plug>(vsnip-jump-next)' :
+					\ '<tab>'
+		nnoremap <silent> <expr> <s-tab> vsnip#jumpable(-1) ?
+					\ '<plug>(vsnip-jump-prev)' :
+					\ '<s-tab>'
+		call ddc#enable()
+	endfunction
 endif
 augroup Autocomplete
-  autocmd!
-  autocmd User DenopsReady call s:ddcinit()
+	autocmd!
+	autocmd User DenopsReady call s:ddcinit()
 augroup END
 " }}}
 
 if has('nvim')
-  " vim-lsp {{{
-  nmap <c-space> <plug>(lsp-code-action)
-  " }}}
+	" vim-lsp {{{
+	nmap <c-space> <plug>(lsp-code-action)
+	" }}}
 
-  " ddc.vim {{{
-  inoremap <silent> <expr> <c-@> ddc#map#manual_complete()
-  " }}}
+	" ddc.vim {{{
+	inoremap <silent> <expr> <c-@> ddc#map#manual_complete()
+	" }}}
 
-  " Telescope {{{
-  inoremap <silent><leader>sp <esc>:Telescope find_files<cr>
-  nnoremap <silent><leader>sp :Telescope find_files<cr>
-  inoremap <silent><leader>sb <esc>:Telescope buffers<cr>
-  nnoremap <silent><leader>sb :Telescope buffers<cr>
-  inoremap <silent><leader>sg <esc>:Telescope git_files<cr>
-  nnoremap <silent><leader>sg :Telescope git_files<cr>
-  inoremap <silent><leader>sG <esc>:Telescope live_grep<cr>
-  nnoremap <silent><leader>sG :Telescope live_grep<cr>
+	" Telescope {{{
+	inoremap <silent><leader>sp <esc>:Telescope find_files<cr>
+	nnoremap <silent><leader>sp :Telescope find_files<cr>
+	inoremap <silent><leader>sb <esc>:Telescope buffers<cr>
+	nnoremap <silent><leader>sb :Telescope buffers<cr>
+	inoremap <silent><leader>sg <esc>:Telescope git_files<cr>
+	nnoremap <silent><leader>sg :Telescope git_files<cr>
+	inoremap <silent><leader>sG <esc>:Telescope live_grep<cr>
+	nnoremap <silent><leader>sG :Telescope live_grep<cr>
 
 lua << EOF
 local actions = require("telescope.actions")
 local actions_layout = require("telescope.actions.layout")
 require('telescope').setup({
-  defaults = {
-    layout_strategy='vertical',
-    layout_config={
-      prompt_position='bottom',
-      width=0.95,
-      height=0.5,
-      anchor='S',
-    },
-    dynamic_preview_title = true,
-    results_title = false,
-    prompt_title = false,
-    vimgrep_arguments = {
-      "rg",
-      "--color=never",
-      "--no-heading",
-      "--with-filename",
-      "--line-number",
-      "--column",
-      "--smart-case",
-      "--trim"
-    },
-    preview = {
-      hide_on_startup = true
-    },
-    default_mappings = {
-      i = {
-        ["<tab>"] = actions.move_selection_next,
-        ["<s-tab>"] = actions.move_selection_previous,
-        ["<cr>"] = actions.select_default,
-        ["<c-s>"] = actions.select_horizontal,
-        ["<c-v>"] = actions.select_vertical,
-        ["<c-u>"] = actions.preview_scrolling_up,
-        ["<c-d>"] = actions.preview_scrolling_down,
-        ["<c-j>"] = actions.results_scrolling_up,
-        ["<c-k>"] = actions.results_scrolling_down,
-        ["<esc>"] = actions.close,
-        ["<c-p>"] = actions_layout.toggle_preview,
-        ["<c-q>"] = actions.send_to_qflist + actions.open_qflist
-      },
-    },
-  }
+	defaults = {
+		layout_strategy='vertical',
+		layout_config={
+			prompt_position='bottom',
+			width=0.95,
+			height=0.5,
+			anchor='S',
+		},
+		dynamic_preview_title = true,
+		results_title = false,
+		prompt_title = false,
+		vimgrep_arguments = {
+			"rg",
+			"--color=never",
+			"--no-heading",
+			"--with-filename",
+			"--line-number",
+			"--column",
+			"--smart-case",
+			"--trim"
+		},
+		preview = {
+			hide_on_startup = true
+		},
+		default_mappings = {
+			i = {
+				["<tab>"] = actions.move_selection_next,
+				["<s-tab>"] = actions.move_selection_previous,
+				["<cr>"] = actions.select_default,
+				["<c-s>"] = actions.select_horizontal,
+				["<c-v>"] = actions.select_vertical,
+				["<c-u>"] = actions.preview_scrolling_up,
+				["<c-d>"] = actions.preview_scrolling_down,
+				["<c-j>"] = actions.results_scrolling_up,
+				["<c-k>"] = actions.results_scrolling_down,
+				["<esc>"] = actions.close,
+				["<c-p>"] = actions_layout.toggle_preview,
+				["<c-q>"] = actions.send_to_qflist + actions.open_qflist
+			},
+		},
+	}
 })
 EOF
 
-  " Telescope }}}
-  " Treesitter {{{
+	" Telescope }}}
+	" Treesitter {{{
 lua << EOF
 require('nvim-treesitter.configs').setup {
-  -- Automatically install missing parsers when entering buffer
-  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-  auto_install = true,
-  highlight = {
-    enable = true,
-    disable = function(lang, buf)
-        -- manual disable
-        local manualDisable = {"yaml", "markdown", "json", "astro"}
-        for _, v in ipairs(manualDisable) do
-          if v == lang then
-            return true
-          end
-        end
-        -- disable slow treesitter highlight for large files
-        local max_filesize = 100 * 1024 -- 100 KB
-        local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-        if ok and stats and stats.size > max_filesize then
-          return true
-        end
-    end,
-  },
+	-- Automatically install missing parsers when entering buffer
+	-- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+	auto_install = true,
+	highlight = {
+		enable = true,
+		disable = function(lang, buf)
+				-- manual disable
+				local manualDisable = {"yaml", "markdown", "json", "astro"}
+				for _, v in ipairs(manualDisable) do
+					if v == lang then
+						return true
+					end
+				end
+				-- disable slow treesitter highlight for large files
+				local max_filesize = 100 * 1024 -- 100 KB
+				local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+				if ok and stats and stats.size > max_filesize then
+					return true
+				end
+		end,
+	},
 }
 EOF
-  " }}}
+	" }}}
 
-  " AI {{{
-  if !exists('*s:loadAI')
-    function! s:loadAI(...)
-      for ai in a:000
-        if ai == 'tabnine'
-          call plug#load('tabnine-nvim')
+	" AI {{{
+	if !exists('*s:loadAI')
+		function! s:loadAI(...)
+			for ai in a:000
+				if ai == 'tabnine'
+					call plug#load('tabnine-nvim')
 lua << EOF
 require('tabnine').setup({
-    accept_keymap="<c-y>",
-    disable_auto_comment=true
-  })
+		accept_keymap="<c-y>",
+		disable_auto_comment=true
+	})
 EOF
-        elseif ai == 'copilot'
-          let g:copilot_no_tab_map = v:true
-          call plug#load('copilot.vim')
-          imap <silent><script><expr> <c-y> copilot#Accept("\<CR>")
-        endif
-      endfor
-    endfunction
-  endif
+				elseif ai == 'copilot'
+					let g:copilot_no_tab_map = v:true
+					call plug#load('copilot.vim')
+					imap <silent><script><expr> <c-y> copilot#Accept("\<CR>")
+				endif
+			endfor
+		endfunction
+	endif
 
-  if !exists(':LoadAI')
-    command! -nargs=+ LoadAI call <sid>loadAI(<f-args>)
-  endif
-  " }}}
+	if !exists(':LoadAI')
+		command! -nargs=+ LoadAI call <sid>loadAI(<f-args>)
+	endif
+	" }}}
 endif
 
 
