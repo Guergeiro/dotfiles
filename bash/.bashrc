@@ -179,10 +179,19 @@ export PIP_HOME="$XDG_DATA_HOME/pip"
 __path_update "$PIP_HOME/bin"
 
 # Go
-export GOPATH="$XDG_DATA_HOME/go/workspace"
-__path_update "$GOPATH"
-export GOROOT="$XDG_DATA_HOME/go"
-__path_update "$GOROOT/bin"
+function __asdf_golang() {
+	local go_bin_path="$(asdf which go 2>/dev/null)"
+	if [[ -n "${go_bin_path}" ]]; then
+		local abs_go_bin_path="$(readlink -f "${go_bin_path}")"
+
+		export GOROOT="$(dirname "$(dirname "${abs_go_bin_path}")")"
+
+		export GOPATH="$(dirname "${GOROOT}")/packages"
+
+		__path_update "$GOPATH/bin"
+fi
+}
+__asdf_golang
 
 # Rust
 export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
