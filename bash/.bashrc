@@ -127,15 +127,15 @@ function __path_update() {
 }
 
 # Asdf
-export ASDF_DIR="$HOME/Documents/asdf-vm/asdf"
-if [ -f "$ASDF_DIR/asdf.sh" ]; then
-  . "$ASDF_DIR/asdf.sh"
+export ASDF_HOME="$XDG_DATA_HOME/asdf"
+export ASDF_DIR="$ASDF_HOME"
+__path_update "$ASDF_DIR/bin"
+__path_update "$ASDF_DIR/shims"
+export ASDF_DATA_DIR="$ASDF_HOME"
+export ASDF_CONFIG_FILE="$ASDF_HOME/.asdfrc"
+if [ -f "$ASDF_DATA_DIR/asdf" ]; then
+	. <(asdf completion bash)
 fi
-if [ -f "$ASDF_DIR/completions/asdf.bash" ]; then
-  . "$ASDF_DIR/completions/asdf.bash"
-fi
-export ASDF_DATA_DIR="$XDG_DATA_HOME/asdf"
-export ASDF_CONFIG_FILE="$XDG_CONFIG_HOME/asdf/.asdfrc"
 if [ -f "$ASDF_DATA_DIR/plugins/set-java-home.bash" ]; then
   . "$ASDF_DATA_DIR/plugins/set-java-home.bash"
 fi
@@ -160,7 +160,7 @@ __path_update "$DENO_INSTALL/bin"
 
 # Neovim
 export NEOVIM_HOME="$XDG_DATA_HOME/neovim"
-__path_update "$NEOVIM_HOME/nvim-linux64/bin"
+__path_update "$NEOVIM_HOME/nvim-linux-x86_64/bin"
 
 # Alacritty
 export ALACRITTY_HOME="$XDG_DATA_HOME/alacritty"
