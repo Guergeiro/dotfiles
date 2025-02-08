@@ -292,7 +292,6 @@ else
 
 
 	if has('nvim')
-		Plug 'codota/tabnine-nvim', { 'do': './dl_binaries.sh && cd chat && cargo build --release', 'on': [] }
 		Plug 'github/copilot.vim', { 'on': [] }
 
 		Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}

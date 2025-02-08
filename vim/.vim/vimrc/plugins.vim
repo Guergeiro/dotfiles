@@ -161,49 +161,55 @@ if !exists('*s:ddcinit')
 
 		call ddc#custom#patch_global('ui', 'pum')
 		call ddc#custom#patch_global('sources',
-					\ [
-					\	 'vim-lsp',
-					\	 'buffer',
-					\	 'around',
-					\	 'file',
-					\	 'rg',
-					\	 'vsnip'
-					\ ])
+					\	[
+					\		'vim-lsp',
+					\		'buffer',
+					\		'around',
+					\		'file',
+					\		'rg',
+					\		'vsnip'
+					\	])
 		call ddc#custom#patch_global('sourceOptions', {
-					\ '_': {
-					\	 'maxItems': 5,
-					\	 'sorters': ['sorter_fuzzy', 'sorter_rank'],
-					\	 'matchers': ['matcher_fuzzy', 'matcher_head'],
-					\	 'converters': ['converter_fuzzy', 'converter_remove_overlap']
-					\	 },
-					\ 'vim-lsp': {
-					\	 'mark': 'lsp',
-					\	 },
-					\ 'file': {
-					\	 'mark': 'file',
-					\	 'isVolatile': v:true,
-					\	 },
-					\ 'buffer': {
-					\	 'mark': 'b',
-					\	 },
-					\ 'around': {
-					\	 'mark': 'a',
-					\	 },
-					\ 'omni': {
-					\	 'mark': 'o',
-					\	 },
-					\ 'rg': {
-					\	 'mark': 'rg',
-					\	 },
-					\ 'tabnine': {
-					\	 'mark': 'tab',
-					\	 'isVolatile': v:true,
-					\	 },
-					\ 'vsnip': {
-					\	 'mark': 'vsnip',
-					\	 'dup': 'keep'
-					\	 }
-					\ })
+					\	'_': {
+					\		'sorters': ['sorter_fuzzy', 'sorter_rank'],
+					\		'matchers': ['matcher_fuzzy', 'matcher_head'],
+					\		'converters': ['converter_fuzzy', 'converter_remove_overlap']
+					\	},
+					\	'vim-lsp': {
+					\		'mark': 'lsp',
+					\	},
+					\	'file': {
+					\		'maxItems': 5,
+					\		'mark': 'file',
+					\		'isVolatile': v:true,
+					\	},
+					\	'buffer': {
+					\		'maxItems': 5,
+					\		'mark': 'b',
+					\	},
+					\	'around': {
+					\		'maxItems': 5,
+					\		'mark': 'a',
+					\	},
+					\	'omni': {
+					\		'maxItems': 5,
+					\		'mark': 'o',
+					\	},
+					\	'rg': {
+					\		'maxItems': 5,
+					\		'mark': 'rg',
+					\	},
+					\	'tabnine': {
+					\		'maxItems': 5,
+					\		'mark': 'tab',
+					\		'isVolatile': v:true,
+					\	},
+					\	'vsnip': {
+					\		'maxItems': 5,
+					\		'mark': 'vsnip',
+					\		'dup': 'keep'
+					\	}
+					\})
 
 		inoremap <silent> <expr> <tab>
 					\ pum#visible() ?
