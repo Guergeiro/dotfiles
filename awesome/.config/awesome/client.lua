@@ -94,6 +94,24 @@ client.connect_signal("manage", function(c)
 
 	utils.toggle_titlebar(c)
 end)
+
+
+local excluded_managed_instances = { ["Alacritty"] = true }
+
+client.connect_signal("manage", function(c)
+	-- Get the currently selected tag on the focused screen.
+	if not excluded_managed_instances[c.instance] then
+		local current_tag = awful.screen.focused().selected_tag
+		if current_tag then
+			-- Force the new client into the current tag.
+			c:move_to_tag(current_tag)
+		end
+		-- Ensure the window is not positioned offscreen.
+		awful.placement.no_offscreen(c)
+		utils.toggle_titlebar(c)
+	end
+end)
+
 -- Add titlebars to floating windows
 client.connect_signal("property::floating", utils.toggle_titlebar)
 

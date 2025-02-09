@@ -58,7 +58,6 @@ end
 
 run_once({
 	"xfsettingsd --sm-client-disable",
-	"xfdesktop --disable-wm-check --display=" .. os.getenv("DISPLAY"),
 	"xfce4-power-manager",
 	"light-locker",
 	"nm-applet",

@@ -15,7 +15,8 @@ local rules = {
 			raise = true,
 			keys = clientkeys,
 			buttons = clientbuttons,
-			screen = awful.screen.preferred,
+			tag = awful.screen.focused().selected_tag,
+			screen = awful.screen.focused,
 			floating = true,  -- Make all clients floating
 			size_hints_honor = false,
 			placement = awful.placement.no_overlap+awful.placement.no_offscreen
@@ -58,22 +59,6 @@ local rules = {
 			floating = true
 		}
 	},
-
-	-- Non Floating clients.
-	-- {
-	-- 	rule_any = {
-	-- 		instance = {
-	-- 			"Navigator"
-	-- 		},
-	-- 		class = {
-	-- 			"Firefox",
-	-- 		},
-	-- 	},
-	-- 	properties = {
-	-- 		floating = false,
-	-- 		maximized = true,
-	-- 	}
-	-- },
 
 	-- Fullscreen clients.
 	{
@@ -120,11 +105,7 @@ local rules = {
 		properties = {
 			titlebars_enabled = true
 		}
-	},
-
-	-- Set Firefox to always map on the tag named "2" on screen 1.
-	-- { rule = { class = "Firefox" },
-	--   properties = { screen = 1, tag = "2" } },
+	}
 }
 
 return rules
