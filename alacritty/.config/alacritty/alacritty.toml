@@ -25,13 +25,28 @@
   hide_when_typing = true
 
 [window]
-  decorations = "none"
   dynamic_padding = true
   dynamic_title = true
-  startup_mode = "Fullscreen"
 
 [general]
 import = [
-  "~/Documents/dracula/alacritty/dracula.toml",
+  "alacritty-theme/themes/dracula-plus.toml"
   # "~/.config/alacritty/alacritty-wsl.toml"
 ]
+
+[keyboard]
+  bindings = [
+    { key = "V", mods = "Control|Shift", mode = "~Vi", action = "Paste" },
+    { key = "V", mods = "Control|Shift", mode = "Vi|Search", action = "Paste" },
+    { key = "C", mods = "Control|Shift", action = "Copy" },
+    { key = "F", mods = "Control|Shift", mode = "~Search", action = "SearchForward" },
+    { key = "B", mods = "Control|Shift", mode = "~Search", action = "SearchBackward" },
+    { key = "C", mods = "Control|Shift", mode = "Vi|~Search", action = "ClearSelection" },
+    { key = "Insert", mods = "Shift", action = "PasteSelection" },
+    { key = "0", mods = "Control", action = "ResetFontSize" },
+    { key = "=", mods = "Control", action = "IncreaseFontSize" },
+    { key = "+", mods = "Control", action = "IncreaseFontSize" },
+    { key = "NumpadAdd", mods = "Control", action = "IncreaseFontSize" },
+    { key = "-", mods = "Control", action = "DecreaseFontSize" },
+    { key = "NumpadSubtract", mods = "Control", action = "DecreaseFontSize" }
+  ]

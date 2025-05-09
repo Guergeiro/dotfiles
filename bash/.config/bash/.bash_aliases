@@ -17,13 +17,13 @@ alias ln="ln -i";
 # Recursively create directories
 alias mkdir="mkdir -pv";
 # I don't know the name of every explorer
-if [ "$(command uname -r)" = *"microsoft"* ]; then
-    alias explorer="explorer.exe";
-elif [ "$(command lsb_release -is)" = "Linuxmint" ]; then
-    alias explorer="thunar";
-else
-    alias explorer="nautilus";
-fi
+# if [ "$(command uname -r)" = *"microsoft"* ]; then
+#     alias explorer="explorer.exe";
+# elif [ "$(command lsb_release -is)" = "Linuxmint" ]; then
+#     alias explorer="thunar";
+# else
+#     alias explorer="nautilus";
+# fi
 # Some more ls aliases
 alias ll="ls -alhF"; alias la="ls -hA"; alias l="ls -CF";
 # Ripgrep rules for me!

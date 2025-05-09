@@ -126,6 +126,9 @@ else
 endif
 nmap <f2> <plug>(lsp-rename)
 let g:lsp_settings_filetype_typescript = ['typescript-language-server', 'deno']
+let g:lsp_settings = {
+			\ 'eclipse-jdt-ls': {'cmd': 'jdtls'}
+	\ }
 " }}}
 
 " Lightline {{{
