@@ -1,8 +1,6 @@
 local awful = require("awful")
 local beautiful = require("beautiful")
 local hotkeys_popup = require("awful.hotkeys_popup")
--- Load Debian menu entries
-local debian = require("debian.menu")
 local has_fdo, freedesktop = pcall(require, "freedesktop")
 local global = require("global")
 
@@ -62,7 +60,6 @@ local menu_logout = { "System", logout_menu, ICON_DIR .. "power_w.svg" }
 local mymainmenu = awful.menu({
 		items = {
 			menu_logout,
-				{ "Debian", debian.menu.Debian_menu.Debian },
 			menu_awesome
 		}
 	})

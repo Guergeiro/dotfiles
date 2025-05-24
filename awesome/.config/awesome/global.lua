@@ -1,6 +1,6 @@
 local global = {
 		modkey = "Mod4",
-		terminal = os.getenv("HOME") .. "/.local/share/alacritty/bin/alacritty",
+		terminal = "alacritty",
 		editor = os.getenv("EDITOR") or "editor"
 }
 
