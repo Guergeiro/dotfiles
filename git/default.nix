@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, lib, ... }:
 {
   programs.git = {
     enable = true;
@@ -10,26 +10,30 @@
       key = "~/.ssh/SignKey.pub";
     };
     extraConfig = {
+      commit.verbose = true;
       core.editor = "${pkgs.neovim}/bin/nvim";
       merge.tool = "diffconflicts";
       mergetool = {
         keepBackup = false;
-        keepTemporaries = null;
+        keepTemporaries = false;
         diffconflicts = {
-          cmd = ''${pkgs.neovim}/bin/nvim \
-            -c DiffConflicts "$MERGED" "$BASE" "$LOCAL" "$REMOTE"
-          '';
+          cmd = lib.concatStringsSep " " [
+            "${pkgs.neovim}/bin/nvim"
+            ''-c DiffConflicts "$MERGED" "$BASE" "$LOCAL" "$REMOTE"''
+          ];
           trustExitCode = true;
         };
       };
       checkout.defaultRemote = "origin";
       diff.tool = "customdiff";
       difftool = {
-      prompt = false;
-      difftool.customdiff.cmd = ''${pkgs.neovim}/bin/nvim -R -f -d \
-        -c 'wincmd h' \
-        -c 'cd $GIT_PREFIX' "$REMOTE" "$LOCAL"
-      '';
+        prompt = false;
+        customdiff.cmd = lib.concatStringsSep " " [
+            "${pkgs.neovim}/bin/nvim -R -f -d"
+            "-c 'wincmd h'"
+            ''-c 'cd $GIT_PREFIX' "$REMOTE" "$LOCAL"''
+        ];
+      };
     };
   };
 }

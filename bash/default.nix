@@ -13,8 +13,15 @@
       # Automatically tries it's best to correct misspell
       "cdspell"
     ];
+    bashrcExtra = ''
+      function docker-compose() {
+        if [ "$1" = "up" ]; then
+          shift
+          command docker compose up --remove-orphans --build "$@"
+        else
+          command docker compose "$@"
+        fi
+      }
+    '';
   };
-
-  # Note, if you use NixOS or nix-darwin and do not have Bash completion enabled in the system configuration, then make sure to add
-  environment.pathsToLink = [ "/share/bash-completion" ];
 }

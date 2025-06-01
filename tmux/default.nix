@@ -3,7 +3,7 @@
   programs.tmux = {
     enable = true;
     clock24 = true;
-    shell = pkgs.bash;
+    shell = "${pkgs.bashInteractive}/bin/bash";
     terminal = "tmux-256color";
     plugins = with pkgs; [
       {

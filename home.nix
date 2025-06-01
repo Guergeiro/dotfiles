@@ -3,7 +3,7 @@
 {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
-  home.username = "breno";
+  home.username = username;
   home.homeDirectory = if system == "aarch64-darwin" || system == "x86_64-darwin"
     then "/Users/${username}"
     else "/home/${username}";
@@ -70,9 +70,53 @@
   #  /etc/profiles/per-user/breno/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-    # EDITOR = "emacs";
+    EDITOR = "${pkgs.neovim}/bin/nvim";
+    MANPAGER="sh -c 'col -bx | ${pkgs.bat}/bin/bat -l man -p'";
   };
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+  home.preferXdgDirectories = true;
+  home.shellAliases = {
+    # You remember Vi? It's just faster to type
+    vi = "${pkgs.neovim}/bin/nvim";
+    vim = "${pkgs.neovim}/bin/nvim";
+    # Force tmux UTF-8
+    tmux="${pkgs.tmux}/bin/tmux -u";
+    # Sometimes I forget I'm not in VIM, but still want to quit :>
+    ":q"="exit";
+    # Fuck Python2... Sorry :(
+    python="python3"; pip="pip3";
+    # Security stuff
+    del="${pkgs.trash-cli}/bin/trash";
+    rm="${pkgs.coreutils}/bin/echo Use \"del\", or the full path i.e. \"/bin/rm\"";
+    mv="${pkgs.coreutils}/bin/mv -i";
+    cp="${pkgs.coreutils}/bin/cp -i";
+    ln="${pkgs.coreutils}/bin/ln -i";
+    # Recursively create directories
+    mkdir="${pkgs.coreutils}/bin/mkdir -pv";
+
+    # Some more ls aliases
+    ll="${pkgs.coreutils}/bin/ls -alhF --color=auto";
+    la="${pkgs.coreutils}/bin/ls -hA --color=auto";
+    l="${pkgs.coreutils}/bin/ls -CF --color=auto";
+    ls="${pkgs.coreutils}/bin/ls --color=auto";
+
+    # Ripgrep rules for me!
+    grep="${pkgs.ripgrep}/bin/rg --hidden --color=auto";
+    fgrep="${pkgs.ripgrep}/bin/rg -F --color=auto";
+    egrep="${pkgs.ripgrep}/bin/rg -E --color=auto";
+
+    # Bat is awesome
+    cat="${pkgs.bat}/bin/bat";
+  };
+
+  imports = [
+    ./bash/default.nix
+    ./starship/default.nix
+    ./git/default.nix
+    ./readline/default.nix
+    ./tmux/default.nix
+  ];
 }
