@@ -1,5 +1,12 @@
-{ config, pkgs, username, system, ... }:
+{ config, pkgs, username, system, lib, ... }:
+let
+  dotfilesBaseCmd = "home-manager switch --flake $HOME/Documents/guergeiro/dotfiles";
+  dotfilesFlake = if system == "aarch64-darwin" || system == "x86_64-darwin"
+    then "breno-macos"
+    else "breno-linux";
 
+  dotfilesUpdate = "${dotfilesBaseCmd}/.#${dotfilesFlake}";
+in
 {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -70,8 +77,6 @@
   #  /etc/profiles/per-user/breno/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-    EDITOR = "${pkgs.neovim}/bin/nvim";
-    MANPAGER="sh -c 'col -bx | ${pkgs.bat}/bin/bat -l man -p'";
   };
 
   # Let Home Manager install and manage itself.
@@ -79,6 +84,8 @@
 
   home.preferXdgDirectories = true;
   home.shellAliases = {
+    "dotfiles-update" = dotfilesUpdate;
+    "dotfiles-upgrade" = "nix flake update --flake $HOME/Documents/guergeiro/dotfiles";
     # You remember Vi? It's just faster to type
     vi = "${pkgs.neovim}/bin/nvim";
     vim = "${pkgs.neovim}/bin/nvim";
@@ -112,11 +119,8 @@
     cat="${pkgs.bat}/bin/bat";
   };
 
-  imports = [
-    ./bash/default.nix
-    ./starship/default.nix
-    ./git/default.nix
-    ./readline/default.nix
-    ./tmux/default.nix
-  ];
+  # I still want to manage Vim manually as it changes frequently
+  home.activation.stowVim = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    ${pkgs.stow}/bin/stow --target ${config.home.homeDirectory} --stow vim --dir ${config.home.homeDirectory}/Documents/guergeiro/dotfiles
+  '';
 }
