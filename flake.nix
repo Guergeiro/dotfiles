@@ -34,6 +34,7 @@
         ./readline/default.nix
         ./starship/default.nix
         ./tmux/default.nix
+        ./gtk/default.nix
       ];
 
       extraSpecialArgs = {
