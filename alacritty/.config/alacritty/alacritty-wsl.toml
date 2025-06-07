@@ -1,9 +1,0 @@
-[shell]
-  program = "c:\\Windows\\System32\\wsl.exe"
-  args = ["--cd ~"]
-
-# https://github.com/alacritty/alacritty/issues/1703
-[keyboard]
-  bindings = [
-    { key = "Space", mods = "Control", chars = "\u0000" }
-  ]

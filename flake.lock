@@ -89,7 +89,24 @@
         "flake-parts": "flake-parts",
         "home-manager": "home-manager",
         "nix-secrets": "nix-secrets",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "starship-dracula": "starship-dracula"
+      }
+    },
+    "starship-dracula": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1718871491,
+        "narHash": "sha256-W5FTRNbHNXJIcgOgiqvP9lyM7hiCh0rHlJ0A8JdkaE4=",
+        "owner": "dracula",
+        "repo": "starship",
+        "rev": "bd1383b8a078d7d6829fa71a8e7c4119ae77e962",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dracula",
+        "repo": "starship",
+        "type": "github"
       }
     }
   },

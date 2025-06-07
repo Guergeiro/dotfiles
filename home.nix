@@ -2,8 +2,8 @@
 let
   dotfilesBaseCmd = "home-manager switch --flake $HOME/Documents/guergeiro/dotfiles";
   dotfilesFlake = if system == "aarch64-darwin" || system == "x86_64-darwin"
-    then "breno-macos"
-    else "breno-linux";
+    then "macos"
+    else "linux";
 
   dotfilesUpdate = "${dotfilesBaseCmd}/.#${dotfilesFlake}";
 

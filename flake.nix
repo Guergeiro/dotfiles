@@ -8,65 +8,55 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
 
     nix-secrets.url = "git+file:./nix-secrets";
+
+    starship-dracula = {
+      url = "github:dracula/starship";
+      flake = false;
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, flake-parts, nix-secrets, ... }:
+  outputs = { self, nixpkgs, home-manager, flake-parts, nix-secrets, starship-dracula, ... }:
   let
+    # Define forAllSystems to generate Nixpkgs instances for each system
     forAllSystems = function:
       nixpkgs.lib.genAttrs [
         "x86_64-linux"
-        "aarch64-linux"
+        "aarch64-darwin" # Added aarch64-darwin to the list
       ] (system: function nixpkgs.legacyPackages.${system});
 
-    linuxSystem = "x86_64-linux";
-    darwinSystem = "aarch64-darwin";
+    # Common modules for both Linux and macOS (where applicable)
+    commonModules = [
+      ./home.nix
+      ./alacritty/default.nix
+      ./bash/default.nix
+      ./direnv/default.nix
+      ./git/default.nix
+      ./librewolf/default.nix
+      ./readline/default.nix
+      ./starship/default.nix
+      ./tmux/default.nix
+    ];
   in
   {
-    homeConfigurations."breno-linux" = home-manager.lib.homeManagerConfiguration {
-      pkgs = nixpkgs.legacyPackages.${linuxSystem};
+    homeConfigurations = forAllSystems (pkgs:
+      let
+        # System-specific modules
+        systemSpecificModules =
+          if pkgs.stdenv.isLinux then [ ./gtk/default.nix ]
+          else if pkgs.stdenv.isDarwin then [ ./aerospace/default.nix ]
+          else [];
+      in
+        home-manager.lib.homeManagerConfiguration {
+          inherit pkgs; # Use the pkgs provided by forAllSystems
 
-      # Specify your home configuration modules here, for example,
-      # the path to your home.nix.
-      modules = [
-        ./home.nix
-        ./alacritty/default.nix
-        ./bash/default.nix
-        ./direnv/default.nix
-        ./git/default.nix
-        ./gtk/default.nix
-        ./librewolf/default.nix
-        ./readline/default.nix
-        ./starship/default.nix
-        ./tmux/default.nix
-      ];
+          modules = commonModules ++ systemSpecificModules;
 
-      extraSpecialArgs = {
-        username = nix-secrets.linux.username;
-        system = linuxSystem;
-      };
-    };
-    homeConfigurations."breno-macos" = home-manager.lib.homeManagerConfiguration {
-      pkgs = nixpkgs.legacyPackages.${darwinSystem};
-
-      # Specify your home configuration modules here, for example,
-      # the path to your home.nix.
-      modules = [
-        ./home.nix
-        ./aerospace/default.nix
-        ./alacritty/default.nix
-        ./bash/default.nix
-        ./direnv/default.nix
-        ./git/default.nix
-        ./librewolf/default.nix
-        ./readline/default.nix
-        ./starship/default.nix
-        ./tmux/default.nix
-      ];
-
-      extraSpecialArgs = {
-        username = nix-secrets.macos.username;
-        system = darwinSystem;
-      };
-    };
+          extraSpecialArgs = {
+            username = nix-secrets.${pkgs.system}.username;
+            system = pkgs.system; # Use the system string from pkgs
+            inherit starship-dracula;
+          };
+        }
+    );
   };
 }

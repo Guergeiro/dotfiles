@@ -6,7 +6,7 @@ in
 {
   programs.alacritty = {
     enable = true;
-    theme = "dracula-plus";
+    theme = "dracula_plus";
     settings = {
       cursor.style.blinking = "Always";
       font = {

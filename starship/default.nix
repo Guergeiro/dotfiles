@@ -1,8 +1,11 @@
-{ lib, ... }:
+{ lib, starship-dracula, ... }:
+let
+  draculaPalette = builtins.fromTOML (builtins.readFile "${starship-dracula}/starship.toml" );
+in
 {
   programs.starship = {
     enable = true;
-    settings = {
+    settings = lib.recursiveUpdate {
       add_newline = true;
       format = lib.concatStrings [
         "$hostname"
@@ -47,6 +50,6 @@
         deleted = "​";
         staged = "​";
       };
-    };
+    } draculaPalette;
   };
 }
