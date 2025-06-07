@@ -23,14 +23,13 @@ computer.
 _It is recommended that you use my
 [iac repository](https://github.com/guergeiro/iac)._
 
-1. Create `secrets.nix` based on `secrets.example.nix`
-
-2. Remove original `.bashrc`
+1. Init nix-secrets
    ```bash
-   /bin/rm $HOME/.bashrc
+   cd nix-secrets
+   git init
    ```
 
-3. Run nix and select corresponding output
+2. Run nix and select corresponding output
    ```bash
    nix run home-manager/master -- switch --flake .#breno-linux
    nix run home-manager/master -- switch --flake .#breno-macos

@@ -6,6 +6,8 @@ let
     else "breno-linux";
 
   dotfilesUpdate = "${dotfilesBaseCmd}/.#${dotfilesFlake}";
+
+  browser = lib.getExe pkgs.librewolf;
 in
 {
   # Home Manager needs a bit of information about you and the paths it should
@@ -123,4 +125,9 @@ in
   home.activation.stowVim = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     ${pkgs.stow}/bin/stow --target ${config.home.homeDirectory} --stow vim --dir ${config.home.homeDirectory}/Documents/guergeiro/dotfiles
   '';
+
+  xdg.desktopEntries.whatsapp = {
+    name = "WhatsApp";
+    exec = "${browser} --kiosk --new-window https://web.whatsapp.com/";
+  };
 }

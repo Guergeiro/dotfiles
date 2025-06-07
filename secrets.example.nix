@@ -1,4 +1,0 @@
-{
-  linuxUsername = "username";
-  macosUsername = "username";
-}

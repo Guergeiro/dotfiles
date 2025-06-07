@@ -38,6 +38,21 @@
         "type": "github"
       }
     },
+    "nix-secrets": {
+      "locked": {
+        "lastModified": 1749247027,
+        "narHash": "sha256-3Ktw5JesPxqtH2QaX+YutvEcJ6dJor0AhUz+z1wUQcg=",
+        "ref": "refs/heads/master",
+        "rev": "581107477bc772ba860e0398591220fe6cc370cc",
+        "revCount": 17,
+        "type": "git",
+        "url": "file:./nix-secrets"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:./nix-secrets"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1748929857,
@@ -73,6 +88,7 @@
       "inputs": {
         "flake-parts": "flake-parts",
         "home-manager": "home-manager",
+        "nix-secrets": "nix-secrets",
         "nixpkgs": "nixpkgs"
       }
     }

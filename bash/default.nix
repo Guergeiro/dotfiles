@@ -22,6 +22,8 @@
           command docker compose "$@"
         fi
       }
+
+      eval "$(direnv hook bash)"
     '';
   };
 }
