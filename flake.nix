@@ -29,6 +29,7 @@
       # the path to your home.nix.
       modules = [
         ./home.nix
+        ./alacritty/default.nix
         ./bash/default.nix
         ./direnv/default.nix
         ./git/default.nix
@@ -52,6 +53,7 @@
       modules = [
         ./home.nix
         ./aerospace/default.nix
+        ./alacritty/default.nix
         ./bash/default.nix
         ./direnv/default.nix
         ./git/default.nix

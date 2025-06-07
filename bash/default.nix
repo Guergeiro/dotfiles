@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 {
   programs.bash = {
     enable = true;
@@ -17,9 +17,23 @@
       function docker-compose() {
         if [ "$1" = "up" ]; then
           shift
-          command docker compose up --remove-orphans --build "$@"
+          command ${pkgs.docker}/bin/docker compose up --remove-orphans --build "$@"
         else
-          command docker compose "$@"
+          command ${pkgs.docker}/bin/docker compose "$@"
+        fi
+      }
+
+      function cd() {
+        local dir="$@"
+        builtin cd $dir && ls -A --color=auto
+      }
+
+      # Check if internet is working
+      function ping() {
+        if [ "$#" -ne 0 ]; then
+          command ping "$@"
+        else
+          command ping "www.brenosalles.com"
         fi
       }
 

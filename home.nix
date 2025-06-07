@@ -122,8 +122,12 @@ in
   };
 
   # I still want to manage Vim manually as it changes frequently
-  home.activation.stowVim = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+  home.activation.stow-vim = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     ${pkgs.stow}/bin/stow --target ${config.home.homeDirectory} --stow vim --dir ${config.home.homeDirectory}/Documents/guergeiro/dotfiles
+  '';
+
+  home.activation.stow-awesome = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    ${pkgs.stow}/bin/stow --target ${config.home.homeDirectory} --stow awesome --dir ${config.home.homeDirectory}/Documents/guergeiro/dotfiles
   '';
 
   xdg.desktopEntries.whatsapp = {
