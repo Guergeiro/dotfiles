@@ -5,7 +5,6 @@
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    flake-parts.url = "github:hercules-ci/flake-parts";
 
     nix-secrets.url = "git+file:./nix-secrets";
 
@@ -21,7 +20,7 @@
     forAllSystems = function:
       nixpkgs.lib.genAttrs [
         "x86_64-linux"
-        "aarch64-darwin" # Added aarch64-darwin to the list
+        "aarch64-darwin"
       ] (system: function nixpkgs.legacyPackages.${system});
 
     # Common modules for both Linux and macOS (where applicable)
@@ -35,6 +34,7 @@
       ./readline/default.nix
       ./starship/default.nix
       ./tmux/default.nix
+      ./vim/default.nix
     ];
   in
   {
@@ -42,8 +42,15 @@
       let
         # System-specific modules
         systemSpecificModules =
-          if pkgs.stdenv.isLinux then [ ./gtk/default.nix ]
-          else if pkgs.stdenv.isDarwin then [ ./aerospace/default.nix ]
+          if pkgs.stdenv.isLinux then
+          [
+            ./awesome/default.nix
+            ./gtk/default.nix
+          ]
+          else if pkgs.stdenv.isDarwin then
+          [
+            ./aerospace/default.nix
+          ]
           else [];
       in
         home-manager.lib.homeManagerConfiguration {

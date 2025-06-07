@@ -1,5 +1,12 @@
-{ pkgs, config, ... }:
+{ pkgs, config, lib, ... }:
+let
+  browser = lib.getExe pkgs.librewolf;
+in
 {
+  xdg.desktopEntries.whatsapp = {
+    name = "WhatsApp";
+    exec = "${browser} --kiosk --new-window https://web.whatsapp.com/";
+  };
   dconf.settings = {
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";

@@ -1,19 +1,14 @@
 { config, pkgs, username, system, lib, ... }:
 let
   dotfilesBaseCmd = "home-manager switch --flake $HOME/Documents/guergeiro/dotfiles";
-  dotfilesFlake = if system == "aarch64-darwin" || system == "x86_64-darwin"
-    then "macos"
-    else "linux";
 
-  dotfilesUpdate = "${dotfilesBaseCmd}/.#${dotfilesFlake}";
-
-  browser = lib.getExe pkgs.librewolf;
+  dotfilesUpdate = "${dotfilesBaseCmd}/.#${system}";
 in
 {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = username;
-  home.homeDirectory = if system == "aarch64-darwin" || system == "x86_64-darwin"
+  home.homeDirectory = if pkgs.stdenv.isDarwin
     then "/Users/${username}"
     else "/home/${username}";
 
@@ -119,19 +114,5 @@ in
 
     # Bat is awesome
     cat="${pkgs.bat}/bin/bat";
-  };
-
-  # I still want to manage Vim manually as it changes frequently
-  home.activation.stow-vim = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    ${pkgs.stow}/bin/stow --target ${config.home.homeDirectory} --stow vim --dir ${config.home.homeDirectory}/Documents/guergeiro/dotfiles
-  '';
-
-  home.activation.stow-awesome = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    ${pkgs.stow}/bin/stow --target ${config.home.homeDirectory} --stow awesome --dir ${config.home.homeDirectory}/Documents/guergeiro/dotfiles
-  '';
-
-  xdg.desktopEntries.whatsapp = {
-    name = "WhatsApp";
-    exec = "${browser} --kiosk --new-window https://web.whatsapp.com/";
   };
 }
