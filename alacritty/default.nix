@@ -1,13 +1,14 @@
-{ ... }:
+{ pkgs, ... }:
 let
   fontFamily = "FantasqueSansM Nerd Font";
-  style = "Bold Italic";
+  style = "Bold";
 in
 {
   programs.alacritty = {
     enable = true;
     theme = "dracula_plus";
     settings = {
+      terminal.shell = "${pkgs.bashInteractive}/bin/bash";
       cursor.style.blinking = "Always";
       font = {
         size = 14;

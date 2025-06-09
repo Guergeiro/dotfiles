@@ -36,34 +36,47 @@
       ./tmux/default.nix
       ./vim/default.nix
     ];
+
+    linuxModules = [
+      ./awesome/default.nix
+      ./gtk/default.nix
+    ];
+
+    macosModules = [
+      ./aerospace/default.nix
+    ];
+
+    homeModules = pkgs: commonModules ++
+          (if pkgs.stdenv.isLinux then
+            linuxModules
+          else if pkgs.stdenv.isDarwin then
+            macosModules
+          else []);
   in
   {
+    homeManagerModules = forAllSystems (
+      pkgs: {
+        inherit pkgs;
+        modules = homeModules pkgs;
+        extraSpecialArgs = {
+          username = nix-secrets.${pkgs.system}.username;
+          system = pkgs.system;
+          standalone = false;
+          inherit starship-dracula;
+        };
+      }
+    );
     homeConfigurations = forAllSystems (pkgs:
-      let
-        # System-specific modules
-        systemSpecificModules =
-          if pkgs.stdenv.isLinux then
-          [
-            ./awesome/default.nix
-            ./gtk/default.nix
-          ]
-          else if pkgs.stdenv.isDarwin then
-          [
-            ./aerospace/default.nix
-          ]
-          else [];
-      in
-        home-manager.lib.homeManagerConfiguration {
-          inherit pkgs; # Use the pkgs provided by forAllSystems
-
-          modules = commonModules ++ systemSpecificModules;
-
-          extraSpecialArgs = {
-            username = nix-secrets.${pkgs.system}.username;
-            system = pkgs.system; # Use the system string from pkgs
-            inherit starship-dracula;
-          };
-        }
+      home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        modules = homeModules pkgs;
+        extraSpecialArgs = {
+          username = nix-secrets.${pkgs.system}.username;
+          system = pkgs.system;
+          standalone = true;
+          inherit starship-dracula;
+        };
+      }
     );
   };
 }

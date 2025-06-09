@@ -36,8 +36,6 @@
           command ping "www.brenosalles.com"
         fi
       }
-
-      eval "$(direnv hook bash)"
     '';
   };
 }

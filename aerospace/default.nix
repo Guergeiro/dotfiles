@@ -1,7 +1,7 @@
 { ... }:
 {
   programs.aerospace = {
-    enable = true;
+    enable = false;
     userSettings = {
       mode.main.binding = {
         alt-1 = "workspace 1";
