@@ -54,16 +54,7 @@
           else []);
   in
   {
-    homeManagerModules = forAllSystems (
-      pkgs: system: username: {
-        inherit pkgs;
-        modules = homeModules pkgs;
-        extraSpecialArgs = {
-          standalone = false;
-          inherit username system starship-dracula;
-        };
-      }
-    );
+    mkHomeModules = homeModules;
     homeConfigurations = forAllSystems (pkgs:
       home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
