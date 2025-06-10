@@ -55,14 +55,12 @@
   in
   {
     homeManagerModules = forAllSystems (
-      pkgs: {
+      pkgs: system: username: {
         inherit pkgs;
         modules = homeModules pkgs;
         extraSpecialArgs = {
-          username = nix-secrets.${pkgs.system}.username;
-          system = pkgs.system;
           standalone = false;
-          inherit starship-dracula;
+          inherit username system starship-dracula;
         };
       }
     );
