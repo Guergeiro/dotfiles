@@ -4,6 +4,14 @@
     enable = true;
     clock24 = true;
     terminal = "tmux-256color";
+    shell = "${pkgs.bashInteractive}/bin/bash";
+    sensibleOnTop = false;
+    mouse = true;
+    historyLimit = 50000;
+    escapeTime = 0;
+    keyMode = "vi";
+    aggressiveResize = true;
+    secureSocket = false;
     plugins = with pkgs; [
       {
         plugin = tmuxPlugins.dracula;
@@ -14,13 +22,10 @@
           set -g @dracula-plugins "time"
         '';
       }
-      {
-        plugin = tmuxPlugins.resurrect;
-        extraConfig = "set -g @resurrect-strategy-vim 'session'";
-      }
       tmuxPlugins.yank
     ];
     extraConfig = ''
+set-option -g update-environment "PATH"
 unbind C-a
 unbind C-b
 unbind C-w
@@ -46,20 +51,11 @@ bind-key -T VIMWINDOWS s split-window -c "#{pane_current_path}"
 bind-key -T VIMWINDOWS v split-window -h -c "#{pane_current_path}"
 bind-key -T VIMWINDOWS c kill-pane
 
-# address vim mode switching delay (http://superuser.com/a/252717/65504)
-set -s escape-time 0
-
-# increase scrollback buffer size
-set -g history-limit 50000
-
 # tmux messages are displayed for 4 seconds
 set -g display-time 4000
 
 # focus events enabled for terminals that support them
 set -g focus-events on
-
-# super useful when using "grouped sessions" and multi-monitor setup
-set -g aggressive-resize on
 
 # No bells at all
 set -g bell-action none
@@ -69,9 +65,6 @@ set -g bell-action none
 
 # Keep windows around after they exit
 set -g remain-on-exit off
-
-# Mouse support
-set -g mouse on
 
 # Vi mode
 set-window-option -g mode-keys vi

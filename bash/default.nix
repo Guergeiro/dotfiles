@@ -13,7 +13,7 @@
       # Automatically tries it's best to correct misspell
       "cdspell"
     ];
-    bashrcExtra = ''
+    initExtra = ''
       function docker-compose() {
         if [ "$1" = "up" ]; then
           shift
