@@ -30,6 +30,7 @@
       ./bash/default.nix
       ./direnv/default.nix
       ./git/default.nix
+      ./gradle/default.nix
       ./librewolf/default.nix
       ./readline/default.nix
       ./starship/default.nix

@@ -1,0 +1,6 @@
+{ ... }:
+{
+  programs.gradle = {
+    enable = true;
+  };
+}
