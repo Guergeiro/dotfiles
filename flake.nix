@@ -33,6 +33,7 @@
       ./gradle/default.nix
       ./librewolf/default.nix
       ./readline/default.nix
+      ./ssh/default.nix
       ./starship/default.nix
       ./tmux/default.nix
       ./vim/default.nix
@@ -68,6 +69,7 @@
         modules = homeModules pkgs;
         extraSpecialArgs = {
           username = nix-secrets.${pkgs.system}.username;
+          gitEmail = nix-secrets.${pkgs.system}.gitEmail;
           system = pkgs.system;
           standalone = true;
           inherit starship-dracula;

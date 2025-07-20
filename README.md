@@ -31,21 +31,33 @@ _It is recommended that you use my
 
 2. Run nix and select corresponding output
    ```bash
-   nix run home-manager/master -- switch --flake .#breno-linux
-   nix run home-manager/master -- switch --flake .#breno-macos
+   nix run home-manager/master -- switch --flake .#x86_64-linux
+   nix run home-manager/master -- switch --flake .#aarch64-darwin
    ```
 
 ### Note
 
 ```bash
-ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
-# Save it to /home/{your-user-here}/.ssh/GitHub
+ssh-keygen -t ed25519 -C "your_email@example.com"
+# Save it to /home/{your-user-here}/.ssh/id_ed25519
+```
+
+```bash
+# encrypt id_ed25519
+openssl enc -aes-256-cbc -pbkdf2 -in id_ed25519 -out id_ed25519.enc
+# decrypt id_ed25519
+openssl enc -d -aes-256-cbc -pbkdf2 -in id_ed25519.enc -out id_ed25519
+
+# encrypt sign_key
+openssl enc -aes-256-cbc -pbkdf2 -in sign_key -out sign_key.enc
+# decrypt sign_key
+openssl enc -d -aes-256-cbc -pbkdf2 -in sign_key.enc -out sign_key
 ```
 
 ```
 # Have .ssh/config with the following
 Host github.com
-   IdentityFile ~/.ssh/GitHub
+   IdentityFile ~/.ssh/id_ed25519
 ```
 
 ## Author

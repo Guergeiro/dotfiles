@@ -1,13 +1,13 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, gitEmail, ... }:
 {
   programs.git = {
     enable = true;
-    userEmail = "git@brenosalles.com";
+    userEmail = gitEmail;
     userName = "Breno Salles";
     signing = {
       signByDefault = true;
       format = "ssh";
-      key = "~/.ssh/SignKey.pub";
+      key = "~/.ssh/sign_key.pub";
     };
     extraConfig = {
       commit.verbose = true;

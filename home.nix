@@ -3,6 +3,13 @@ let
   dotfilesBaseCmd = "home-manager switch --flake $HOME/Documents/guergeiro/dotfiles";
 
   dotfilesUpdate = "${dotfilesBaseCmd}/.#${system}";
+
+  sshFiles = [
+    "id_ed25519"
+    "id_ed25519.pub"
+    "sign_key"
+    "sign_key.pub"
+  ];
 in
 {
   # Home Manager needs a bit of information about you and the paths it should
@@ -44,7 +51,8 @@ in
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
-  home.file = {
+  home.file = lib.mkMerge [
+    {
     # # Building this configuration will create a copy of 'dotfiles/screenrc' in
     # # the Nix store. Activating the configuration will then make '~/.screenrc' a
     # # symlink to the Nix store copy.
@@ -55,7 +63,16 @@ in
     #   org.gradle.console=verbose
     #   org.gradle.daemon.idletimeout=3600000
     # '';
-  };
+    }
+    builtins.listToAttrs (map (name: {
+        name = "${name}";
+        value = {
+          source = "./nix-secrets/${name}";
+          target = "./ssh/${name}";
+          force = true;
+        };
+      }) sshFiles)
+  ];
 
   # Home Manager can also manage your environment variables through
   # 'home.sessionVariables'. These will be explicitly sourced when using a
