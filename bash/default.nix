@@ -37,8 +37,8 @@
         fi
       }
 
-      eval "$(${pkgs.ssh}/bin/ssh-agent -s)" > /dev/null
-      ${pkgs.ssh}/bin/ssh-add ~/.ssh/id_ed25519 2> /dev/null
+      eval "$(${pkgs.openssh}/bin/ssh-agent -s)" > /dev/null
+      ${pkgs.openssh}/bin/ssh-add ~/.ssh/id_ed25519 2> /dev/null
     '';
   };
 }

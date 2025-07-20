@@ -6,7 +6,10 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    nix-secrets.url = "git+file:./nix-secrets";
+    nix-secrets = {
+      url = "git+file:./nix-secrets";
+      flake = false;
+    };
 
     starship-dracula = {
       url = "github:dracula/starship";
@@ -16,6 +19,8 @@
 
   outputs = { self, nixpkgs, home-manager, flake-parts, nix-secrets, starship-dracula, ... }:
   let
+    secrets = builtins.fromJSON (builtins.readFile nix-secrets);
+
     # Define forAllSystems to generate Nixpkgs instances for each system
     forAllSystems = function:
       nixpkgs.lib.genAttrs [
@@ -54,6 +59,23 @@
           else if pkgs.stdenv.isDarwin then
             macosModules
           else []);
+
+    sshKeyFiles = [
+      "sign_key"
+      "sign_key.pub"
+      "id_ed25519"
+      "id_ed25519.pub"
+    ];
+
+    generateSshKeyMap = secrets: filenames:
+      builtins.listToAttrs (map (name: {
+        name = name;
+        value = {
+          source = "${secrets}/${name}";
+          target = "./.ssh/${name}";
+          force = true;
+        };
+      }) filenames);
   in
   {
     mkHomeModules = pkgs: {
@@ -63,17 +85,21 @@
       };
       modules = homeModules pkgs;
     };
+    mkSshKeys = generateSshKeyMap;
     homeConfigurations = forAllSystems (pkgs:
       home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = homeModules pkgs;
-        extraSpecialArgs = {
-          username = nix-secrets.${pkgs.system}.username;
-          gitEmail = nix-secrets.${pkgs.system}.gitEmail;
-          system = pkgs.system;
-          standalone = true;
-          inherit starship-dracula;
-        };
+        extraSpecialArgs = pkgs.lib.mkMerge [
+          (generateSshKeyMap nix-secrets sshKeyFiles)
+          {
+            username = secrets.${pkgs.system}.username;
+            gitEmail = secrets.${pkgs.system}.gitEmail;
+            system = pkgs.system;
+            standalone = true;
+            inherit starship-dracula;
+          }
+        ];
       }
     );
   };

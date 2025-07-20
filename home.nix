@@ -1,15 +1,8 @@
-{ config, pkgs, username, system, lib, standalone, ... }:
+{ config, pkgs, username, system, lib, standalone, sshKeys, ... }:
 let
   dotfilesBaseCmd = "home-manager switch --flake $HOME/Documents/guergeiro/dotfiles";
 
   dotfilesUpdate = "${dotfilesBaseCmd}/.#${system}";
-
-  sshFiles = [
-    "id_ed25519"
-    "id_ed25519.pub"
-    "sign_key"
-    "sign_key.pub"
-  ];
 in
 {
   # Home Manager needs a bit of information about you and the paths it should
@@ -64,14 +57,7 @@ in
     #   org.gradle.daemon.idletimeout=3600000
     # '';
     }
-    builtins.listToAttrs (map (name: {
-        name = "${name}";
-        value = {
-          source = "./nix-secrets/${name}";
-          target = "./ssh/${name}";
-          force = true;
-        };
-      }) sshFiles)
+    sshKeys
   ];
 
   # Home Manager can also manage your environment variables through
