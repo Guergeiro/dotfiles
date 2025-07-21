@@ -17,90 +17,118 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, flake-parts, nix-secrets, starship-dracula, ... }:
-  let
-    secrets = builtins.fromJSON (builtins.readFile nix-secrets);
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      flake-parts,
+      nix-secrets,
+      starship-dracula,
+      ...
+    }:
+    let
+      secrets = builtins.fromJSON (builtins.readFile nix-secrets);
 
-    # Define forAllSystems to generate Nixpkgs instances for each system
-    forAllSystems = function:
-      nixpkgs.lib.genAttrs [
-        "x86_64-linux"
-        "aarch64-darwin"
-      ] (system: function nixpkgs.legacyPackages.${system});
+      # Define forAllSystems to generate Nixpkgs instances for each system
+      forAllSystems =
+        function:
+        nixpkgs.lib.genAttrs [
+          "x86_64-linux"
+          "aarch64-darwin"
+        ] (system: function nixpkgs.legacyPackages.${system});
 
-    # Common modules for both Linux and macOS (where applicable)
-    commonModules = [
-      ./home.nix
-      ./alacritty/default.nix
-      ./bash/default.nix
-      ./direnv/default.nix
-      ./git/default.nix
-      ./gradle/default.nix
-      ./librewolf/default.nix
-      ./readline/default.nix
-      ./ssh/default.nix
-      ./starship/default.nix
-      ./tmux/default.nix
-      ./vim/default.nix
-    ];
+      # Common modules for both Linux and macOS (where applicable)
+      commonModules = [
+        ./home.nix
+        ./alacritty/default.nix
+        ./bash/default.nix
+        ./direnv/default.nix
+        ./git/default.nix
+        ./gradle/default.nix
+        ./librewolf/default.nix
+        ./readline/default.nix
+        ./ssh/default.nix
+        ./starship/default.nix
+        ./tmux/default.nix
+        ./vim/default.nix
+      ];
 
-    linuxModules = [
-      ./awesome/default.nix
-      ./gtk/default.nix
-    ];
+      linuxModules = [
+        ./awesome/default.nix
+        ./gtk/default.nix
+      ];
 
-    macosModules = [
-      ./aerospace/default.nix
-    ];
+      macosModules = [
+        ./aerospace/default.nix
+      ];
 
-    homeModules = pkgs: commonModules ++
-          (if pkgs.stdenv.isLinux then
+      homeModules =
+        pkgs:
+        commonModules
+        ++ (
+          if pkgs.stdenv.isLinux then
             linuxModules
           else if pkgs.stdenv.isDarwin then
             macosModules
-          else []);
+          else
+            [ ]
+        );
 
-    sshKeyFiles = [
-      "sign_key"
-      "sign_key.pub"
-      "id_ed25519"
-      "id_ed25519.pub"
-    ];
+      sshKeyFiles = [
+        "sign_key.pub"
+        "id_ed25519.pub"
+      ];
 
-    generateSshKeyMap = secrets: filenames:
-      builtins.listToAttrs (map (name: {
-        name = name;
-        value = {
-          source = "${secrets}/${name}";
-          target = "./.ssh/${name}";
-          force = true;
-        };
-      }) filenames);
-  in
-  {
-    mkHomeModules = pkgs: {
-      extraSpecialArgs = {
-        standalone = false;
-        inherit starship-dracula;
-      };
-      modules = homeModules pkgs;
-    };
-    mkSshKeys = generateSshKeyMap;
-    homeConfigurations = forAllSystems (pkgs:
-      home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        modules = homeModules pkgs;
-        extraSpecialArgs = pkgs.lib.mkMerge [
-          (generateSshKeyMap nix-secrets sshKeyFiles)
+      generateSshKeyMap =
+        secretsLocation: filenames:
+        builtins.listToAttrs (
+          map (name: {
+            name = name;
+            value = {
+              source = "${secretsLocation}/${name}";
+              target = "./.ssh/${name}";
+              force = true;
+            };
+          }) filenames
+        );
+
+      createExtraSpecialArgs =
+        pkgs: system: secrets: secretsLocation: sshKeyFiles:
+        pkgs.lib.mkMerge [
           {
-            username = secrets.${pkgs.system}.username;
-            gitEmail = secrets.${pkgs.system}.gitEmail;
+            sshKeys = generateSshKeyMap secretsLocation sshKeyFiles;
+          }
+          {
+            username = secrets.${system}.username;
+            gitEmail = secrets.${system}.gitEmail;
             system = pkgs.system;
-            standalone = true;
             inherit starship-dracula;
           }
         ];
-      }
-    );
-  };
+    in
+    {
+      mkHomeModules = pkgs: system: secrets: secretsLocation: {
+        modules = homeModules pkgs;
+        extraSpecialArgs = pkgs.lib.mkMerge [
+          (createExtraSpecialArgs pkgs system secrets secretsLocation sshKeyFiles)
+          {
+            standalone = false;
+          }
+        ];
+      };
+      homeConfigurations = forAllSystems (
+        pkgs:
+        home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          modules = homeModules pkgs;
+          extraSpecialArgs = pkgs.lib.mkMerge [
+            (createExtraSpecialArgs pkgs pkgs.system secrets nix-secrets sshKeyFiles)
+            {
+              standalone = true;
+            }
+          ];
+        }
+      );
+    };
 }

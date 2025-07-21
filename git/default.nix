@@ -1,4 +1,9 @@
-{ pkgs, lib, gitEmail, ... }:
+{
+  pkgs,
+  lib,
+  gitEmail,
+  ...
+}:
 {
   programs.git = {
     enable = true;
@@ -29,9 +34,9 @@
       difftool = {
         prompt = false;
         customdiff.cmd = lib.concatStringsSep " " [
-            "${pkgs.neovim}/bin/nvim -R -f -d"
-            "-c 'wincmd h'"
-            ''-c 'cd $GIT_PREFIX' "$REMOTE" "$LOCAL"''
+          "${pkgs.neovim}/bin/nvim -R -f -d"
+          "-c 'wincmd h'"
+          ''-c 'cd $GIT_PREFIX' "$REMOTE" "$LOCAL"''
         ];
       };
     };
