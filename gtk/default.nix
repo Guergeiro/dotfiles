@@ -5,12 +5,12 @@
   ...
 }:
 let
-  browser = lib.getExe pkgs.librewolf;
+  browser = lib.getExe pkgs.ungoogled-chromium;
 in
 {
   xdg.desktopEntries.whatsapp = {
     name = "WhatsApp";
-    exec = "${browser} --kiosk --new-window https://web.whatsapp.com/";
+    exec = "${browser} --app=https://web.whatsapp.com/";
   };
   dconf.settings = {
     "org/gnome/desktop/interface" = {
