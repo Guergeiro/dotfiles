@@ -193,7 +193,7 @@ if !exists('*s:ShowDocumentation')
 		if (index(['vim', 'help'], &filetype) >= 0)
 			execute 'h ' . expand('<cword>')
 		elseif get(g:, 'lsp_server_loaded', 0) == 1
-			execute 'LspHover'
+			call g:CustomLspHover()
 		else
 			execute '!' . &keywordprg . ' ' . expand('<cword>')
 		endif
@@ -270,10 +270,6 @@ else
 	Plug 'wincent/scalpel', { 'on': '<plug>(Scalpel)' }
 	Plug 'wuelnerdotexe/vim-astro'
 
-	Plug 'mattn/vim-lsp-settings'
-	Plug 'prabirshrestha/vim-lsp'
-	Plug 'prabirshrestha/async.vim'
-
 	Plug 'LumaKernel/ddc-file'
 	Plug 'matsui54/ddc-buffer'
 	Plug 'matsui54/denops-popup-preview.vim'
@@ -283,9 +279,9 @@ else
 	Plug 'Shougo/ddc-filter-sorter_rank'
 	Plug 'Shougo/ddc-source-around'
 	Plug 'Shougo/ddc-source-rg'
+	Plug 'Shougo/ddc-source-lsp'
 	Plug 'Shougo/ddc-ui-pum'
 	Plug 'Shougo/pum.vim'
-	Plug 'shun/ddc-vim-lsp'
 	Plug 'tani/ddc-fuzzy'
 	Plug 'uga-rosa/ddc-source-vsnip'
 	Plug 'vim-denops/denops.vim'
@@ -294,9 +290,16 @@ else
 	if has('nvim')
 		Plug 'github/copilot.vim', { 'on': [] }
 
-		Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+		Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate', 'branch': 'main' }
 		Plug 'nvim-lua/plenary.nvim'
 		Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
+		Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'on': [] }
+		Plug 'neovim/nvim-lspconfig'
+		Plug 'mfussenegger/nvim-jdtls'
+	else
+		Plug 'mattn/vim-lsp-settings'
+		Plug 'prabirshrestha/vim-lsp'
+		Plug 'prabirshrestha/async.vim'
 	endif
 	call plug#end()
 
