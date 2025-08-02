@@ -126,20 +126,6 @@ function __path_update() {
   esac
 }
 
-# Asdf
-export ASDF_HOME="$XDG_DATA_HOME/asdf"
-export ASDF_DIR="$ASDF_HOME"
-__path_update "$ASDF_DIR/bin"
-__path_update "$ASDF_DIR/shims"
-export ASDF_DATA_DIR="$ASDF_HOME"
-export ASDF_CONFIG_FILE="$ASDF_HOME/.asdfrc"
-if [ -f "$ASDF_DATA_DIR/asdf" ]; then
-	. <(asdf completion bash)
-fi
-if [ -f "$ASDF_DATA_DIR/plugins/set-java-home.bash" ]; then
-  . "$ASDF_DATA_DIR/plugins/set-java-home.bash"
-fi
-
 # Gradle
 export GRADLE_HOME="$XDG_DATA_HOME/gradle"
 __path_update "$GRADLE_HOME/bin"

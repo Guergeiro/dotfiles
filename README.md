@@ -3,6 +3,7 @@
 ## Table of Contents
 
 - [About and Disclaimer](#about-and-disclaimer)
+- [Requirements](#requirements)
 - [Steps](#steps)
 - [Author](#author)
 - [License](#license)
@@ -13,46 +14,50 @@ This repository is merely for personal use. It's not private since someone might
 find it useful and, even for me, it saves the pain of login while in a strangers
 computer.
 
-The purpose of this reposity is when I start a freshly Linux image, a bit more
-than just dotfiles. If you want to use it, do it at your own risk.
+## Requirements
+
+- `nix`
 
 ## Steps
 
 _It is recommended that you use my
 [iac repository](https://github.com/guergeiro/iac)._
 
-1. Install stow
-
+1. Init nix-secrets
    ```bash
-   sudo apt-get install stow
+   cd nix-secrets
+   git init
    ```
 
-2. Unstow for each directory
+2. Run nix and select corresponding output
    ```bash
-   stow --target $HOME --stow {dirname} # this should be scripted
-   ```
-
-3. Remove original `.bashrc`
-   ```bash
-   /bin/rm $HOME/.bashrc
-   ```
-
-4. Stow for each directory
-   ```bash
-   stow --target $HOME --stow {dirname} # this should be scripted
+   nix run home-manager/master -- switch --flake .#x86_64-linux
+   nix run home-manager/master -- switch --flake .#aarch64-darwin
    ```
 
 ### Note
 
 ```bash
-ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
-# Save it to /home/{your-user-here}/.ssh/GitHub
+ssh-keygen -t ed25519 -C "your_email@example.com"
+# Save it to /home/{your-user-here}/.ssh/id_ed25519
+```
+
+```bash
+# encrypt id_ed25519
+openssl enc -aes-256-cbc -pbkdf2 -in id_ed25519 -out id_ed25519.enc
+# decrypt id_ed25519
+openssl enc -d -aes-256-cbc -pbkdf2 -in id_ed25519.enc -out id_ed25519
+
+# encrypt sign_key
+openssl enc -aes-256-cbc -pbkdf2 -in sign_key -out sign_key.enc
+# decrypt sign_key
+openssl enc -d -aes-256-cbc -pbkdf2 -in sign_key.enc -out sign_key
 ```
 
 ```
 # Have .ssh/config with the following
 Host github.com
-   IdentityFile ~/.ssh/GitHub
+   IdentityFile ~/.ssh/id_ed25519
 ```
 
 ## Author
