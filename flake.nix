@@ -94,12 +94,13 @@
         );
 
       createExtraSpecialArgs =
-        pkgs: system: secrets: secretsLocation: sshKeyFiles:
+        pkgs: system: secrets: secretsLocation: sshKeyFiles: dotfilesDir:
         pkgs.lib.mkMerge [
           {
             sshKeys = generateSshKeyMap secretsLocation sshKeyFiles;
           }
           {
+            dotfilesDir = dotfilesDir;
             username = secrets.${system}.username;
             gitEmail = secrets.${system}.gitEmail;
             system = pkgs.system;
@@ -108,10 +109,10 @@
         ];
     in
     {
-      mkHomeModules = pkgs: system: secrets: secretsLocation: {
+      mkHomeModules = pkgs: system: secrets: secretsLocation: dotfilesDir: {
         modules = homeModules pkgs;
         extraSpecialArgs = pkgs.lib.mkMerge [
-          (createExtraSpecialArgs pkgs system secrets secretsLocation sshKeyFiles)
+          (createExtraSpecialArgs pkgs system secrets secretsLocation sshKeyFiles dotfilesDir)
           {
             standalone = false;
           }
@@ -123,7 +124,7 @@
           inherit pkgs;
           modules = homeModules pkgs;
           extraSpecialArgs = pkgs.lib.mkMerge [
-            (createExtraSpecialArgs pkgs pkgs.system secrets nix-secrets sshKeyFiles)
+            (createExtraSpecialArgs pkgs pkgs.system secrets nix-secrets sshKeyFiles self)
             {
               standalone = true;
             }
