@@ -1,11 +1,21 @@
 {
-  lib,
-  pkgs,
   config,
+  dotfilesDir,
+  awesome-wm-widgets,
   ...
 }:
+let
+  awesomeDir = "${dotfilesDir}/awesome/awesome";
+in
 {
-  home.activation.stow-awesome = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    ${pkgs.stow}/bin/stow --target ${config.home.homeDirectory} --stow awesome --dir ${config.home.homeDirectory}/Documents/guergeiro/dotfiles/awesome
-  '';
+  home.file.".config/awesome/" = {
+    source = config.lib.file.mkOutOfStoreSymlink "${awesomeDir}/.config/awesome/";
+    recursive = true;
+    force = true;
+  };
+  home.file.".config/awesome/awesome-wm-widgets/" = {
+    source = config.lib.file.mkOutOfStoreSymlink awesome-wm-widgets;
+    recursive = true;
+    force = true;
+  };
 }

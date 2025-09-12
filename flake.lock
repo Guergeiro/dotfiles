@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "awesome-wm-widgets": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1751404832,
+        "narHash": "sha256-G68SbhW5tkhWRp4HmcH4f4LS09WEzPiNcsWN88aJCy8=",
+        "owner": "streetturtle",
+        "repo": "awesome-wm-widgets",
+        "rev": "101f7a5fbd33f238b4c14e57314b9690f719d861",
+        "type": "github"
+      },
+      "original": {
+        "owner": "streetturtle",
+        "repo": "awesome-wm-widgets",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": "nixpkgs-lib"
@@ -85,6 +101,7 @@
     },
     "root": {
       "inputs": {
+        "awesome-wm-widgets": "awesome-wm-widgets",
         "flake-parts": "flake-parts",
         "home-manager": "home-manager",
         "nix-secrets": "nix-secrets",

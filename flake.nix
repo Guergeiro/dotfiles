@@ -15,6 +15,11 @@
       url = "github:dracula/starship";
       flake = false;
     };
+
+    awesome-wm-widgets = {
+      url = "github:streetturtle/awesome-wm-widgets";
+      flake = false;
+    };
   };
 
   outputs =
@@ -25,6 +30,7 @@
       flake-parts,
       nix-secrets,
       starship-dracula,
+      awesome-wm-widgets,
       ...
     }:
     let
@@ -104,7 +110,7 @@
             username = secrets.${system}.username;
             gitEmail = secrets.${system}.gitEmail;
             system = pkgs.system;
-            inherit starship-dracula;
+            inherit starship-dracula awesome-wm-widgets;
           }
         ];
     in
