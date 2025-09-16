@@ -21,7 +21,7 @@ if !exists('*g:LspJumpNext')
 		if has('nvim')
 lua << EOF
 vim.diagnostic.jump({
-	count = -1
+	count = 1
 })
 EOF
 		else
