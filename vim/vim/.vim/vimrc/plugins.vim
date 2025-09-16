@@ -111,7 +111,7 @@ vim.diagnostic.config({
 		},
 	},
 })
-vim.lsp.enable('jdtls')
+vim.lsp.enable({'jdtls', 'denols'})
 EOF
 	nnoremap gd <cmd>lua vim.lsp.buf.type_definition()<cr>
 	nnoremap gr <cmd>lua vim.lsp.buf.references()<cr>
