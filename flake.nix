@@ -53,6 +53,7 @@
         ./git/default.nix
         ./gradle/default.nix
         ./librewolf/default.nix
+        ./opencode/default.nix
         ./readline/default.nix
         ./ssh/default.nix
         ./starship/default.nix
