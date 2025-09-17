@@ -111,7 +111,11 @@ vim.diagnostic.config({
 		},
 	},
 })
-vim.lsp.enable({'jdtls', 'denols'})
+vim.lsp.enable({
+	'jdtls',
+	'denols',
+	'kotlin_language_server'
+})
 EOF
 	nnoremap gd <cmd>lua vim.lsp.buf.type_definition()<cr>
 	nnoremap gr <cmd>lua vim.lsp.buf.references()<cr>
