@@ -12,7 +12,7 @@ setlocal tabstop=4
 setlocal softtabstop=4
 setlocal shiftwidth=4
 
-let &l:formatprg='ktlint --log-level=none --stdin --format ' . expand('%') . ' 2> /dev/null'
+let &l:formatprg='ktlint --log-level=error --stdin --format 2> /dev/null'
 let g:smartpairs_pairs = get(g:, "smartpairs_pairs", {})
 let g:smartpairs_pairs[&filetype] = {
 			\ '(': ')',
