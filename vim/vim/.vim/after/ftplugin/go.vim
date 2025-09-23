@@ -4,7 +4,7 @@ endif
 setlocal tabstop=4
 setlocal softtabstop=4
 setlocal shiftwidth=4
-let &l:formatprg='gofmt ' . expand('%')
+let &l:formatprg='gofmt -s'
 
 if !exists('g:smartpairs_loaded')
 	finish
