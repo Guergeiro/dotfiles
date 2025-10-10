@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, pkgs, ... }:
 {
   programs.librewolf = {
     enable = true;
@@ -6,12 +6,16 @@
       "en-GB"
       "pt-PT"
     ];
-    settings = {
-      # Reopen windows/tabs
-      "browser.startup.page" = 3;
-      "privacy.clearOnShutdown.history" = false;
-      "privacy.resistFingerprinting" = false;
-      "widget.gtk.non-native-titlebar-buttons.enabled" = false;
-    };
+    settings = lib.mkMerge [
+      {
+        # Reopen windows/tabs
+        "browser.startup.page" = 3;
+        "privacy.clearOnShutdown.history" = false;
+        "privacy.resistFingerprinting" = false;
+      }
+      # (lib.mkIf (!pkgs.stdenv.isDarwin) {
+      #   "widget.gtk.non-native-titlebar-buttons.enabled" = false;
+      # })
+    ];
   };
 }
