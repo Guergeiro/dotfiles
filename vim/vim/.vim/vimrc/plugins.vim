@@ -114,7 +114,8 @@ vim.diagnostic.config({
 vim.lsp.enable({
 	'jdtls',
 	'denols',
-	'kotlin_language_server'
+	'kotlin_language_server',
+	'terraformls'
 })
 EOF
 	nnoremap gd <cmd>lua vim.lsp.buf.type_definition()<cr>
