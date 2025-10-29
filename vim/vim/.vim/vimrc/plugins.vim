@@ -115,7 +115,9 @@ vim.lsp.enable({
 	'jdtls',
 	'denols',
 	'kotlin_language_server',
-	'terraformls'
+	'terraformls',
+	'pyright',
+	'pylsp'
 })
 EOF
 	nnoremap gd <cmd>lua vim.lsp.buf.type_definition()<cr>
