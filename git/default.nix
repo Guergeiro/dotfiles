@@ -7,14 +7,14 @@
 {
   programs.git = {
     enable = true;
-    userEmail = gitEmail;
-    userName = "Breno Salles";
     signing = {
       signByDefault = true;
       format = "ssh";
       key = "~/.ssh/sign_key.pub";
     };
-    extraConfig = {
+    settings = {
+      user.email = gitEmail;
+      user.name = "Breno Salles";
       commit.verbose = true;
       core.editor = "${pkgs.neovim}/bin/nvim";
       merge.tool = "diffconflicts";
