@@ -114,6 +114,7 @@ vim.diagnostic.config({
 vim.lsp.enable({
 	'jdtls',
 	'denols',
+	'gopls',
 	'kotlin_language_server',
 	'terraformls',
 	'pyright',
