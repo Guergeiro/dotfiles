@@ -111,6 +111,7 @@
             username = secrets.${system}.username;
             gitEmail = secrets.${system}.gitEmail;
             system = pkgs.system;
+            hosts = secrets.${system}.hosts;
             inherit starship-dracula awesome-wm-widgets;
           }
         ];
