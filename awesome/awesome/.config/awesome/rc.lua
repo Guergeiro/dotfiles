@@ -62,7 +62,8 @@ run_once({
 	"light-locker",
 	"nm-applet",
 	"blueman-applet",
-	"mintupdate-launcher"
+	"mintupdate-launcher",
+	"xfce4-clipman"
 })
 
 
