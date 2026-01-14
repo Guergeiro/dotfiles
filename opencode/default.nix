@@ -10,6 +10,13 @@
         edit = "allow";
         bash = "allow";
       };
+      mcp = {
+        "astro-mcp-server" = {
+          type = "remote";
+          url = "https://mcp.docs.astro.build/mcp";
+          enabled = true;
+        };
+      };
     };
   };
 }
