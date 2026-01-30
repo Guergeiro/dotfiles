@@ -1,7 +1,7 @@
 {
   pkgs,
   lib,
-  gitEmail,
+  gitConfig,
   ...
 }:
 {
@@ -13,7 +13,7 @@
       key = "~/.ssh/sign_key.pub";
     };
     settings = {
-      user.email = gitEmail;
+      user.email = "git@brenosalles.com";
       user.name = "Breno Salles";
       commit.verbose = true;
       core.editor = "${pkgs.neovim}/bin/nvim";
@@ -40,5 +40,14 @@
         ];
       };
     };
+    includes = map (config: {
+      condition = config.condition;
+      contents = lib.mkMerge [
+        { user.email = config.gitEmail; }
+        (lib.mkIf (config ? signingKey) {
+          user.signingKey = config.signingKey;
+        })
+      ];
+    }) gitConfig;
   };
 }

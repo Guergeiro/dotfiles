@@ -1,15 +1,15 @@
 {
   pkgs,
-  hosts,
+  sshConfig,
   lib,
   ...
 }:
 let
   matchBlocks = builtins.listToAttrs (
-    map (host: {
-      name = host.hostname;
-      value = host;
-    }) hosts
+    map (config: {
+      name = config.hostname;
+      value = config;
+    }) sshConfig
   );
 in
 {

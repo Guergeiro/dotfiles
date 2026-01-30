@@ -109,9 +109,9 @@
           {
             dotfilesDir = dotfilesDir;
             username = secrets.${system}.username;
-            gitEmail = secrets.${system}.gitEmail;
             system = pkgs.system;
-            hosts = secrets.${system}.hosts;
+            sshConfig = secrets.${system}.sshConfig;
+            gitConfig = secrets.${system}.gitConfig;
             inherit starship-dracula awesome-wm-widgets;
           }
         ];
