@@ -68,6 +68,7 @@
 
       macosModules = [
         ./aerospace/default.nix
+        ./colima/default.nix
       ];
 
       homeModules =

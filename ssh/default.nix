@@ -16,6 +16,9 @@ in
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
+    includes = [
+      "~/.colima/ssh_config"
+    ];
     matchBlocks = lib.mkMerge [
       matchBlocks
       {
