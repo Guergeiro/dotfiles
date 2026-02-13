@@ -247,7 +247,6 @@ else
 	Plug 'lambdalisue/fern-hijack.vim'
 	Plug 'lambdalisue/fern-renderer-nerdfont.vim', { 'on': 'Fern' }
 	Plug 'lambdalisue/nerdfont.vim'
-	Plug 'lervag/vimtex', { 'for': 'tex' }
 	Plug 'machakann/vim-highlightedyank'
 	Plug 'mattn/emmet-vim', { 'for':
 				\ [
@@ -265,15 +264,12 @@ else
 	Plug 'tpope/vim-commentary'
 	Plug 'tpope/vim-surround'
 	Plug 'sheerun/vim-polyglot'
-	Plug 'srcery-colors/srcery-vim'
 	Plug 'whiteinge/diffconflicts'
 	Plug 'wincent/scalpel', { 'on': '<plug>(Scalpel)' }
-	Plug 'wuelnerdotexe/vim-astro'
 
 	Plug 'LumaKernel/ddc-file'
 	Plug 'matsui54/ddc-buffer'
-	Plug 'matsui54/denops-popup-preview.vim'
-	Plug 'Shougo/ddc.vim'
+	Plug 'Shougo/ddc.vim', { 'tag': '*' }
 	Plug 'Shougo/ddc-filter-converter_remove_overlap'
 	Plug 'Shougo/ddc-filter-matcher_head'
 	Plug 'Shougo/ddc-filter-sorter_rank'
@@ -284,16 +280,14 @@ else
 	Plug 'Shougo/pum.vim'
 	Plug 'tani/ddc-fuzzy'
 	Plug 'uga-rosa/ddc-source-vsnip'
-	Plug 'vim-denops/denops.vim'
+	Plug 'vim-denops/denops.vim', { 'tag': '*' }
+	Plug 'github/copilot.vim', { 'on': [], 'tag': '*' }
 
 
 	if has('nvim')
-		Plug 'github/copilot.vim', { 'on': [] }
-
 		Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate', 'branch': 'main' }
 		Plug 'nvim-lua/plenary.nvim'
-		Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
-		Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'on': [] }
+		Plug 'nvim-telescope/telescope.nvim', { 'tag': '*' }
 		Plug 'neovim/nvim-lspconfig'
 		Plug 'mfussenegger/nvim-jdtls'
 	else
