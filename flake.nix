@@ -6,6 +6,9 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+    nur.url = "github:nix-community/NUR";
+    nur.inputs.nixpkgs.follows = "nixpkgs";
+
     nix-secrets = {
       url = "git+file:./nix-secrets";
       flake = false;
@@ -26,8 +29,8 @@
     {
       self,
       nixpkgs,
+      nur,
       home-manager,
-      flake-parts,
       nix-secrets,
       starship-dracula,
       awesome-wm-widgets,
@@ -113,6 +116,7 @@
             system = pkgs.system;
             sshConfig = secrets.${system}.sshConfig;
             gitConfig = secrets.${system}.gitConfig;
+            nur = nur.legacyPackages.${system};
             inherit starship-dracula awesome-wm-widgets;
           }
         ];
