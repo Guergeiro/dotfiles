@@ -18,6 +18,8 @@
         "browser.startup.page" = 3;
         "privacy.clearOnShutdown.history" = false;
         "privacy.resistFingerprinting" = false;
+        "privacy.clearOnShutdown.cookies" = false;
+        "privacy.clearOnShutdown_v2.cookiesAndStorage" = false;
         "browser.toolbars.bookmarks.visibility" = "newtab";
         # We manage extensions via nix
         "extensions.autoDisableScopes" = 0;
