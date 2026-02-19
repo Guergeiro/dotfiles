@@ -28,8 +28,13 @@
             "run"
             "-i"
             "--rm"
-            "hashicorp/terraform-mcp-server:0.4.0"
+            "hashicorp/terraform-mcp-server:latest"
           ];
+          enabled = true;
+        };
+        "hono" = {
+          type = "remote";
+          url = "https://hono.dev/llms.txt";
           enabled = true;
         };
       };
