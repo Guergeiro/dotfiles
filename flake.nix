@@ -67,6 +67,7 @@
       linuxModules = [
         ./awesome/default.nix
         ./gtk/default.nix
+        ./qtile/default.nix
       ];
 
       darwinModules = [
