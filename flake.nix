@@ -10,7 +10,7 @@
     nur.inputs.nixpkgs.follows = "nixpkgs";
 
     nix-secrets = {
-      url = "git+file:./nix-secrets";
+      url = "./nix-secrets";
       flake = false;
     };
 
@@ -69,7 +69,7 @@
         ./gtk/default.nix
       ];
 
-      macosModules = [
+      darwinModules = [
         ./aerospace/default.nix
         ./colima/default.nix
       ];
@@ -81,7 +81,7 @@
           if pkgs.stdenv.isLinux then
             linuxModules
           else if pkgs.stdenv.isDarwin then
-            macosModules
+            darwinModules
           else
             [ ]
         );
@@ -113,6 +113,10 @@
           {
             dotfilesDir = dotfilesDir;
             username = secrets.${system}.username;
+            isPersonal = secrets.${system}.personal;
+            isWork = secrets.${system}.personal == false;
+            envVars = secrets.${system}.environment or {};
+            gradleProperties = secrets.${system}.gradle or {};
             system = pkgs.system;
             sshConfig = secrets.${system}.sshConfig;
             gitConfig = secrets.${system}.gitConfig;
