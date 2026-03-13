@@ -10,7 +10,7 @@
     nur.inputs.nixpkgs.follows = "nixpkgs";
 
     nix-secrets = {
-      url = "./nix-secrets";
+      url = "git+file:./nix-secrets";
       flake = false;
     };
 

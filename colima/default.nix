@@ -73,7 +73,7 @@
   programs.bash.initExtra = ''
     # Set TESTCONTAINERS_HOST_OVERRIDE dynamically from running Colima instance
     if ${pkgs.colima}/bin/colima status &> /dev/null; then
-      export TESTCONTAINERS_HOST_OVERRIDE=$(${pkgs.colima}/bin/colima ls -j | ${pkgs.jq}/bin/jq -r '.address')
+      export TESTCONTAINERS_HOST_OVERRIDE=$(${pkgs.colima}/bin/colima ${pkgs.coreutils}/bin/ls -j | ${pkgs.jq}/bin/jq -r '.address')
     fi
   '';
 }

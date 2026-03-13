@@ -60,14 +60,18 @@
     "nix-secrets": {
       "flake": false,
       "locked": {
-        "path": "./nix-secrets",
-        "type": "path"
+        "lastModified": 1773428632,
+        "narHash": "sha256-CNu692aJh7o653rf7LD0d0qzua+Jds8p36vqMUp09z4=",
+        "ref": "refs/heads/master",
+        "rev": "85f7df910ceeeec3540eda8fc9e7979be9e802e5",
+        "revCount": 27,
+        "type": "git",
+        "url": "file:./nix-secrets"
       },
       "original": {
-        "path": "./nix-secrets",
-        "type": "path"
-      },
-      "parent": []
+        "type": "git",
+        "url": "file:./nix-secrets"
+      }
     },
     "nixpkgs": {
       "locked": {
