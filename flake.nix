@@ -19,6 +19,11 @@
       flake = false;
     };
 
+    rofi-dracula = {
+      url = "github:dracula/rofi";
+      flake = false;
+    };
+
     awesome-wm-widgets = {
       url = "github:streetturtle/awesome-wm-widgets";
       flake = false;
@@ -33,6 +38,7 @@
       home-manager,
       nix-secrets,
       starship-dracula,
+      rofi-dracula,
       awesome-wm-widgets,
       ...
     }:
@@ -68,6 +74,7 @@
         ./awesome/default.nix
         ./gtk/default.nix
         ./qtile/default.nix
+        ./rofi/default.nix
       ];
 
       darwinModules = [
@@ -122,7 +129,7 @@
             sshConfig = secrets.${system}.sshConfig;
             gitConfig = secrets.${system}.gitConfig;
             nur = nur.legacyPackages.${system};
-            inherit starship-dracula awesome-wm-widgets;
+            inherit starship-dracula rofi-dracula awesome-wm-widgets;
           }
         ];
     in

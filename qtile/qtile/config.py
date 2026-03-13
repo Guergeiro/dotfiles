@@ -45,6 +45,7 @@ from qtile_extras import widget
 mod = "mod4"
 alt = "mod1"
 terminal = guess_terminal()
+rofi = "rofi -show drun"
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -71,7 +72,7 @@ keys = [
     Key([mod], "f", lazy.window.toggle_floating(), desc="Toggle floating on the focused window"),
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
-    Key([mod], "s", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+    Key([mod], "s", lazy.spawn(rofi), desc="Spawn rofi in drun mode"),
     Key([mod], "space", lazy.widget["keyboardlayout"].next_keyboard(), desc="Next keyboard layout"),
     Key([], "XF86AudioRaiseVolume", lazy.widget["pulsevolume"].increase_vol(), desc="Increase volume" ),
     Key([], "XF86AudioLowerVolume", lazy.widget["pulsevolume"].decrease_vol(), desc="Decrease volume" ),

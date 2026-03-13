@@ -44,11 +44,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1773367248,
-        "narHash": "sha256-FFMc1uAwy2GYasd0rdNDVxKyAgzuoJH2M+GglBQbqf0=",
+        "lastModified": 1773422513,
+        "narHash": "sha256-MPjR48roW7CUMU6lu0+qQGqj92Kuh3paIulMWFZy+NQ=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "be0c641a6a5564caa33982faa1fe2c60d92131c7",
+        "rev": "ef12a9a2b0f77c8fa3dda1e7e494fca668909056",
         "type": "github"
       },
       "original": {
@@ -97,16 +97,32 @@
         ]
       },
       "locked": {
-        "lastModified": 1773416379,
-        "narHash": "sha256-voiP3sOuUmzypoN4OkpbqqHRFiemD809JJZTb0HnWTQ=",
+        "lastModified": 1773436970,
+        "narHash": "sha256-8W7J/EvtAvO4x8X2ebGE/hJns85fT6fHIdKrKf9/EII=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "ca93892f3a4ce47513f926f3f22981135b1f5d00",
+        "rev": "18e764719da8c51f8c69c5ea0f96c02e4e384d16",
         "type": "github"
       },
       "original": {
         "owner": "nix-community",
         "repo": "NUR",
+        "type": "github"
+      }
+    },
+    "rofi-dracula": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1693050823,
+        "narHash": "sha256-Zx/+FLd5ocHg6+YkqOt67nWfeHR3+iitVm1uKnNXrzc=",
+        "owner": "dracula",
+        "repo": "rofi",
+        "rev": "459eee340059684bf429a5eb51f8e1cc4998eb74",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dracula",
+        "repo": "rofi",
         "type": "github"
       }
     },
@@ -117,6 +133,7 @@
         "nix-secrets": "nix-secrets",
         "nixpkgs": "nixpkgs",
         "nur": "nur",
+        "rofi-dracula": "rofi-dracula",
         "starship-dracula": "starship-dracula"
       }
     },
