@@ -40,6 +40,25 @@ in
     # (pkgs.writeShellScriptBin "my-hello" ''
     #   echo "Hello, ${config.home.username}!"
     # '')
+
+    pkgs.python3Packages.passlib
+
+    # Create a new copy/paste command that allows too feed/read content directly to/from xclip
+    (pkgs.writeShellScriptBin "copy" ''
+      if [ -n "$WAYLAND_DISPLAY" ]; then
+        exec ${pkgs.wl-clipboard}/bin/wl-copy
+      else
+        exec ${pkgs.xclip}/bin/xclip -i -selection clipboard
+      fi
+    '')
+
+    (pkgs.writeShellScriptBin "paste" ''
+      if [ -n "$WAYLAND_DISPLAY" ]; then
+        exec ${pkgs.wl-clipboard}/bin/wl-paste
+      else
+        exec ${pkgs.xclip}/bin/xclip -o -selection clipboard
+      fi
+    '')
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage

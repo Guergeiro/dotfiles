@@ -45,4 +45,7 @@
       ${pkgs.openssh}/bin/ssh-add ~/.ssh/id_ed25519 2> /dev/null
     '';
   };
+  home.packages = [
+    pkgs.openssh
+  ];
 }

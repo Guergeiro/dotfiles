@@ -35,12 +35,10 @@ from libqtile.utils import guess_terminal
 from libqtile.backend.wayland import InputConfig
 from qtile_extras import widget
 
-# @hook.subscribe.startup_once
-# def autostart():
-#     nm_applet = os.path.expanduser("nm-applet")
-#     blueman_applet = os.path.expanduser("blueman-applet")
-#     subprocess.run([nm_applet])
-#     subprocess.run([blueman_applet])
+@hook.subscribe.startup_once
+def autostart():
+    os.system("systemctl --user restart blueman-applet.service")
+    os.system("systemctl --user restart nm-applet.service")
 
 mod = "mod4"
 alt = "mod1"
@@ -160,11 +158,9 @@ screens = [
                     name_transform=lambda name: name.upper(),
                 ),
                 widget.KeyboardLayout(configured_keyboards=["us", "us(intl)"]),
-                widget.WiFiIcon(wifi_shape="rectangle", interface="wlp0s20f3"),
                 widget.StatusNotifier(),
                 widget.UPowerWidget(),
                 widget.BrightnessControl(name="brightness"),
-                widget.Bluetooth(),
                 widget.PulseVolumeExtra(),
                 widget.Clock(format="%Y-%m-%d %a %H:%M"),
                 widget.CurrentLayout(mode="icon"),
