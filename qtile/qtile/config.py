@@ -44,6 +44,7 @@ mod = "mod4"
 alt = "mod1"
 terminal = guess_terminal()
 rofi = "rofi -show drun"
+screenshooter = "xfce4-screenshooter"
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -77,6 +78,7 @@ keys = [
     Key([], "XF86AudioMute", lazy.widget["pulsevolume"].mute(), desc="Mute volume" ),
     Key([], "XF86MonBrightnessUp", lazy.widget["brightness"].brightness_up(), desc="Increase brightness" ),
     Key([], "XF86MonBrightnessDown", lazy.widget["brightness"].brightness_down(), desc="Decrease brightness" ),
+    Key([], "Print", lazy.spawn(screenshooter), desc="Spawn screenshooter"),
 ]
 
 # Add key bindings to switch VTs in Wayland.
