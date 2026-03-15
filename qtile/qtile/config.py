@@ -163,7 +163,7 @@ screens = [
                 widget.StatusNotifier(),
                 widget.UPowerWidget(),
                 widget.BrightnessControl(name="brightness"),
-                widget.PulseVolumeExtra(),
+                widget.PulseVolumeExtra(name="pulsevolume"),
                 widget.Clock(format="%Y-%m-%d %a %H:%M"),
                 widget.CurrentLayout(mode="icon"),
             ],
