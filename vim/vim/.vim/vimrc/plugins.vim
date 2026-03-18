@@ -384,30 +384,7 @@ if has('nvim')
 				if ai == 'copilot'
 					let g:copilot_no_tab_map = v:true
 					call plug#load('copilot.vim')
-					call plug#load('CopilotChat.nvim')
-					imap <silent><script><expr> <c-y> copilot#Accept("\<CR>")
-lua << EOF
-require("CopilotChat").setup {
-	-- See Configuration section for options
-mappings = {
-		complete = {
-			insert = '<c-y>',
-		},
-		close = {
-			normal = 'q',
-			insert = '<esc>',
-		},
-		reset = {
-			normal = '<C-l>',
-			insert = '<C-l>',
-		},
-		submit_prompt = {
-			normal = '<CR>',
-			insert = '<C-s>',
-		},
-	},
-}
-EOF
+					imap <silent><script><expr> <c-y> copilot#Accept()
 				endif
 			endfor
 		endfunction
