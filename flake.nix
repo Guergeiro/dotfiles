@@ -23,6 +23,11 @@
       url = "github:dracula/rofi";
       flake = false;
     };
+
+    obra-superpowers = {
+      url = "github:obra/superpowers";
+      flake = false;
+    };
   };
 
   outputs =
@@ -34,10 +39,15 @@
       nix-secrets,
       starship-dracula,
       rofi-dracula,
+      obra-superpowers,
       ...
     }:
     let
       secrets = builtins.fromJSON (builtins.readFile nix-secrets);
+
+      opencode-plugins = {
+        superpowers = obra-superpowers;
+      };
 
       # Define forAllSystems to generate Nixpkgs instances for each system
       forAllSystems =
@@ -122,7 +132,7 @@
             sshConfig = secrets.${system}.sshConfig;
             gitConfig = secrets.${system}.gitConfig;
             nur = nur.legacyPackages.${system};
-            inherit starship-dracula rofi-dracula;
+            inherit starship-dracula rofi-dracula opencode-plugins;
           }
         ];
     in

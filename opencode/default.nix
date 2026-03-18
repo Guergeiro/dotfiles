@@ -4,6 +4,7 @@
   isPersonal,
   isWork,
   envVars,
+  opencode-plugins,
   ...
 }:
 let
@@ -99,6 +100,9 @@ in
         bash = "allow";
       };
       mcp = mcpServers;
+      plugin = with opencode-plugins; [
+        superpowers
+      ];
     };
   };
 }
