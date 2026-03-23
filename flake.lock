@@ -134,7 +134,8 @@
         "nur": "nur",
         "obra-superpowers": "obra-superpowers",
         "rofi-dracula": "rofi-dracula",
-        "starship-dracula": "starship-dracula"
+        "starship-dracula": "starship-dracula",
+        "sublime-dracula": "sublime-dracula"
       }
     },
     "starship-dracula": {
@@ -150,6 +151,22 @@
       "original": {
         "owner": "dracula",
         "repo": "starship",
+        "type": "github"
+      }
+    },
+    "sublime-dracula": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1750788141,
+        "narHash": "sha256-7veVVrLPW3T7KkkelDmgPW5kp+b12naKSKwCXBgjL1k=",
+        "owner": "dracula",
+        "repo": "sublime",
+        "rev": "d490b57c08f3d110ff61a07ec6edcc1ed9e24a63",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dracula",
+        "repo": "sublime",
         "type": "github"
       }
     }

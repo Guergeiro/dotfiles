@@ -24,6 +24,11 @@
       flake = false;
     };
 
+    sublime-dracula = {
+      url = "github:dracula/sublime";
+      flake = false;
+    };
+
     obra-superpowers = {
       url = "github:obra/superpowers";
       flake = false;
@@ -39,6 +44,7 @@
       nix-secrets,
       starship-dracula,
       rofi-dracula,
+      sublime-dracula,
       obra-superpowers,
       ...
     }:
@@ -126,13 +132,18 @@
             username = secrets.${system}.username;
             isPersonal = secrets.${system}.personal;
             isWork = secrets.${system}.personal == false;
-            envVars = secrets.${system}.environment or {};
-            gradleProperties = secrets.${system}.gradle or {};
+            envVars = secrets.${system}.environment or { };
+            gradleProperties = secrets.${system}.gradle or { };
             system = pkgs.system;
             sshConfig = secrets.${system}.sshConfig;
             gitConfig = secrets.${system}.gitConfig;
             nur = nur.legacyPackages.${system};
-            inherit starship-dracula rofi-dracula opencode-plugins;
+            inherit
+              starship-dracula
+              rofi-dracula
+              sublime-dracula
+              opencode-plugins
+              ;
           }
         ];
     in
@@ -157,6 +168,41 @@
               standalone = true;
             }
           ];
+        }
+      );
+      devShells = forAllSystems (
+        pkgs:
+        let
+          hookScripts = {
+            pre-commit = pkgs.writeShellScript "pre-commit" ''
+              format_staged_nix_files() {
+                files=$(${pkgs.git}/bin/git diff --cached --name-only --diff-filter=ACMR -- '*.nix')
+                [ -z "$files" ] && return 0
+                ${pkgs.coreutils}/bin/echo "$files" | ${pkgs.findutils}/bin/xargs ${pkgs.nixfmt}/bin/nixfmt
+                ${pkgs.coreutils}/bin/echo "$files" | ${pkgs.findutils}/bin/xargs ${pkgs.git}/bin/git add
+              }
+              format_staged_nix_files
+            '';
+            post-commit = pkgs.writeShellScript "post-commit" ''
+              exec ${pkgs.git}/bin/git update-index -g
+            '';
+          };
+          hooksDir = pkgs.linkFarm "git-hooks" (
+            pkgs.lib.mapAttrsToList (name: path: {
+              inherit name path;
+            }) hookScripts
+          );
+        in
+        {
+          default = pkgs.mkShell {
+            packages = with pkgs; [
+              nixfmt
+            ];
+
+            GIT_CONFIG_COUNT = "1";
+            GIT_CONFIG_KEY_0 = "core.hooksPath";
+            GIT_CONFIG_VALUE_0 = hooksDir;
+          };
         }
       );
     };

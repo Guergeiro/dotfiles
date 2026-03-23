@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, sublime-dracula, ... }:
 {
   programs.bash = {
     enable = true;
@@ -45,6 +45,28 @@
       ${pkgs.openssh}/bin/ssh-add ~/.ssh/id_ed25519 2> /dev/null
     '';
   };
+
+  programs.bat = {
+    enable = true;
+    config = {
+      theme = "Dracula";
+    };
+    themes = {
+      Dracula = {
+        src = sublime-dracula;
+        file = "Dracula.tmTheme";
+      };
+    };
+  };
+  programs.ripgrep = {
+    enable = true;
+    arguments = [
+      "--hidden"
+      "--color=auto"
+      "--smart-case"
+    ];
+  };
+
   home.packages = [
     pkgs.openssh
   ];
