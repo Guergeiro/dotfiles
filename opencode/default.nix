@@ -10,7 +10,24 @@
 let
   mcpServers = lib.mkMerge [
     {
-      "astro_mcp_server" = {
+      "sequential" = {
+        type = "local";
+        command = [
+          "docker"
+          "run"
+          "-i"
+          "--rm"
+          "--pull=always"
+          "mcp/sequentialthinking:latest"
+        ];
+        enabled = true;
+      };
+      "context7" = {
+        type = "remote";
+        url = "https://mcp.context7.com/mcp";
+        enabled = true;
+      };
+      "astro" = {
         type = "remote";
         url = "https://mcp.docs.astro.build/mcp";
         enabled = isPersonal;
@@ -20,7 +37,7 @@ let
         url = "https://mcp.grep.app";
         enabled = true;
       };
-      "terraform_mcp_server" = {
+      "terraform" = {
         type = "local";
         command = [
           "docker"
@@ -32,14 +49,14 @@ let
         ];
         enabled = isWork;
       };
-      "hono_mcp_server" = {
+      "hono" = {
         type = "remote";
         url = "https://hono.dev/llms.txt";
         enabled = isPersonal;
       };
     }
     (lib.mkIf (envVars ? JENKINS_URL && envVars ? JENKINS_USERNAME && envVars ? JENKINS_PASSWORD) {
-      "jenkins_mcp_server" = {
+      "jenkins" = {
         type = "local";
         command = [
           "docker"
@@ -64,7 +81,7 @@ let
       };
     })
     (lib.mkIf (envVars ? SONARQUBE_TOKEN && envVars ? SONARQUBE_URL) {
-      "sonar_mcp_server" = {
+      "sonar" = {
         type = "local";
         command = [
           "docker"
