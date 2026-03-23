@@ -1,16 +1,45 @@
-{ config, pkgs, username, system, lib, standalone, sshKeys, ... }:
+{
+  config,
+  pkgs,
+  username,
+  system,
+  lib,
+  standalone,
+  sshKeys,
+  ...
+}:
 let
   dotfilesBaseCmd = "home-manager switch --flake $HOME/Documents/guergeiro/dotfiles";
 
   dotfilesUpdate = "${dotfilesBaseCmd}/.#${system}";
+
+  darwinCopy = pkgs.writeShellScriptBin "copy" ''
+    exec pbcopy
+  '';
+  darwinPaste = pkgs.writeShellScriptBin "paste" ''
+    exec pbpaste
+  '';
+
+  linuxCopy = pkgs.writeShellScriptBin "copy" ''
+    if [ -n "$WAYLAND_DISPLAY" ]; then
+      exec ${pkgs.wl-clipboard}/bin/wl-copy
+    else
+      exec ${pkgs.xclip}/bin/xclip -i -selection clipboard
+    fi
+  '';
+  linuxPaste = pkgs.writeShellScriptBin "paste" ''
+    if [ -n "$WAYLAND_DISPLAY" ]; then
+      exec ${pkgs.wl-clipboard}/bin/wl-paste
+    else
+      exec ${pkgs.xclip}/bin/xclip -o -selection clipboard
+    fi
+  '';
 in
 {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = username;
-  home.homeDirectory = if pkgs.stdenv.isDarwin
-    then "/Users/${username}"
-    else "/home/${username}";
+  home.homeDirectory = if pkgs.stdenv.isDarwin then "/Users/${username}" else "/home/${username}";
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -43,38 +72,25 @@ in
 
     pkgs.python3Packages.passlib
 
-    # Create a new copy/paste command that allows too feed/read content directly to/from xclip
-    (pkgs.writeShellScriptBin "copy" ''
-      if [ -n "$WAYLAND_DISPLAY" ]; then
-        exec ${pkgs.wl-clipboard}/bin/wl-copy
-      else
-        exec ${pkgs.xclip}/bin/xclip -i -selection clipboard
-      fi
-    '')
-
-    (pkgs.writeShellScriptBin "paste" ''
-      if [ -n "$WAYLAND_DISPLAY" ]; then
-        exec ${pkgs.wl-clipboard}/bin/wl-paste
-      else
-        exec ${pkgs.xclip}/bin/xclip -o -selection clipboard
-      fi
-    '')
+    # Create a new copy/paste command that allows too feed/read content directly to/from clipboard
+    (if pkgs.stdenv.isDarwin then darwinCopy else linuxCopy)
+    (if pkgs.stdenv.isDarwin then darwinPaste else linuxPaste)
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
   home.file = lib.mkMerge [
     {
-    # # Building this configuration will create a copy of 'dotfiles/screenrc' in
-    # # the Nix store. Activating the configuration will then make '~/.screenrc' a
-    # # symlink to the Nix store copy.
-    # ".screenrc".source = dotfiles/screenrc;
+      # # Building this configuration will create a copy of 'dotfiles/screenrc' in
+      # # the Nix store. Activating the configuration will then make '~/.screenrc' a
+      # # symlink to the Nix store copy.
+      # ".screenrc".source = dotfiles/screenrc;
 
-    # # You can also set the file content immediately.
-    # ".gradle/gradle.properties".text = ''
-    #   org.gradle.console=verbose
-    #   org.gradle.daemon.idletimeout=3600000
-    # '';
+      # # You can also set the file content immediately.
+      # ".gradle/gradle.properties".text = ''
+      #   org.gradle.console=verbose
+      #   org.gradle.daemon.idletimeout=3600000
+      # '';
     }
     sshKeys
   ];
@@ -109,33 +125,34 @@ in
       vi = "${pkgs.neovim}/bin/nvim";
       vim = "${pkgs.neovim}/bin/nvim";
       # Force tmux UTF-8
-      tmux="${pkgs.tmux}/bin/tmux -u";
+      tmux = "${pkgs.tmux}/bin/tmux -u";
       # Sometimes I forget I'm not in VIM, but still want to quit :>
-      ":q"="exit";
+      ":q" = "exit";
       # Fuck Python2... Sorry :(
-      python="python3"; pip="pip3";
+      python = "python3";
+      pip = "pip3";
       # Security stuff
-      del="${pkgs.trash-cli}/bin/trash";
-      rm="${pkgs.coreutils}/bin/echo Use \"del\", or the full path i.e. \"/bin/rm\"";
-      mv="${pkgs.coreutils}/bin/mv -i";
-      cp="${pkgs.coreutils}/bin/cp -i";
-      ln="${pkgs.coreutils}/bin/ln -i";
+      del = "${pkgs.trash-cli}/bin/trash";
+      rm = "${pkgs.coreutils}/bin/echo Use \"del\", or the full path i.e. \"/bin/rm\"";
+      mv = "${pkgs.coreutils}/bin/mv -i";
+      cp = "${pkgs.coreutils}/bin/cp -i";
+      ln = "${pkgs.coreutils}/bin/ln -i";
       # Recursively create directories
-      mkdir="${pkgs.coreutils}/bin/mkdir -pv";
+      mkdir = "${pkgs.coreutils}/bin/mkdir -pv";
 
       # Some more ls aliases
-      ll="${pkgs.coreutils}/bin/ls -alhF --color=auto";
-      la="${pkgs.coreutils}/bin/ls -hA --color=auto";
-      l="${pkgs.coreutils}/bin/ls -CF --color=auto";
-      ls="${pkgs.coreutils}/bin/ls --color=auto";
+      ll = "${pkgs.coreutils}/bin/ls -alhF --color=auto";
+      la = "${pkgs.coreutils}/bin/ls -hA --color=auto";
+      l = "${pkgs.coreutils}/bin/ls -CF --color=auto";
+      ls = "${pkgs.coreutils}/bin/ls --color=auto";
 
       # Ripgrep rules for me!
-      grep="${pkgs.ripgrep}/bin/rg --hidden --color=auto";
-      fgrep="${pkgs.ripgrep}/bin/rg -F --color=auto";
-      egrep="${pkgs.ripgrep}/bin/rg -E --color=auto";
+      grep = "${pkgs.ripgrep}/bin/rg";
+      fgrep = "${pkgs.ripgrep}/bin/rg -F";
+      egrep = "${pkgs.ripgrep}/bin/rg -E";
 
       # Bat is awesome
-      cat="${pkgs.bat}/bin/bat";
+      cat = "${pkgs.bat}/bin/bat";
     }
     (lib.mkIf standalone {
       "dotfiles-update" = dotfilesUpdate;
