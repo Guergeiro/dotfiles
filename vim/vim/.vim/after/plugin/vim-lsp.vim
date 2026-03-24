@@ -35,8 +35,6 @@ if !exists('*g:CustomLspHover')
 lua << EOF
 vim.lsp.buf.hover()
 EOF
-		else
-			execute 'LspHover'
 		endif
 	endfunction
 endif
@@ -50,10 +48,4 @@ vim.lsp.config('*', {
 	end
 })
 EOF
-else
-	augroup General
-		autocmd!
-		" Execute commands when Lsp is ready
-		autocmd User lsp_server_init call g:LspInit()
-	augroup END
 endif

@@ -24,8 +24,6 @@ vim.diagnostic.jump({
 	count = 1
 })
 EOF
-		else
-			silent execute 'LspNextDiagnostic'
 		endif
 	endfunction
 endif
@@ -38,8 +36,6 @@ vim.diagnostic.jump({
 	count = -1
 })
 EOF
-		else
-			silent execute 'LspPreviousDiagnostic'
 		endif
 	endfunction
 endif

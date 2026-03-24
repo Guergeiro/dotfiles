@@ -43,18 +43,6 @@ let g:CoolTotalMatches = 1
 let g:mdip_imgdir = '.assets'
 " }}}
 
-" Vimspector {{{
-nmap <leader>dc <plug>VimspectorContinue
-nmap <leader>ds <plug>VimspectorStop
-nmap <leader>dr <plug>VimspectorRestart
-nmap <leader>db <plug>VimspectorToggleBreakpoint
-nmap <leader>dj <plug>VimspectorStepOver
-nmap <leader>dl <plug>VimspectorStepInto
-nmap <leader>dh <plug>VimspectorStepOut
-nmap <leader>di <plug>VimspectorBalloonEval
-xmap <leader>di <plug>VimspectorBalloonEval
-" }}}
-
 " Undotree {{{
 inoremap <silent> <leader>u <esc>:UndotreeToggle<cr>
 nnoremap <silent> <leader>u :UndotreeToggle<cr>
@@ -127,30 +115,6 @@ EOF
 	nnoremap gt <cmd>lua vim.lsp.buf.type_definition()<cr>
 	nnoremap <c-space> <cmd>lua vim.lsp.buf.code_action()<cr>
 	nnoremap <f2> <cmd>lua vim.lsp.buf.rename()<cr>
-else
-	let g:lsp_fold_enabled = 0
-	let g:lsp_use_event_queue = 1
-	let g:lsp_use_native_client = 1
-	let g:lsp_untitled_buffer_enabled = 0
-	let g:lsp_document_highlight_enabled = 0
-	let g:lsp_document_code_action_signs_enabled = 0
-	let g:lsp_diagnostics_float_cursor = 1
-	let g:lsp_diagnostics_float_insert_mode_enabled = 0
-	let g:lsp_diagnostics_virtual_text_enabled = 0
-	let g:lsp_diagnostics_signs_error = {'text': ''}
-	let g:lsp_diagnostics_signs_warning = {'text': ''}
-	let g:lsp_diagnostics_signs_info = {'text': ''}
-	let g:lsp_diagnostics_signs_hint = {'text': ''}
-	let g:lsp_semantic_enabled = 0
-	let g:lsp_format_sync_timeout = 1000
-
-	nmap gd <plug>(lsp-definition)
-	nmap gr <plug>(lsp-references)
-	nmap gi <plug>(lsp-implementation)
-	nmap gt <plug>(lsp-type-definition)
-	nmap <c-@> <plug>(lsp-code-action)
-	nmap <f2> <plug>(lsp-rename)
-	let g:lsp_settings_filetype_typescript = ['typescript-language-server', 'deno']
 endif
 " lsp }}}
 

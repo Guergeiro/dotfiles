@@ -257,7 +257,6 @@ else
 				\	 'astro'
 				\ ] }
 	Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
-	Plug 'puremourning/vimspector'
 	Plug 'rafamadriz/friendly-snippets'
 	Plug 'rhysd/committia.vim'
 	Plug 'romainl/vim-cool'
@@ -283,17 +282,12 @@ else
 	Plug 'vim-denops/denops.vim', { 'tag': '*' }
 	Plug 'github/copilot.vim', { 'on': [], 'tag': '*' }
 
-
 	if has('nvim')
 		Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate', 'branch': 'main' }
 		Plug 'nvim-lua/plenary.nvim'
 		Plug 'nvim-telescope/telescope.nvim', { 'tag': '*' }
 		Plug 'neovim/nvim-lspconfig'
 		Plug 'mfussenegger/nvim-jdtls'
-	else
-		Plug 'mattn/vim-lsp-settings'
-		Plug 'prabirshrestha/vim-lsp'
-		Plug 'prabirshrestha/async.vim'
 	endif
 	call plug#end()
 
