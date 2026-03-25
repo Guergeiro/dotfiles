@@ -17,6 +17,7 @@
       user.name = "Breno Salles";
       commit.verbose = true;
       core.editor = "${pkgs.neovim}/bin/nvim";
+      core.pager = "${pkgs.bat-extras.batdiff}/bin/batdiff";
       merge.tool = "diffconflicts";
       mergetool = {
         keepBackup = false;
@@ -30,9 +31,11 @@
         };
       };
       checkout.defaultRemote = "origin";
+
       diff.tool = "customdiff";
       difftool = {
         prompt = false;
+        trustExitCode = true;
         customdiff.cmd = lib.concatStringsSep " " [
           "${pkgs.neovim}/bin/nvim -R -f -d"
           "-c 'wincmd h'"
@@ -50,4 +53,8 @@
       ];
     }) gitConfig;
   };
+
+  programs.bat.extraPackages = with pkgs.bat-extras; [
+    batdiff
+  ];
 }
