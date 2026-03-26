@@ -280,7 +280,7 @@ else
 	Plug 'tani/ddc-fuzzy'
 	Plug 'uga-rosa/ddc-source-vsnip'
 	Plug 'vim-denops/denops.vim', { 'tag': '*' }
-	Plug 'github/copilot.vim', { 'on': [], 'tag': '*' }
+	Plug 'github/copilot.vim', { 'tag': '*' }
 
 	if has('nvim')
 		Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate', 'branch': 'main' }
@@ -288,6 +288,10 @@ else
 		Plug 'nvim-telescope/telescope.nvim', { 'tag': '*' }
 		Plug 'neovim/nvim-lspconfig'
 		Plug 'mfussenegger/nvim-jdtls'
+
+		Plug 'sudo-tee/opencode.nvim'
+		Plug 'MeanderingProgrammer/render-markdown.nvim', { 'tag': '*' }
+
 	endif
 	call plug#end()
 
