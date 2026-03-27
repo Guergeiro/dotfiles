@@ -3,10 +3,6 @@
   programs.bash = {
     enable = true;
     historyControl = [ "ignoreboth" ];
-    sessionVariables = {
-      LC_COLLATE = "C";
-      LC_CTYPE = "C.UTF-8";
-    };
     shellOptions = [
       # append to the history file, don't overwrite it
       "histappend"
@@ -66,6 +62,9 @@
       "--smart-case"
     ];
   };
+
+  programs.direnv.enable = true;
+  programs.direnv.nix-direnv.enable = true;
 
   home.packages = [
     pkgs.openssh
