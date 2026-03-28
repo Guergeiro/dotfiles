@@ -1,17 +1,24 @@
 {
   pkgs,
   config,
-  lib,
   ...
 }:
-let
-  browser = lib.getExe pkgs.ungoogled-chromium;
-in
 {
-  xdg.desktopEntries.whatsapp = {
-    name = "WhatsApp";
-    exec = "${browser} --app=https://web.whatsapp.com/";
+  programs.firefoxpwa = {
+    enable = true;
+
+    profiles."01KMTZRFEDWNC2GHD1TN5SZRW5".sites."01KMTZRFEDWNC2GHD1TN5SZRW5" = {
+      manifestUrl = "https://open.spotifycdn.com/cdn/generated/manifest-web-player.1609946b.json";
+      name = "Spotify";
+      url = "https://open.spotify.com/";
+      desktopEntry.icon = pkgs.fetchurl {
+        url = "https://open.spotifycdn.com/cdn/images/icons/Spotify_1024.31b25879.png";
+        sha256 = "sha256-MbJYed49mTS56YqTzohLBdnfngOoAASRJ98rZIhvAFU=";
+      };
+    };
+
   };
+
   dconf.settings = {
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
@@ -23,28 +30,33 @@ in
     package = pkgs.dracula-theme;
     size = 16;
   };
-  gtk = {
-    enable = true;
-    cursorTheme = {
-      name = "Dracula-cursors";
-      package = pkgs.dracula-theme;
+  gtk =
+    let
+      theme = {
+        name = "Dracula";
+        package = pkgs.dracula-theme;
+      };
+    in
+    {
+      enable = true;
+      cursorTheme = {
+        name = "Dracula-cursors";
+        package = pkgs.dracula-theme;
+      };
+      iconTheme = {
+        name = "Dracula";
+        package = pkgs.dracula-icon-theme;
+      };
+      theme = theme;
+      gtk4.theme = theme;
+      gtk3.bookmarks = [
+        "file:///${config.home.homeDirectory}/Documents"
+        "file:///${config.home.homeDirectory}/Music"
+        "file:///${config.home.homeDirectory}/Pictures"
+        "file:///${config.home.homeDirectory}/Videos"
+        "file:///${config.home.homeDirectory}/Downloads"
+      ];
     };
-    iconTheme = {
-      name = "Dracula";
-      package = pkgs.dracula-icon-theme;
-    };
-    theme = {
-      name = "Dracula";
-      package = pkgs.dracula-theme;
-    };
-    gtk3.bookmarks = [
-      "file:///${config.home.homeDirectory}/Documents"
-      "file:///${config.home.homeDirectory}/Music"
-      "file:///${config.home.homeDirectory}/Pictures"
-      "file:///${config.home.homeDirectory}/Videos"
-      "file:///${config.home.homeDirectory}/Downloads"
-    ];
-  };
 
   xdg.portal = {
     enable = true;
