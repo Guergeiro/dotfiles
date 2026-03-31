@@ -289,8 +289,8 @@ else
 		Plug 'neovim/nvim-lspconfig'
 		Plug 'mfussenegger/nvim-jdtls'
 
-		Plug 'sudo-tee/opencode.nvim'
-		Plug 'MeanderingProgrammer/render-markdown.nvim', { 'tag': '*' }
+		" Plug 'sudo-tee/opencode.nvim'
+		" Plug 'MeanderingProgrammer/render-markdown.nvim', { 'tag': '*' }
 
 	endif
 	call plug#end()

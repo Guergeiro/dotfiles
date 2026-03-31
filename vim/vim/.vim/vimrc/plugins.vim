@@ -346,22 +346,22 @@ imap <silent><script><expr> <c-y> copilot#Accept()
 
 if has('nvim')
 lua << EOF
-require('render-markdown').setup({
-	opts = {
-		anti_conceal = { enabled = false },
-		file_types = { 'markdown', 'opencode_output' },
-	},
-	ft = { 'markdown', 'Avante', 'copilot-chat', 'opencode_output' },
-})
-require("opencode").setup({
-	preferred_picker = 'telescope',
-	ui = {
-		position = 'current',
-	},
-	quick_chat = {
-		default_model = 'gpt-5.4-mini',
-	}
-})
+-- require('render-markdown').setup({
+-- 	opts = {
+-- 		anti_conceal = { enabled = false },
+-- 		file_types = { 'markdown', 'opencode_output' },
+-- 	},
+-- 	ft = { 'markdown', 'Avante', 'copilot-chat', 'opencode_output' },
+-- })
+-- require("opencode").setup({
+-- 	preferred_picker = 'telescope',
+-- 	ui = {
+-- 		position = 'current',
+-- 	},
+-- 	quick_chat = {
+-- 		default_model = 'gpt-5.4-mini',
+-- 	}
+-- })
 EOF
 endif
 " AI }}}
