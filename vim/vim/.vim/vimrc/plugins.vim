@@ -106,7 +106,8 @@ vim.lsp.enable({
 	'kotlin_language_server',
 	'terraformls',
 	'pyright',
-	'pylsp'
+	'pylsp',
+	'groovyls'
 })
 EOF
 	nnoremap gd <cmd>lua vim.lsp.buf.type_definition()<cr>
