@@ -60,5 +60,6 @@
 
   home.packages = [
     pkgs.coreutils
+    pkgs.git-absorb
   ];
 }

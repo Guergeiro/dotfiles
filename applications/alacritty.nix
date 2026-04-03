@@ -36,4 +36,8 @@ in
       };
     };
   };
+
+  home.packages = with pkgs; [
+    alacritty-theme
+  ];
 }

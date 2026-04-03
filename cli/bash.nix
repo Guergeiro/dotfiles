@@ -30,6 +30,7 @@ in
 {
   programs.bash = {
     enable = true;
+    enableCompletion = true;
     historyControl = [ "ignoreboth" ];
     shellOptions = [
       # append to the history file, don't overwrite it
@@ -100,6 +101,8 @@ in
 
   home.packages = [
     pkgs.openssh
+
+    pkgs.trash-cli
 
     # Create a new copy/paste command that allows too feed/read content directly to/from clipboard
     (if pkgs.stdenv.isDarwin then darwinCopy else linuxCopy)
