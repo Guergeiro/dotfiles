@@ -1,35 +1,16 @@
 {
   pkgs,
   config,
+  lib,
   ...
 }:
+let
+  browser = lib.getExe pkgs.ungoogled-chromium;
+in
 {
-  programs.firefoxpwa = {
-    enable = true;
-
-    settings = {
-      "firefoxpwa.enableHidingIconBar" = true;
-    };
-
-    profiles."01KMTZRFEDWNC2GHD1TN5SZRW5".sites."01KMTZRFEDWNC2GHD1TN5SZRW5" = {
-      manifestUrl = "https://open.spotifycdn.com/cdn/generated/manifest-web-player.1609946b.json";
-      name = "Spotify";
-      url = "https://open.spotify.com/";
-      desktopEntry.icon = pkgs.fetchurl {
-        url = "https://open.spotifycdn.com/cdn/images/icons/Spotify_1024.31b25879.png";
-        sha256 = "sha256-MbJYed49mTS56YqTzohLBdnfngOoAASRJ98rZIhvAFU=";
-      };
-    };
-
-    profiles."01KMV006FY2SN4QFRX71YSCZBH".sites."01KMV006FY2SN4QFRX71YSCZBH" = {
-      manifestUrl = "https://web.whatsapp.com/data/manifest.json";
-      name = "WhatsApp";
-      url = "https://web.whatsapp.com/";
-      desktopEntry.icon = pkgs.fetchurl {
-        url = "https://static.whatsapp.net/rsrc.php/yp/r/iBj9rlryvZv.svg";
-        sha256 = "sha256-QmNVdkQ5QwVITocMZ8Hlf26P559OdrCJO6ezPoMKUeI=";
-      };
-    };
+  xdg.desktopEntries.whatsapp = {
+    name = "WhatsApp";
+    exec = "${browser} --app=https://web.whatsapp.com/";
   };
 
   dconf.settings = {
