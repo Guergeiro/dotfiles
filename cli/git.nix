@@ -32,7 +32,6 @@
       };
       checkout.defaultRemote = "origin";
 
-      diff.pager = "${pkgs.bat-extras.batdiff}/bin/batdiff";
       diff.tool = "customdiff";
       difftool = {
         prompt = false;
@@ -54,10 +53,6 @@
       ];
     }) gitConfig;
   };
-
-  programs.bat.extraPackages = with pkgs.bat-extras; [
-    batdiff
-  ];
 
   home.packages = [
     pkgs.coreutils

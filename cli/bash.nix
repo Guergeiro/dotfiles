@@ -84,10 +84,8 @@ in
     };
     extraPackages = with pkgs.bat-extras; [
       batman
+      batdiff
     ];
-  };
-  home.sessionVariables = {
-    MANPAGER = "${pkgs.bat}/bin/bat --paging=always";
   };
 
   programs.ripgrep = {
@@ -101,7 +99,7 @@ in
 
   home.packages = [
     pkgs.openssh
-
+    pkgs.xclip
     pkgs.trash-cli
 
     # Create a new copy/paste command that allows too feed/read content directly to/from clipboard
@@ -142,5 +140,7 @@ in
 
     # Bat is awesome
     cat = "${pkgs.bat}/bin/bat";
+    man = "${pkgs.bat-extras.batman}/bin/batman";
+    diff = "${pkgs.bat-extras.batdiff}/bin/batdiff";
   };
 }
