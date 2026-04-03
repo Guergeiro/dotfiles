@@ -2,6 +2,7 @@
   pkgs,
   lib,
   gitConfig,
+  isWork,
   ...
 }:
 {
@@ -62,4 +63,6 @@
     pkgs.coreutils
     pkgs.git-absorb
   ];
+
+  programs.gh.enable = isWork;
 }
