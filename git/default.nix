@@ -17,7 +17,6 @@
       user.name = "Breno Salles";
       commit.verbose = true;
       core.editor = "${pkgs.neovim}/bin/nvim";
-      core.pager = "${pkgs.bat-extras.batdiff}/bin/batdiff";
       merge.tool = "diffconflicts";
       mergetool = {
         keepBackup = false;
@@ -32,6 +31,7 @@
       };
       checkout.defaultRemote = "origin";
 
+      diff.pager = "${pkgs.bat-extras.batdiff}/bin/batdiff";
       diff.tool = "customdiff";
       difftool = {
         prompt = false;
@@ -56,5 +56,9 @@
 
   programs.bat.extraPackages = with pkgs.bat-extras; [
     batdiff
+  ];
+
+  home.packages = [
+    pkgs.coreutils
   ];
 }
