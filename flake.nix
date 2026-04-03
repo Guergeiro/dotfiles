@@ -71,6 +71,7 @@
         ./applications/librewolf.nix
         ./applications/localsend.nix
         ./applications/rofi.nix
+        ./applications/signal.nix
         ./applications/spotify.nix
         ./applications/whatsapp.nix
 
