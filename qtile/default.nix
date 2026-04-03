@@ -20,5 +20,6 @@ in
     python3Packages.iwlib
     python3Packages.pulsectl-asyncio
     python3Packages.xdg
+    xfce4-settings
   ];
 }

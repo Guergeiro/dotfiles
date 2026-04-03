@@ -45,6 +45,7 @@ alt = "mod1"
 terminal = guess_terminal()
 rofi = "rofi -show drun"
 screenshooter = "xfce4-screenshooter"
+monitortool = "xfce4-display-settings"
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -79,6 +80,7 @@ keys = [
     Key([], "XF86MonBrightnessUp", lazy.widget["brightness"].brightness_up(), desc="Increase brightness" ),
     Key([], "XF86MonBrightnessDown", lazy.widget["brightness"].brightness_down(), desc="Decrease brightness" ),
     Key([], "Print", lazy.spawn(screenshooter), desc="Spawn screenshooter"),
+    Key([mod], "p", lazy.spawn(monitortool), desc="Spawn monitor tool"),
 ]
 
 # Add key bindings to switch VTs in Wayland.
