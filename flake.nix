@@ -67,6 +67,7 @@
         ./home.nix
 
         ./applications/alacritty.nix
+        ./applications/bruno.nix
         ./applications/librewolf.nix
         ./applications/localsend.nix
         ./applications/rofi.nix
@@ -76,6 +77,7 @@
         ./window-manager/aerospace.nix
         ./window-manager/qtile.nix
 
+        ./cli/ansible.nix
         ./cli/bash.nix
         ./cli/colima.nix
         ./cli/direnv.nix

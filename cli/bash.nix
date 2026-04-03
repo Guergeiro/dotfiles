@@ -100,7 +100,6 @@ in
 
   home.packages = [
     pkgs.openssh
-    pkgs.python3Packages.passlib
 
     # Create a new copy/paste command that allows too feed/read content directly to/from clipboard
     (if pkgs.stdenv.isDarwin then darwinCopy else linuxCopy)
