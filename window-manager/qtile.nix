@@ -1,17 +1,28 @@
 {
-  pkgs,
   config,
+  pkgs,
+  dotfilesDir,
   lib,
   ...
 }:
 let
-  browser = lib.getExe pkgs.ungoogled-chromium;
+  qtileDir = "${dotfilesDir}/window-manager/qtile";
 in
-{
-  xdg.desktopEntries.whatsapp = {
-    name = "WhatsApp";
-    exec = "${browser} --app=https://web.whatsapp.com/";
+lib.mkIf pkgs.stdenv.isLinux {
+  home.file.".config/qtile/config.py" = {
+    source = config.lib.file.mkOutOfStoreSymlink "${qtileDir}/config.py";
+    force = true;
   };
+
+  services.clipcat.enable = true;
+  services.blueman-applet.enable = true;
+  home.packages = with pkgs; [
+    python3Packages.dbus-fast
+    python3Packages.iwlib
+    python3Packages.pulsectl-asyncio
+    python3Packages.xdg
+    xfce4-settings
+  ];
 
   dconf.settings = {
     "org/gnome/desktop/interface" = {

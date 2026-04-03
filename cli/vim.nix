@@ -6,7 +6,7 @@
   ...
 }:
 let
-  vimDir = "${dotfilesDir}/vim/vim";
+  vimDir = "${dotfilesDir}/cli/vim";
 in
 {
   programs.neovim = {

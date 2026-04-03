@@ -2,6 +2,7 @@
   pkgs,
   sshConfig,
   lib,
+  sshKeys,
   ...
 }:
 let
@@ -38,4 +39,9 @@ in
       }
     ];
   };
+
+  home.file = lib.mkMerge [
+    sshKeys
+  ];
+
 }

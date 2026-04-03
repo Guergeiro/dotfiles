@@ -356,6 +356,7 @@ lua << EOF
 -- })
 -- require("opencode").setup({
 -- 	preferred_picker = 'telescope',
+--	default_global_keymaps = false,
 -- 	ui = {
 -- 		position = 'current',
 -- 	},

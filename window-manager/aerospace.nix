@@ -1,7 +1,7 @@
-{ ... }:
+{ pkgs, ... }:
 {
   programs.aerospace = {
-    enable = false;
+    enable = pkgs.stdenv.isDarwin;
     settings = {
       mode.main.binding = {
         alt-1 = "workspace 1";

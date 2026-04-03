@@ -8,6 +8,9 @@
   ...
 }:
 let
+  # TODO: Refactor to use the following:
+  # lib.mkIf (lib.all (attr: envVars ? ${attr}) [ "JENKINS_URL" "JENKINS_USERNAME" "JENKINS_PASSWORD" ]) {
+
   mcpServers = lib.mkMerge [
     {
       "sequential" = {
