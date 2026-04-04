@@ -50,12 +50,7 @@ in
 
   home.preferXdgDirectories = true;
 
-  home.shellAliases = lib.mkMerge [
-    {
-      "dotfiles-upgrade" = "nix flake update --flake $HOME/Documents/guergeiro/dotfiles";
-    }
-    (lib.mkIf standalone {
-      "dotfiles-update" = dotfilesUpdate;
-    })
-  ];
+  home.shellAliases = lib.mkIf standalone {
+    "dotfiles-update" = dotfilesUpdate;
+  };
 }
