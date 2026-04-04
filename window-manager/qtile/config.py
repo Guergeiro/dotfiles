@@ -42,6 +42,7 @@ def autostart():
 
 mod = "mod4"
 alt = "mod1"
+lshift = "shift"
 terminal = guess_terminal()
 rofi = "rofi -show drun"
 screenshooter = "xfce4-screenshooter"
@@ -52,13 +53,13 @@ keys = [
     # at https://docs.qtile.org/en/latest/manual/config/lazy.html
     # Switch between windows
     Key([alt], "Tab", lazy.group.next_window(), desc="Move window focus to other window"),
-    Key([alt, "shift"], "Tab", lazy.group.prev_window(), desc="Move window focus to other window"),
+    Key([alt, lshift], "Tab", lazy.group.prev_window(), desc="Move window focus to other window"),
     # Move windows between left/right columns or move up/down in current stack.
     # Moving out of range in Columns layout will create new column.
-    Key([mod, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),
-    Key([mod, "shift"], "l", lazy.layout.shuffle_right(), desc="Move window to the right"),
-    Key([mod, "shift"], "j", lazy.layout.shuffle_down(), desc="Move window down"),
-    Key([mod, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
+    Key([mod, lshift], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),
+    Key([mod, lshift], "l", lazy.layout.shuffle_right(), desc="Move window to the right"),
+    Key([mod, lshift], "j", lazy.layout.shuffle_down(), desc="Move window down"),
+    Key([mod, lshift], "k", lazy.layout.shuffle_up(), desc="Move window up"),
 
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
     # Toggle between different layouts as defined below
@@ -70,7 +71,7 @@ keys = [
         desc="Toggle fullscreen on the focused window",
     ),
     Key([mod], "f", lazy.window.toggle_floating(), desc="Toggle floating on the focused window"),
-    Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
+    Key([alt, lshift], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "s", lazy.spawn(rofi), desc="Spawn rofi in drun mode"),
     Key([mod], "space", lazy.widget["keyboardlayout"].next_keyboard(), desc="Next keyboard layout"),
@@ -118,7 +119,7 @@ for i in groups:
             # ),
             # Or, use below if you prefer not to switch to that group.
             # # mod + shift + group number = move focused window to group
-            Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
+            Key([mod, lshift], i.name, lazy.window.togroup(i.name),
                 desc=f"move focused window to group {i.name}"),
         ]
     )

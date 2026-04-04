@@ -2,6 +2,7 @@
 {
   programs.aerospace = {
     enable = pkgs.stdenv.isDarwin;
+    launchd.enable = true;
     settings = {
       mode.main.binding = {
         alt-1 = "workspace 1";
