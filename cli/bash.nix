@@ -100,6 +100,7 @@ in
   home.packages = [
     pkgs.openssh
     pkgs.xclip
+    pkgs.wl-clipboard
     pkgs.trash-cli
 
     # Create a new copy/paste command that allows too feed/read content directly to/from clipboard

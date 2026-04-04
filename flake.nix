@@ -68,12 +68,14 @@
 
         ./applications/alacritty.nix
         ./applications/bruno.nix
+        ./applications/discord.nix
         ./applications/gimp.nix
         ./applications/keepassxc.nix
         ./applications/librewolf.nix
         ./applications/localsend.nix
         ./applications/mos.nix
         ./applications/rofi.nix
+        ./applications/rustdesk.nix
         ./applications/signal.nix
         ./applications/spotify.nix
         ./applications/thunderbird.nix

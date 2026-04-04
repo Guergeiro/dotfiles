@@ -21,6 +21,11 @@ lib.mkIf pkgs.stdenv.isLinux {
     python3Packages.iwlib
     python3Packages.pulsectl-asyncio
     python3Packages.xdg
+
+    pavucontrol
+    xfce4-taskmanager
+    xfce4-screenshooter
+    xfce4-power-manager
     xfce4-settings
   ];
 
