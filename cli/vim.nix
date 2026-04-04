@@ -19,17 +19,18 @@ in
     withNodeJs = true;
     withPerl = true;
     withRuby = true;
+    initLua = ''
+      vim.opt.runtimepath:prepend(vim.fn.expand("~/.vim"))
+      vim.opt.runtimepath:append(vim.fn.expand("~/.vim/after"))
+      vim.opt.packpath = vim.opt.runtimepath:get()
+      vim.cmd.source(vim.fn.expand("$HOME/.vimrc"))
+    '';
   };
   home.packages = with pkgs; [
     tree-sitter
     nixfmt
   ];
 
-  home.file.".config/nvim/" = {
-    source = config.lib.file.mkOutOfStoreSymlink "${vimDir}/.config/nvim/";
-    recursive = true;
-    force = true;
-  };
   home.file.".vimrc".source = config.lib.file.mkOutOfStoreSymlink "${vimDir}/.vimrc";
   home.file.".vimrc".force = true;
   home.file.".vim/" = {
