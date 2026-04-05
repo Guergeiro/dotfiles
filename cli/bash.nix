@@ -26,6 +26,26 @@ let
       exec ${pkgs.xclip}/bin/xclip -o -selection clipboard
     fi
   '';
+
+  packages =
+    with pkgs;
+    [
+      pkgs.ssh-agents
+      pkgs.trash-cli
+
+      # Create a new copy/paste command that allows too feed/read content directly to/from clipboard
+      (if pkgs.stdenv.isDarwin then darwinCopy else linuxCopy)
+      (if pkgs.stdenv.isDarwin then darwinPaste else linuxPaste)
+    ]
+    ++ (
+      if pkgs.stdenv.isLinux then
+        [
+          pkgs.xclip
+          pkgs.wl-clipboard
+        ]
+      else
+        [ ]
+    );
 in
 {
   programs.bash = {
@@ -96,16 +116,7 @@ in
     ];
   };
 
-  home.packages = [
-    pkgs.ssh-agents
-    pkgs.xclip
-    pkgs.wl-clipboard
-    pkgs.trash-cli
-
-    # Create a new copy/paste command that allows too feed/read content directly to/from clipboard
-    (if pkgs.stdenv.isDarwin then darwinCopy else linuxCopy)
-    (if pkgs.stdenv.isDarwin then darwinPaste else linuxPaste)
-  ];
+  home.packages = packages;
 
   home.shellAliases = {
     # You remember Vi? It's just faster to type
