@@ -53,8 +53,7 @@ in
       }
 
       function cd() {
-        local dir="$@"
-        builtin cd $dir && ls -A --color=auto
+        builtin cd "$@" && ${pkgs.coreutils}/bin/ls -A --color=auto
       }
 
       # Check if internet is working
@@ -65,9 +64,9 @@ in
           command ping "www.brenosalles.com"
         fi
       }
-
-      eval "$(${pkgs.openssh}/bin/ssh-agent -s)" > /dev/null
-      ${pkgs.openssh}/bin/ssh-add ~/.ssh/id_ed25519 2> /dev/null
+    '';
+    profileExtra = ''
+      eval "$(${pkgs.ssh-agents}/bin/ssh-agents)"
     '';
   };
 
@@ -98,7 +97,7 @@ in
   };
 
   home.packages = [
-    pkgs.openssh
+    pkgs.ssh-agents
     pkgs.xclip
     pkgs.wl-clipboard
     pkgs.trash-cli

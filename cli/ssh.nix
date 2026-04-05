@@ -43,5 +43,4 @@ in
   home.file = lib.mkMerge [
     sshKeys
   ];
-
 }
