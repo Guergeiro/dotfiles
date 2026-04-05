@@ -53,4 +53,7 @@ in
   home.shellAliases = lib.mkIf standalone {
     "dotfiles-update" = dotfilesUpdate;
   };
+
+  targets.darwin.copyApps.enable = pkgs.stdenv.isDarwin;
+  targets.darwin.linkApps.enable = false;
 }
