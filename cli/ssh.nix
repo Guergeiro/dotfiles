@@ -43,4 +43,12 @@ in
   home.file = lib.mkMerge [
     sshKeys
   ];
+
+  programs.keychain = {
+    enable = true;
+    enableBashIntegration = true;
+    keys = [
+      "~/.ssh/id_ed25519"
+    ];
+  };
 }

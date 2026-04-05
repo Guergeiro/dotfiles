@@ -30,7 +30,6 @@ let
   packages =
     with pkgs;
     [
-      pkgs.ssh-agents
       pkgs.trash-cli
 
       # Create a new copy/paste command that allows too feed/read content directly to/from clipboard
@@ -84,9 +83,6 @@ in
           command ping "www.brenosalles.com"
         fi
       }
-    '';
-    profileExtra = ''
-      eval "$(${pkgs.ssh-agents}/bin/ssh-agents)"
     '';
   };
 
