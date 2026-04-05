@@ -63,45 +63,40 @@
           "aarch64-darwin"
         ] (system: function nixpkgs.legacyPackages.${system});
 
-      # Common modules for both Linux and macOS (where applicable)
-      commonModules = [
+      homeModules = [
         ./home.nix
-        ./alacritty/default.nix
-        ./bash/default.nix
-        ./direnv/default.nix
-        ./git/default.nix
-        ./gradle/default.nix
-        ./librewolf/default.nix
-        ./opencode/default.nix
-        ./readline/default.nix
-        ./ssh/default.nix
-        ./starship/default.nix
-        ./tmux/default.nix
-        ./vim/default.nix
-      ];
 
-      linuxModules = [
-        ./gtk/default.nix
-        ./qtile/default.nix
-        ./rofi/default.nix
-      ];
+        ./applications/alacritty.nix
+        ./applications/bruno.nix
+        ./applications/discord.nix
+        ./applications/gimp.nix
+        ./applications/keepassxc.nix
+        ./applications/librewolf.nix
+        ./applications/localsend.nix
+        ./applications/mos.nix
+        ./applications/rofi.nix
+        ./applications/rustdesk.nix
+        ./applications/signal.nix
+        ./applications/spotify.nix
+        ./applications/thunderbird.nix
+        ./applications/whatsapp.nix
 
-      darwinModules = [
-        ./aerospace/default.nix
-        ./colima/default.nix
-      ];
+        ./window-manager/aerospace.nix
+        ./window-manager/qtile.nix
 
-      homeModules =
-        pkgs:
-        commonModules
-        ++ (
-          if pkgs.stdenv.isLinux then
-            linuxModules
-          else if pkgs.stdenv.isDarwin then
-            darwinModules
-          else
-            [ ]
-        );
+        ./cli/ansible.nix
+        ./cli/bash.nix
+        ./cli/colima.nix
+        ./cli/direnv.nix
+        ./cli/git.nix
+        ./cli/gradle.nix
+        ./cli/opencode.nix
+        ./cli/readline.nix
+        ./cli/ssh.nix
+        ./cli/starship.nix
+        ./cli/tmux.nix
+        ./cli/vim.nix
+      ];
 
       sshKeyFiles = [
         "sign_key.pub"
@@ -149,7 +144,7 @@
     in
     {
       mkHomeModules = pkgs: system: secrets: secretsLocation: dotfilesDir: {
-        modules = homeModules pkgs;
+        modules = homeModules;
         extraSpecialArgs = pkgs.lib.mkMerge [
           (createExtraSpecialArgs pkgs system secrets secretsLocation sshKeyFiles dotfilesDir)
           {
@@ -161,7 +156,7 @@
         pkgs:
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          modules = homeModules pkgs;
+          modules = homeModules;
           extraSpecialArgs = pkgs.lib.mkMerge [
             (createExtraSpecialArgs pkgs pkgs.system secrets nix-secrets sshKeyFiles self)
             {
