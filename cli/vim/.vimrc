@@ -209,91 +209,75 @@ augroup Autocmd
 	autocmd CompleteDone * if pumvisible() == 0 | pclose | endif
 augroup END
 " AutoCommands }}}
-let g:packages_home = expand('$HOME') . '/.vim/plugged'
-" Install plugins automatically
-if empty(glob(expand('$HOME') . '/.vim/autoload/plug.vim'))
-	if has('dialog_con')
-		let choice = confirm("Install VimPlug?", "&Yes\n&No", 2)
-		if choice == 1
-			silent execute '!curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-		endif
-	else
-		echo 'Install VimPlug to ~/.vim/autoload/plug.vim'
-	endif
-else
-	" Vim-Polyglot {{{
-	let g:polyglot_disabled = ['autoindent']
-	" Vim-Polyglot }}}
-	call plug#begin(g:packages_home)
-	Plug 'christoomey/vim-tmux-navigator', { 'on':
-				\ [
-				\	 'TmuxNavigateLeft',
-				\	 'TmuxNavigateDown',
-				\	 'TmuxNavigateUp',
-				\	 'TmuxNavigateRight',
-				\	 'TmuxNavigatePrevious'
-				\ ] }
-	Plug 'dracula/vim', { 'as': 'dracula' }
-	Plug 'fcpg/vim-altscreen'
-	Plug 'ferrine/md-img-paste.vim', { 'for': 'markdown' }
-	Plug 'Guergeiro/clean-path.vim'
-	Plug 'gosukiwi/vim-smartpairs'
-	Plug 'gruvbox-community/gruvbox'
-	Plug 'hrsh7th/vim-vsnip'
-	Plug 'itchyny/lightline.vim'
-	Plug 'itchyny/vim-gitbranch'
-	Plug 'lambdalisue/fern.vim', { 'on': 'Fern' }
-	Plug 'lambdalisue/fern-git-status.vim', { 'on': 'Fern' }
-	Plug 'lambdalisue/fern-hijack.vim'
-	Plug 'lambdalisue/fern-renderer-nerdfont.vim', { 'on': 'Fern' }
-	Plug 'lambdalisue/nerdfont.vim'
-	Plug 'machakann/vim-highlightedyank'
-	Plug 'mattn/emmet-vim', { 'for':
-				\ [
-				\	 'html',
-				\	 'typescriptreact',
-				\	 'javascriptreact',
-				\	 'tex',
-				\	 'astro'
-				\ ] }
-	Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
-	Plug 'rafamadriz/friendly-snippets'
-	Plug 'rhysd/committia.vim'
-	Plug 'romainl/vim-cool'
-	Plug 'tpope/vim-commentary'
-	Plug 'tpope/vim-surround'
-	Plug 'sheerun/vim-polyglot'
-	Plug 'whiteinge/diffconflicts'
-	Plug 'wincent/scalpel', { 'on': '<plug>(Scalpel)' }
 
-	Plug 'LumaKernel/ddc-file'
-	Plug 'matsui54/ddc-buffer'
-	Plug 'Shougo/ddc.vim', { 'tag': '*' }
-	Plug 'Shougo/ddc-filter-converter_remove_overlap'
-	Plug 'Shougo/ddc-filter-matcher_head'
-	Plug 'Shougo/ddc-filter-sorter_rank'
-	Plug 'Shougo/ddc-source-around'
-	Plug 'Shougo/ddc-source-rg'
-	Plug 'Shougo/ddc-source-lsp'
-	Plug 'Shougo/ddc-ui-pum'
-	Plug 'Shougo/pum.vim'
-	Plug 'tani/ddc-fuzzy'
-	Plug 'uga-rosa/ddc-source-vsnip'
-	Plug 'vim-denops/denops.vim', { 'tag': '*' }
-	Plug 'github/copilot.vim', { 'tag': '*' }
+let g:no_minpac_maps = 1
+set packpath^=~/.vim
 
-	if has('nvim')
-		Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate', 'branch': 'main' }
-		Plug 'nvim-lua/plenary.nvim'
-		Plug 'nvim-telescope/telescope.nvim', { 'tag': '*' }
-		Plug 'neovim/nvim-lspconfig'
-		Plug 'mfussenegger/nvim-jdtls'
+packadd minpac
 
-		" Plug 'sudo-tee/opencode.nvim'
-		" Plug 'MeanderingProgrammer/render-markdown.nvim', { 'tag': '*' }
+call minpac#init()
+call minpac#add('k-takata/minpac', { 'type': 'opt' , 'frozen': v:true })
 
-	endif
-	call plug#end()
+" Additional plugins here.
+" Vim-Polyglot {{{
+let g:polyglot_disabled = ['autoindent']
+" Vim-Polyglot }}}
 
-	source $HOME/.vim/vimrc/plugins.vim
+call minpac#add('vim-jp/syntax-vim-ex')
+call minpac#add('tyru/open-browser.vim')
+
+call minpac#add('christoomey/vim-tmux-navigator')
+call minpac#add('dracula/vim', { 'name': 'dracula' })
+call minpac#add('fcpg/vim-altscreen')
+call minpac#add('ferrine/md-img-paste.vim', { 'type': 'opt' })
+call minpac#add('Guergeiro/clean-path.vim')
+call minpac#add('gosukiwi/vim-smartpairs')
+call minpac#add('gruvbox-community/gruvbox')
+call minpac#add('hrsh7th/vim-vsnip')
+call minpac#add('itchyny/lightline.vim')
+call minpac#add('itchyny/vim-gitbranch')
+call minpac#add('lambdalisue/fern.vim')
+call minpac#add('lambdalisue/fern-git-status.vim')
+call minpac#add('lambdalisue/fern-hijack.vim')
+call minpac#add('lambdalisue/fern-renderer-nerdfont.vim')
+call minpac#add('lambdalisue/nerdfont.vim')
+call minpac#add('machakann/vim-highlightedyank')
+call minpac#add('mattn/emmet-vim', { 'type': 'opt' })
+call minpac#add('mbbill/undotree')
+call minpac#add('rafamadriz/friendly-snippets')
+call minpac#add('rhysd/committia.vim')
+call minpac#add('romainl/vim-cool')
+call minpac#add('tpope/vim-commentary')
+call minpac#add('tpope/vim-surround')
+call minpac#add('sheerun/vim-polyglot')
+call minpac#add('whiteinge/diffconflicts')
+call minpac#add('wincent/scalpel')
+
+call minpac#add('LumaKernel/ddc-file')
+call minpac#add('matsui54/ddc-buffer')
+call minpac#add('Shougo/ddc.vim', { 'rev': '*' })
+call minpac#add('Shougo/ddc-filter-converter_remove_overlap')
+call minpac#add('Shougo/ddc-filter-matcher_head')
+call minpac#add('Shougo/ddc-filter-sorter_rank')
+call minpac#add('Shougo/ddc-source-around')
+call minpac#add('Shougo/ddc-source-rg')
+call minpac#add('Shougo/ddc-source-lsp')
+call minpac#add('Shougo/ddc-ui-pum')
+call minpac#add('Shougo/pum.vim')
+call minpac#add('tani/ddc-fuzzy')
+call minpac#add('uga-rosa/ddc-source-vsnip')
+call minpac#add('vim-denops/denops.vim', { 'rev': '*' })
+call minpac#add('github/copilot.vim', { 'rev': '*' })
+
+if has('nvim')
+	call minpac#add('nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate', 'branch': 'main' })
+	call minpac#add('nvim-lua/plenary.nvim')
+	call minpac#add('nvim-telescope/telescope.nvim', { 'rev': '*' })
+	call minpac#add('neovim/nvim-lspconfig')
+	call minpac#add('mfussenegger/nvim-jdtls')
 endif
+
+command! PackUpdate call minpac#update()
+command! PackClean  call minpac#clean()
+command! PackStatus call minpac#status()
+source $HOME/.vim/vimrc/plugins.vim

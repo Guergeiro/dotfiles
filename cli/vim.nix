@@ -3,6 +3,7 @@
   pkgs,
   config,
   dotfilesDir,
+  minpac,
   ...
 }:
 let
@@ -35,6 +36,11 @@ in
   home.file.".vimrc".force = true;
   home.file.".vim/" = {
     source = config.lib.file.mkOutOfStoreSymlink "${vimDir}/.vim/";
+    recursive = true;
+    force = true;
+  };
+  home.file.".vim/pack/minpac/opt/minpac" = {
+    source = config.lib.file.mkOutOfStoreSymlink minpac;
     recursive = true;
     force = true;
   };

@@ -51,7 +51,7 @@ nnoremap <silent> <leader>u :UndotreeToggle<cr>
 " vim-vsnip {{{
 let g:vsnip_snippet_dirs = [
 	\ expand('$HOME') . '/.vim/snippets',
-	\ g:packages_home . '/friendly-snippets/snippets'
+	\ expand('$HOME') . '/.vim/pack/minpac/start/friendly-snippets/snippets'
 	\ ]
 " }}}
 

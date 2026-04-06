@@ -41,6 +41,22 @@
         "type": "github"
       }
     },
+    "minpac": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1758577599,
+        "narHash": "sha256-teIfSVe0D4VnENl2U9yxCDzH9L0PZ4Ik/GJecpS1mU8=",
+        "owner": "k-takata",
+        "repo": "minpac",
+        "rev": "7a616ad2393139dbdf7514c14606098404e38625",
+        "type": "github"
+      },
+      "original": {
+        "owner": "k-takata",
+        "repo": "minpac",
+        "type": "github"
+      }
+    },
     "nix-secrets": {
       "flake": false,
       "locked": {
@@ -129,6 +145,7 @@
     "root": {
       "inputs": {
         "home-manager": "home-manager",
+        "minpac": "minpac",
         "nix-secrets": "nix-secrets",
         "nixpkgs": "nixpkgs",
         "nur": "nur",
