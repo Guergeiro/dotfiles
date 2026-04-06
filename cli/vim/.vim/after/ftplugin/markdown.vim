@@ -20,3 +20,6 @@ let g:smartpairs_pairs[&filetype] = get(g:smartpairs_pairs, &filetype, g:smartpa
 let g:smartpairs_pairs[&filetype] = extendnew(g:smartpairs_pairs[&filetype], {
 			\ '`': '`',
 			\ })
+
+let g:mdip_imgdir = '.assets'
+packadd md-img-paste.vim

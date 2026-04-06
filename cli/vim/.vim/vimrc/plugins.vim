@@ -2,90 +2,6 @@ if exists('g:loaded_plugins')
 	finish
 endif
 
-" Emmet {{{
-augroup Emmet
-	autocmd!
-	" autocmd FileType html,typescriptreact,javascriptreact,text,astro imap
-augroup END
-" }}}
-
-" Vimtex {{{
-let g:vimtex_format_enabled = 1
-" }}}
-
-" vim-astro {{{
-let g:astro_typescript = 'enable'
-" }}}
-
-" ColorScheme {{{
-let g:srcery_italic = 1
-let g:gruvbox_italic = 1
-let g:dracula_colorterm = 0
-let g:dracula_full_special_attrs_support = 1
-set background=dark
-colorscheme dracula
-" }}}
-
-" vim-tmux-navigator {{{
-let g:tmux_navigator_no_mappings = 1
-nnoremap <silent> <c-w>h :TmuxNavigateLeft<cr>
-nnoremap <silent> <c-w>j :TmuxNavigateDown<cr>
-nnoremap <silent> <c-w>k :TmuxNavigateUp<cr>
-nnoremap <silent> <c-w>l :TmuxNavigateRight<cr>
-nnoremap <silent> <c-w>\ :TmuxNavigatePrevious<cr>
-" }}}
-
-" vim-cool {{{
-let g:CoolTotalMatches = 1
-" }}}
-
-" md-img-paste {{{
-let g:mdip_imgdir = '.assets'
-" }}}
-
-" Undotree {{{
-inoremap <silent> <leader>u <esc>:UndotreeToggle<cr>
-nnoremap <silent> <leader>u :UndotreeToggle<cr>
-" }}}
-
-" vim-vsnip {{{
-let g:vsnip_snippet_dirs = [
-	\ expand('$HOME') . '/.vim/snippets',
-	\ expand('$HOME') . '/.vim/pack/minpac/start/friendly-snippets/snippets'
-	\ ]
-" }}}
-
-" Scalpel {{{
-let g:ScalpelMap=0
-nmap <leader><f2> <plug>(Scalpel)
-" }}}
-
-" Vim-smartpairs {{{
-" Removes basic autoclose
-iunmap {
-iunmap (
-iunmap [
-iunmap "
-iunmap `
-let g:smartpairs_hijack_return = 0
-" }}}
-
-" Fern {{{
-let g:fern#disable_default_mappings = 1
-let g:fern#default_hidden = 1
-let g:fern#renderer = 'nerdfont'
-inoremap <silent><c-b>b <esc>:Fern . -reveal=%<cr>
-nnoremap <silent><c-b>b :Fern . -reveal=%<cr>
-inoremap <silent><c-b>v <esc>:wincmd v<cr>:Fern . -reveal=%<cr>
-nnoremap <silent><c-b>v :wincmd v<cr>:Fern . -reveal=%<cr>
-inoremap <silent><c-b>s <esc>:wincmd s<cr>:Fern . -reveal=%<cr>
-nnoremap <silent><c-b>s :wincmd s<cr>:Fern . -reveal=%<cr>
-" Fern }}}
-
-" vim-highlightedyank {{{
-let g:highlightedyank_highlight_duration = 250
-" vim-highlightedyank }}}
-
 " lsp {{{
 if has('nvim')
 lua << EOF
@@ -118,24 +34,6 @@ EOF
 	nnoremap <f2> <cmd>lua vim.lsp.buf.rename()<cr>
 endif
 " lsp }}}
-
-" Lightline {{{
-let g:lightline = {
-			\ 'active': {
-				\	 'left': [['mode', 'paste'],
-				\					 ['gitbranch', 'readonly', 'filename', 'modified']],
-				\	 },
-				\ 'component_function': {
-					\	 'gitbranch': 'gitbranch#name',
-					\	 },
-					\ }
-let g:lightline.colorscheme = g:colors_name
-" Lightline }}}
-
-" clean-path.vim {{{
-let &path.=cleanpath#setpath()
-let &wildignore.=cleanpath#setwildignore()
-" clean-path.vim }}}
 
 " pum.vim {{{
 call pum#set_option(
@@ -258,93 +156,7 @@ augroup Autocomplete
 augroup END
 " ddc.vim }}}
 
-" Telescope {{{
-if has('nvim')
-	inoremap <silent><leader>sp <esc>:Telescope find_files<cr>
-	nnoremap <silent><leader>sp :Telescope find_files<cr>
-	inoremap <silent><leader>sb <esc>:Telescope buffers<cr>
-	nnoremap <silent><leader>sb :Telescope buffers<cr>
-	inoremap <silent><leader>sg <esc>:Telescope git_files<cr>
-	nnoremap <silent><leader>sg :Telescope git_files<cr>
-	inoremap <silent><leader>sG <esc>:Telescope live_grep<cr>
-	nnoremap <silent><leader>sG :Telescope live_grep<cr>
-
-lua << EOF
-local actions = require("telescope.actions")
-local actions_layout = require("telescope.actions.layout")
-require('telescope').setup({
-	defaults = {
-		layout_strategy='vertical',
-		layout_config={
-			prompt_position='bottom',
-			width=0.95,
-			height=0.5,
-			anchor='S',
-		},
-		dynamic_preview_title = true,
-		results_title = false,
-		prompt_title = false,
-		vimgrep_arguments = {
-			"rg",
-			"--color=never",
-			"--no-heading",
-			"--with-filename",
-			"--line-number",
-			"--column",
-			"--smart-case",
-			"--trim"
-		},
-		preview = {
-			hide_on_startup = true
-		},
-		default_mappings = {
-			i = {
-				["<tab>"] = actions.move_selection_next,
-				["<s-tab>"] = actions.move_selection_previous,
-				["<cr>"] = actions.select_default,
-				["<c-s>"] = actions.select_horizontal,
-				["<c-v>"] = actions.select_vertical,
-				["<c-u>"] = actions.preview_scrolling_up,
-				["<c-d>"] = actions.preview_scrolling_down,
-				["<c-j>"] = actions.results_scrolling_up,
-				["<c-k>"] = actions.results_scrolling_down,
-				["<esc>"] = actions.close,
-				["<c-p>"] = actions_layout.toggle_preview,
-				["<c-q>"] = actions.send_to_qflist + actions.open_qflist
-			},
-		},
-	}
-})
-EOF
-endif
-" Telescope }}}
-
-	" Treesitter {{{
-if has('nvim')
-lua << EOF
-vim.api.nvim_create_autocmd("FileType", {
-	callback = function(args)
-		local filetype = args.match
-		local lang = vim.treesitter.language.get_lang(filetype)
-		if vim.tbl_contains(require("nvim-treesitter").get_installed(), lang) then
-			require("nvim-treesitter").update(lang):await(function()
-				vim.treesitter.start()
-			end)
-		elseif vim.tbl_contains(require("nvim-treesitter").get_available(), lang) then
-			require("nvim-treesitter").install(lang):await(function()
-				vim.treesitter.start()
-			end)
-		end
-	end
-})
-EOF
-endif
-" Treesitter }}}
-
 " AI {{{
-let g:copilot_no_tab_map = v:true
-imap <silent><script><expr> <c-y> copilot#Accept()
-
 if has('nvim')
 lua << EOF
 -- require('render-markdown').setup({
