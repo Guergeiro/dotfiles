@@ -1,6 +1,8 @@
 if has('nvim')
 	packadd nvim-treesitter
 lua << EOF
+require("nvim-treesitter.install").prefer_git = true
+
 vim.api.nvim_create_autocmd("FileType", {
 	callback = function(args)
 		local filetype = args.match
