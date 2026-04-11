@@ -1,6 +1,13 @@
 if has('nvim')
-	packadd plenary.nvim
-	packadd telescope.nvim
+	if get(g:, 'loaded_telescope', 0) != 0
+		finish
+	endif
+
+	function! s:telescope(args) abort
+		delcommand! Telescope
+		packadd plenary.nvim
+		packadd telescope.nvim
+
 lua << EOF
 local actions = require("telescope.actions")
 local actions_layout = require("telescope.actions.layout")
@@ -49,6 +56,10 @@ require('telescope').setup({
 })
 EOF
 
+
+		execute 'Telescope ' . a:args
+	endfunction
+
 	inoremap <silent><leader>sp <esc>:Telescope find_files<cr>
 	nnoremap <silent><leader>sp :Telescope find_files<cr>
 	inoremap <silent><leader>sb <esc>:Telescope buffers<cr>
@@ -57,4 +68,7 @@ EOF
 	nnoremap <silent><leader>sg :Telescope git_files<cr>
 	inoremap <silent><leader>sG <esc>:Telescope live_grep<cr>
 	nnoremap <silent><leader>sG :Telescope live_grep<cr>
+
+	command! -nargs=* -complete=dir Telescope call s:telescope(<q-args>)
+
 endif
