@@ -237,7 +237,6 @@ function! PackInit() abort
 	call minpac#add('lambdalisue/fern-renderer-nerdfont.vim', { 'type': 'opt' })
 	call minpac#add('lambdalisue/nerdfont.vim')
 	call minpac#add('machakann/vim-highlightedyank', { 'type': 'opt' })
-	call minpac#add('mattn/emmet-vim', { 'type': 'opt' })
 	call minpac#add('mbbill/undotree', { 'type': 'opt' })
 	call minpac#add('rhysd/committia.vim')
 	call minpac#add('romainl/vim-cool', { 'type': 'opt' })

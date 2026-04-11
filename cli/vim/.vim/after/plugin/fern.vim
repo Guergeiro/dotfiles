@@ -1,10 +1,16 @@
-let g:fern#disable_default_mappings = 1
-let g:fern#default_hidden = 1
-let g:fern#renderer = 'nerdfont'
+function! s:fern(args) abort
+	let g:fern#disable_default_mappings = 1
+	let g:fern#default_hidden = 1
+	let g:fern#renderer = 'nerdfont'
 
-packadd fern.vim
-packadd fern-git-status.vim
-packadd fern-renderer-nerdfont.vim
+	packadd fern.vim
+	packadd fern-git-status.vim
+	packadd fern-renderer-nerdfont.vim
+
+	execute 'Fern ' . a:args
+endfunction
+
+command! -nargs=* -complete=dir Fern call s:fern(<q-args>)
 
 inoremap <silent><c-b>b <esc>:Fern . -reveal=%<cr>
 nnoremap <silent><c-b>b :Fern . -reveal=%<cr>
