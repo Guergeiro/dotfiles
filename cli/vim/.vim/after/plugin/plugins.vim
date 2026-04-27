@@ -1,7 +1,3 @@
-if exists('g:loaded_plugins')
-	finish
-endif
-
 if has('nvim')
 lua << EOF
 require("nvim-treesitter.install").prefer_git = true
@@ -191,5 +187,3 @@ lua << EOF
 EOF
 endif
 " AI }}}
-
-let g:loaded_plugins = 1
