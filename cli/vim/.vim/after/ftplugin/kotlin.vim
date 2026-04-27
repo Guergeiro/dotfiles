@@ -20,3 +20,12 @@ let g:smartpairs_pairs[&filetype] = {
 			\ '{': '}',
 			\ '"': '"'
 			\ }
+
+if has('nvim')
+lua << EOF
+vim.lsp.enable({
+	'jdtls',
+	'kotlin_language_server'
+})
+EOF
+endif

@@ -1,4 +1,4 @@
-function! s:scalpel(args) abort
+function! s:scalpel() abort
 	nunmap <leader><f2>
 	let g:ScalpelMap=0
 

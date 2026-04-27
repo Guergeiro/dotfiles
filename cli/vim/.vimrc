@@ -276,4 +276,3 @@ endfunction
 command! PackUpdate call PackInit() | call minpac#update()
 command! PackClean  call PackInit() | call minpac#clean()
 command! PackStatus call PackInit() | call minpac#status()
-source $HOME/.vim/vimrc/plugins.vim

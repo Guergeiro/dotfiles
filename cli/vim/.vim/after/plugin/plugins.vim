@@ -37,16 +37,6 @@ vim.diagnostic.config({
 		},
 	},
 })
-vim.lsp.enable({
-	'jdtls',
-	'denols',
-	'gopls',
-	'kotlin_language_server',
-	'terraformls',
-	'pyright',
-	'pylsp',
-	'groovyls'
-})
 EOF
 	nnoremap gd <cmd>lua vim.lsp.buf.type_definition()<cr>
 	nnoremap gr <cmd>lua vim.lsp.buf.references()<cr>
