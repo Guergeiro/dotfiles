@@ -1,7 +1,3 @@
-if get(g:, 'loaded_fern', 0) != 0
-	finish
-endif
-
 function! s:fern(args) abort
 	delcommand! Fern
 	let g:fern#disable_default_mappings = 1
