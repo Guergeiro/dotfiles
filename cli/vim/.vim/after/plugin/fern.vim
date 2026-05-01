@@ -9,9 +9,9 @@ function! s:fern(args) abort
 	let g:fern#default_hidden = 1
 	let g:fern#renderer = 'nerdfont'
 
+	packadd fern.vim
 	packadd fern-git-status.vim
 	packadd fern-renderer-nerdfont.vim
-	packadd fern.vim
 
 	execute 'Fern ' . a:args
 endfunction
