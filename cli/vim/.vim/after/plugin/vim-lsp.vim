@@ -5,12 +5,14 @@ endif
 if has('nvim')
 
 lua << EOF
-if _G.CustomLspHover == nil then
-	_G.CustomLspHover = function()
-		vim.lsp.buf.hover()
-	end
+_G.custom_lsp_hover = function()
+	vim.lsp.buf.hover()
 end
-
+vim.cmd([[
+function! g:CustomLspHover()
+	lua _G.custom_lsp_hover()
+endfunction
+]])
 
 local group = vim.api.nvim_create_augroup('VimLsp', { clear = true })
 

@@ -1,5 +1,4 @@
 {
-  lib,
   pkgs,
   config,
   dotfilesDir,
@@ -29,6 +28,7 @@ in
     plugins = with pkgs.vimPlugins; [
       {
         type = "lua";
+        plugin = nvim-treesitter.withAllGrammars;
         config = ''
           vim.api.nvim_create_autocmd("FileType", {
             callback = function(args)
@@ -41,13 +41,11 @@ in
             end,
           })
         '';
-        plugin = nvim-treesitter.withAllGrammars;
       }
     ];
   };
   home.packages = with pkgs; [
     tree-sitter
-    nixfmt
   ];
 
   home.file.".vimrc".source = config.lib.file.mkOutOfStoreSymlink "${vimDir}/.vimrc";

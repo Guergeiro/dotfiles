@@ -223,7 +223,6 @@ function! PackInit() abort
 	call minpac#add('christoomey/vim-tmux-navigator', { 'type': 'opt' })
 	call minpac#add('dracula/vim', { 'name': 'dracula', 'type': 'opt' })
 	call minpac#add('fcpg/vim-altscreen')
-	call minpac#add('ferrine/md-img-paste.vim', { 'type': 'opt' })
 	call minpac#add('Guergeiro/clean-path.vim', { 'type': 'opt' })
 	call minpac#add('gosukiwi/vim-smartpairs', { 'type': 'opt' })
 	call minpac#add('gruvbox-community/gruvbox', { 'type': 'opt' })
@@ -275,25 +274,3 @@ endfunction
 command! PackUpdate call PackInit() | call minpac#update()
 command! PackClean  call PackInit() | call minpac#clean()
 command! PackStatus call PackInit() | call minpac#status()
-
-" if has('nvim')
-" lua << EOF
-" require("nvim-treesitter.install").prefer_git = true
-
-" vim.api.nvim_create_autocmd("FileType", {
-" 	callback = function(args)
-" 		local filetype = args.match
-" 		local lang = vim.treesitter.language.get_lang(filetype)
-" 		if vim.tbl_contains(require("nvim-treesitter").get_installed(), "fern") then
-" 			require("nvim-treesitter").update(lang):await(function()
-" 				vim.treesitter.start()
-" 			end)
-" 		elseif vim.tbl_contains(require("nvim-treesitter").get_available(), lang) then
-" 			require("nvim-treesitter").install(lang):await(function()
-" 				vim.treesitter.start()
-" 			end)
-" 		end
-" 	end
-" })
-" EOF
-" endif

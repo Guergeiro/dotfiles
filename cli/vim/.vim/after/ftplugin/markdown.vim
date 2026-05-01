@@ -19,6 +19,3 @@ if get(g:, 'smartpairs_loaded', 0) != 0
 				\ '`': '`',
 				\ })
 endif
-
-let g:mdip_imgdir = '.assets'
-packadd md-img-paste.vim
