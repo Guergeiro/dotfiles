@@ -199,6 +199,7 @@
           default = pkgs.mkShell {
             packages = with pkgs; [
               nixfmt
+              nixd
             ];
 
             GIT_CONFIG_COUNT = "1";
