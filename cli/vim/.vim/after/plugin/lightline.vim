@@ -1,3 +1,8 @@
+if get(g:, 'loaded_lightline', 0) != 0
+	finish
+endif
+
+
 let g:lightline = {
 			\ 'active': {
 				\	 'left': [
@@ -11,5 +16,5 @@ let g:lightline = {
 			\ 'colorscheme': g:colors_name
 		\ }
 
-packadd lightline.vim
 packadd vim-gitbranch
+packadd lightline.vim

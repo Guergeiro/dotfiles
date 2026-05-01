@@ -1,43 +1,39 @@
-if exists('g:lsp_server_loaded')
+if get(g:, 'lsp_server_loaded', 0) != 0
 	finish
 endif
 
-if !exists('*g:LspInit')
-	function! g:LspInit() abort
-		if has('nvim')
+function! g:LspInit() abort
+	if has('nvim')
 lua << EOF
 vim.api.nvim_create_autocmd('LspAttach', {
-	callback = function(args)
-		-- Unset 'formatexpr'
-		vim.bo[args.buf].formatexpr = nil
-		-- Unset 'omnifunc'
-		vim.bo[args.buf].omnifunc = nil
-	end,
+callback = function(args)
+	-- Unset 'formatexpr'
+	vim.bo[args.buf].formatexpr = nil
+	-- Unset 'omnifunc'
+	vim.bo[args.buf].omnifunc = nil
+end,
 })
 for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
-  vim.api.nvim_set_hl(0, group, {})
+vim.api.nvim_set_hl(0, group, {})
 end
 EOF
-			augroup DiagnosticHover
-				autocmd!
-				" Execute commands when Lsp is ready
-				autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float({ focus=false })
-			augroup END
-		endif
-		let g:lsp_server_loaded = 1
-	endfunction
-endif
+		augroup DiagnosticHover
+			autocmd!
+			" Execute commands when Lsp is ready
+			autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float({ focus=false })
+		augroup END
+	endif
+	let g:lsp_server_loaded = 1
+endfunction
 
 
-if !exists('*g:CustomLspHover')
-	function! g:CustomLspHover() abort
-		if has('nvim')
+function! g:CustomLspHover() abort
+	if has('nvim')
 lua << EOF
 vim.lsp.buf.hover()
 EOF
-		endif
-	endfunction
-endif
+	endif
+endfunction
 
 " AutoCommands
 if has('nvim')

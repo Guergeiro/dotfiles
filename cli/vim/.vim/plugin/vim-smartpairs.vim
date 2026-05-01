@@ -1,3 +1,7 @@
+if get(g:, 'smartpairs_loaded', 0) != 0
+	finish
+endif
+
 iunmap {
 iunmap (
 iunmap [

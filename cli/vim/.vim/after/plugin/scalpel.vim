@@ -1,3 +1,7 @@
+if get(g:, 'ScalpelLoaded', 0) != 0
+	finish
+endif
+
 function! s:scalpel() abort
 	nunmap <leader><f2>
 	let g:ScalpelMap=0

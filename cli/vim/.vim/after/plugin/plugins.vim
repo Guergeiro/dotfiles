@@ -31,110 +31,108 @@ call pum#set_option(
 
 
 " ddc.vim {{{
-if !exists('*s:ddcinit')
-	function! s:ddcinit() abort
+function! s:ddcinit() abort
 
-		call ddc#custom#patch_global('ui', 'pum')
-		call ddc#custom#patch_global('sources',
-					\	[
-					\		'lsp',
-					\		'buffer',
-					\		'around',
-					\		'file',
-					\		'rg',
-					\		'vsnip'
-					\	])
-		call ddc#custom#patch_global('sourceOptions', {
-					\	'_': {
-					\		'sorters': ['sorter_fuzzy', 'sorter_rank'],
-					\		'matchers': ['matcher_fuzzy', 'matcher_head'],
-					\		'converters': ['converter_fuzzy', 'converter_remove_overlap']
-					\	},
-					\	'lsp': {
-					\		'mark': 'lsp',
-					\		'isVolatile': v:true,
-					\	},
-					\	'file': {
-					\		'maxItems': 5,
-					\		'mark': 'file',
-					\		'isVolatile': v:true,
-					\	},
-					\	'buffer': {
-					\		'maxItems': 5,
-					\		'mark': 'b',
-					\	},
-					\	'around': {
-					\		'maxItems': 5,
-					\		'mark': 'a',
-					\	},
-					\	'omni': {
-					\		'maxItems': 5,
-					\		'mark': 'o',
-					\	},
-					\	'rg': {
-					\		'maxItems': 5,
-					\		'mark': 'rg',
-					\	},
-					\	'tabnine': {
-					\		'maxItems': 5,
-					\		'mark': 'tab',
-					\		'isVolatile': v:true,
-					\	},
-					\	'vsnip': {
-					\		'maxItems': 5,
-					\		'mark': 'vsnip',
-					\		'dup': 'keep'
-					\	}
-					\})
-		call ddc#custom#patch_global('sourceParams', {
-					\	'lsp': {
-					\		'lspEngine': has('nvim') ? 'nvim-lsp' : 'vim-lsp',
-					\	}
-					\})
+	call ddc#custom#patch_global('ui', 'pum')
+	call ddc#custom#patch_global('sources',
+				\	[
+				\		'lsp',
+				\		'buffer',
+				\		'around',
+				\		'file',
+				\		'rg',
+				\		'vsnip'
+				\	])
+	call ddc#custom#patch_global('sourceOptions', {
+				\	'_': {
+				\		'sorters': ['sorter_fuzzy', 'sorter_rank'],
+				\		'matchers': ['matcher_fuzzy', 'matcher_head'],
+				\		'converters': ['converter_fuzzy', 'converter_remove_overlap']
+				\	},
+				\	'lsp': {
+				\		'mark': 'lsp',
+				\		'isVolatile': v:true,
+				\	},
+				\	'file': {
+				\		'maxItems': 5,
+				\		'mark': 'file',
+				\		'isVolatile': v:true,
+				\	},
+				\	'buffer': {
+				\		'maxItems': 5,
+				\		'mark': 'b',
+				\	},
+				\	'around': {
+				\		'maxItems': 5,
+				\		'mark': 'a',
+				\	},
+				\	'omni': {
+				\		'maxItems': 5,
+				\		'mark': 'o',
+				\	},
+				\	'rg': {
+				\		'maxItems': 5,
+				\		'mark': 'rg',
+				\	},
+				\	'tabnine': {
+				\		'maxItems': 5,
+				\		'mark': 'tab',
+				\		'isVolatile': v:true,
+				\	},
+				\	'vsnip': {
+				\		'maxItems': 5,
+				\		'mark': 'vsnip',
+				\		'dup': 'keep'
+				\	}
+				\})
+	call ddc#custom#patch_global('sourceParams', {
+				\	'lsp': {
+				\		'lspEngine': has('nvim') ? 'nvim-lsp' : 'vim-lsp',
+				\	}
+				\})
 
-		if has('nvim')
+	if has('nvim')
 lua << EOF
 vim.lsp.config('*', {
-	capabilities = require("ddc_source_lsp").make_client_capabilities(),
+capabilities = require("ddc_source_lsp").make_client_capabilities(),
 })
 EOF
-		endif
+	endif
 
-		inoremap <silent> <expr> <tab>
-					\ pum#visible() ?
-					\ '<cmd>call pum#map#select_relative(+1)<cr>' :
-					\ vsnip#jumpable(1) ? '<plug>(vsnip-jump-next)' :
-					\ '<tab>'
-		inoremap <silent> <expr> <s-tab>
-					\ pum#visible() ?
-					\ '<cmd>call pum#map#select_relative(-1)<cr>' :
-					\ vsnip#jumpable(-1) ? '<plug>(vsnip-jump-prev)' :
-					\ '<s-tab>'
-		inoremap <silent> <expr> <cr>
-					\ pum#visible() ?
-					\ '<cmd>call pum#map#confirm()<cr>' : '<cr>'
+	inoremap <silent> <expr> <tab>
+				\ pum#visible() ?
+				\ '<cmd>call pum#map#select_relative(+1)<cr>' :
+				\ vsnip#jumpable(1) ? '<plug>(vsnip-jump-next)' :
+				\ '<tab>'
+	inoremap <silent> <expr> <s-tab>
+				\ pum#visible() ?
+				\ '<cmd>call pum#map#select_relative(-1)<cr>' :
+				\ vsnip#jumpable(-1) ? '<plug>(vsnip-jump-prev)' :
+				\ '<s-tab>'
+	inoremap <silent> <expr> <cr>
+				\ pum#visible() ?
+				\ '<cmd>call pum#map#confirm()<cr>' : '<cr>'
 
-		if has('nvim')
-			inoremap <silent> <expr> <c-space> ddc#map#manual_complete()
-		else
-			inoremap <silent> <expr> <c-@> ddc#map#manual_complete()
-		endif
+	if has('nvim')
+		inoremap <silent> <expr> <c-space> ddc#map#manual_complete()
+	else
+		inoremap <silent> <expr> <c-@> ddc#map#manual_complete()
+	endif
 
-		snoremap <silent> <expr> <tab> vsnip#jumpable(1) ?
-					\ '<plug>(vsnip-jump-next)' :
-					\ '<tab>'
-		snoremap <silent> <expr> <s-tab> vsnip#jumpable(-1) ?
-					\ '<plug>(vsnip-jump-prev)' :
-					\ '<s-tab>'
-		nnoremap <silent> <expr> <tab> vsnip#jumpable(1) ?
-					\ '<plug>(vsnip-jump-next)' :
-					\ '<tab>'
-		nnoremap <silent> <expr> <s-tab> vsnip#jumpable(-1) ?
-					\ '<plug>(vsnip-jump-prev)' :
-					\ '<s-tab>'
-		call ddc#enable()
-	endfunction
-endif
+	snoremap <silent> <expr> <tab> vsnip#jumpable(1) ?
+				\ '<plug>(vsnip-jump-next)' :
+				\ '<tab>'
+	snoremap <silent> <expr> <s-tab> vsnip#jumpable(-1) ?
+				\ '<plug>(vsnip-jump-prev)' :
+				\ '<s-tab>'
+	nnoremap <silent> <expr> <tab> vsnip#jumpable(1) ?
+				\ '<plug>(vsnip-jump-next)' :
+				\ '<tab>'
+	nnoremap <silent> <expr> <s-tab> vsnip#jumpable(-1) ?
+				\ '<plug>(vsnip-jump-prev)' :
+				\ '<s-tab>'
+	call ddc#enable()
+endfunction
 
 augroup Autocomplete
 	autocmd!
