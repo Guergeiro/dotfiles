@@ -27,7 +27,22 @@ in
       vim.cmd.source(vim.fn.expand("$HOME/.vimrc"))
     '';
     plugins = with pkgs.vimPlugins; [
-      nvim-treesitter.withAllGrammars
+      {
+        type = "lua";
+        config = ''
+          vim.api.nvim_create_autocmd("FileType", {
+            callback = function(args)
+              local filetype = args.match
+              local lang = vim.treesitter.language.get_lang(filetype)
+              local success, is_installed = pcall(vim.treesitter.language.add, lang)
+              if success and is_installed then
+                vim.treesitter.start()
+              end
+            end,
+          })
+        '';
+        plugin = nvim-treesitter.withAllGrammars;
+      }
     ];
   };
   home.packages = with pkgs; [
