@@ -1,47 +1,47 @@
-if get(g:, 'lsp_server_loaded', 0) != 0
+if get(g:, 'loaded_lsp_config', 0) != 0
 	finish
 endif
 
-function! g:LspInit() abort
-	if has('nvim')
+if has('nvim')
+
 lua << EOF
-vim.api.nvim_create_autocmd('LspAttach', {
-callback = function(args)
-	-- Unset 'formatexpr'
-	vim.bo[args.buf].formatexpr = nil
-	-- Unset 'omnifunc'
-	vim.bo[args.buf].omnifunc = nil
-end,
+if _G.CustomLspHover == nil then
+	_G.CustomLspHover = function()
+		vim.lsp.buf.hover()
+	end
+end
+
+
+local group = vim.api.nvim_create_augroup('VimLsp', { clear = true })
+
+vim.api.nvim_create_autocmd({'CursorHold', 'CursorHoldI'}, {
+	group = group,
+	callback = function(args)
+		vim.diagnostic.open_float({ focus=false })
+	end,
 })
+
+vim.api.nvim_create_autocmd('LspAttach', {
+	group = group,
+	callback = function(args)
+		-- Unset 'formatexpr'
+		vim.bo[args.buf].formatexpr = nil
+		-- Unset 'omnifunc'
+		vim.bo[args.buf].omnifunc = nil
+	end,
+})
+
 for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
 vim.api.nvim_set_hl(0, group, {})
 end
-EOF
-		augroup DiagnosticHover
-			autocmd!
-			" Execute commands when Lsp is ready
-			autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float({ focus=false })
-		augroup END
-	endif
-	let g:lsp_server_loaded = 1
-endfunction
 
-
-function! g:CustomLspHover() abort
-	if has('nvim')
-lua << EOF
-vim.lsp.buf.hover()
-EOF
-	endif
-endfunction
-
-" AutoCommands
-if has('nvim')
-lua << EOF
 vim.lsp.config('*', {
 	on_init = function(client, result)
-		vim.api.nvim_call_function('g:LspInit', {})
+		vim.g.lsp_server_loaded = 1
 	end
 })
 EOF
+
 endif
+
+let g:loaded_lsp_config = 1
