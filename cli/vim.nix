@@ -26,6 +26,9 @@ in
       vim.opt.packpath = vim.opt.runtimepath:get()
       vim.cmd.source(vim.fn.expand("$HOME/.vimrc"))
     '';
+    plugins = with pkgs.vimPlugins; [
+      nvim-treesitter.withAllGrammars
+    ];
   };
   home.packages = with pkgs; [
     tree-sitter

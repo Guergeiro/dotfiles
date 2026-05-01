@@ -265,7 +265,6 @@ function! PackInit() abort
 	call minpac#add('github/copilot.vim', { 'rev': '*', 'type': 'opt' })
 
 	if has('nvim')
-		call minpac#add('nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate', 'rev': 'cf12346a3414fa1b06af75c79faebe7f76df080a' })
 		call minpac#add('nvim-lua/plenary.nvim', { 'type': 'opt' })
 		call minpac#add('nvim-telescope/telescope.nvim', { 'rev': '*', 'type': 'opt' })
 		call minpac#add('neovim/nvim-lspconfig')
