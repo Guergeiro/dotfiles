@@ -33,6 +33,11 @@
       url = "github:obra/superpowers";
       flake = false;
     };
+
+    minpac = {
+      url = "github:k-takata/minpac";
+      flake = false;
+    };
   };
 
   outputs =
@@ -46,6 +51,7 @@
       rofi-dracula,
       sublime-dracula,
       obra-superpowers,
+      minpac,
       ...
     }:
     let
@@ -138,6 +144,7 @@
               rofi-dracula
               sublime-dracula
               opencode-plugins
+              minpac
               ;
           }
         ];
@@ -192,6 +199,7 @@
           default = pkgs.mkShell {
             packages = with pkgs; [
               nixfmt
+              nixd
             ];
 
             GIT_CONFIG_COUNT = "1";

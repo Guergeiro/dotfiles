@@ -1,8 +1,8 @@
 {
-  lib,
   pkgs,
   config,
   dotfilesDir,
+  minpac,
   ...
 }:
 let
@@ -25,16 +25,38 @@ in
       vim.opt.packpath = vim.opt.runtimepath:get()
       vim.cmd.source(vim.fn.expand("$HOME/.vimrc"))
     '';
+    plugins = with pkgs.vimPlugins; [
+      {
+        type = "lua";
+        plugin = nvim-treesitter.withAllGrammars;
+        config = ''
+          vim.api.nvim_create_autocmd("FileType", {
+            callback = function(args)
+              local filetype = args.match
+              local lang = vim.treesitter.language.get_lang(filetype)
+              local success, is_installed = pcall(vim.treesitter.language.add, lang)
+              if success and is_installed then
+                vim.treesitter.start()
+              end
+            end,
+          })
+        '';
+      }
+    ];
   };
   home.packages = with pkgs; [
     tree-sitter
-    nixfmt
   ];
 
   home.file.".vimrc".source = config.lib.file.mkOutOfStoreSymlink "${vimDir}/.vimrc";
   home.file.".vimrc".force = true;
   home.file.".vim/" = {
     source = config.lib.file.mkOutOfStoreSymlink "${vimDir}/.vim/";
+    recursive = true;
+    force = true;
+  };
+  home.file.".vim/pack/minpac/opt/minpac" = {
+    source = config.lib.file.mkOutOfStoreSymlink minpac;
     recursive = true;
     force = true;
   };

@@ -6,7 +6,7 @@ in
 {
   programs.alacritty = {
     enable = true;
-    theme = "dracula_plus";
+    theme = "dracula";
     settings = {
       terminal.shell = "${pkgs.bashInteractive}/bin/bash";
       cursor.style.blinking = "Always";
