@@ -2,9 +2,9 @@
   pkgs,
   lib,
   isPersonal,
-  isWork,
   envVars,
   opencode-plugins,
+  opencode-dracula,
   ...
 }:
 let
@@ -39,23 +39,6 @@ let
         type = "remote";
         url = "https://mcp.grep.app";
         enabled = true;
-      };
-      "terraform" = {
-        type = "local";
-        command = [
-          "docker"
-          "run"
-          "-i"
-          "--rm"
-          "--pull=always"
-          "hashicorp/terraform-mcp-server:latest"
-        ];
-        enabled = isWork;
-      };
-      "hono" = {
-        type = "remote";
-        url = "https://hono.dev/llms.txt";
-        enabled = isPersonal;
       };
     }
     (lib.mkIf (envVars ? JENKINS_URL && envVars ? JENKINS_USERNAME && envVars ? JENKINS_PASSWORD) {
@@ -111,8 +94,11 @@ in
 {
   programs.opencode = {
     enable = true;
+    themes = {
+      dracula = builtins.fromJSON (builtins.readFile "${opencode-dracula}/dracula.json");
+    };
+    tui.theme = "dracula";
     settings = {
-      theme = "system";
       autoshare = false;
       autoupdate = false;
       permission = {

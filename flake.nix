@@ -29,6 +29,11 @@
       flake = false;
     };
 
+    opencode-dracula = {
+      url = "github:dracula/opencode";
+      flake = false;
+    };
+
     obra-superpowers = {
       url = "github:obra/superpowers";
       flake = false;
@@ -50,6 +55,7 @@
       starship-dracula,
       rofi-dracula,
       sublime-dracula,
+      opencode-dracula,
       obra-superpowers,
       minpac,
       ...
@@ -143,6 +149,7 @@
               starship-dracula
               rofi-dracula
               sublime-dracula
+              opencode-dracula
               opencode-plugins
               minpac
               ;

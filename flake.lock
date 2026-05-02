@@ -126,6 +126,22 @@
         "type": "github"
       }
     },
+    "opencode-dracula": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1759476923,
+        "narHash": "sha256-JChZttHoHQ4CU7DsjzOskcz7NLAdZM45yrZdrCssj5E=",
+        "owner": "dracula",
+        "repo": "opencode",
+        "rev": "e7b8ba5bff2eca780c974a241d233230e58c4e0c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dracula",
+        "repo": "opencode",
+        "type": "github"
+      }
+    },
     "rofi-dracula": {
       "flake": false,
       "locked": {
@@ -150,6 +166,7 @@
         "nixpkgs": "nixpkgs",
         "nur": "nur",
         "obra-superpowers": "obra-superpowers",
+        "opencode-dracula": "opencode-dracula",
         "rofi-dracula": "rofi-dracula",
         "starship-dracula": "starship-dracula",
         "sublime-dracula": "sublime-dracula"
