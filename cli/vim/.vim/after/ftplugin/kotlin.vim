@@ -14,15 +14,13 @@ setlocal shiftwidth=4
 
 let &l:formatprg='ktlint --log-level=error --stdin --format 2> /dev/null'
 
-if get(g:, 'smartpairs_loaded', 0) != 0
-	let g:smartpairs_pairs = get(g:, "smartpairs_pairs", {})
-	let g:smartpairs_pairs[&filetype] = {
-				\ '(': ')',
-				\ '[': ']',
-				\ '{': '}',
-				\ '"': '"'
-				\ }
-endif
+let g:smartpairs_pairs = get(g:, "smartpairs_pairs", {})
+let g:smartpairs_pairs[&filetype] = {
+			\ '(': ')',
+			\ '[': ']',
+			\ '{': '}',
+			\ '"': '"'
+			\ }
 
 if has('nvim')
 lua << EOF
