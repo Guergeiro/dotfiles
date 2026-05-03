@@ -1,6 +1,5 @@
 {
   pkgs,
-  lib,
   sublime-dracula,
   ...
 }:
@@ -27,24 +26,22 @@ let
     fi
   '';
 
-  packages =
-    with pkgs;
-    [
-      pkgs.trash-cli
+  packages = [
+    pkgs.trash-cli
 
-      # Create a new copy/paste command that allows too feed/read content directly to/from clipboard
-      (if pkgs.stdenv.isDarwin then darwinCopy else linuxCopy)
-      (if pkgs.stdenv.isDarwin then darwinPaste else linuxPaste)
-    ]
-    ++ (
-      if pkgs.stdenv.isLinux then
-        [
-          pkgs.xclip
-          pkgs.wl-clipboard
-        ]
-      else
-        [ ]
-    );
+    # Create a new copy/paste command that allows too feed/read content directly to/from clipboard
+    (if pkgs.stdenv.isDarwin then darwinCopy else linuxCopy)
+    (if pkgs.stdenv.isDarwin then darwinPaste else linuxPaste)
+  ]
+  ++ (
+    if pkgs.stdenv.isLinux then
+      [
+        pkgs.xclip
+        pkgs.wl-clipboard
+      ]
+    else
+      [ ]
+  );
 in
 {
   programs.bash = {

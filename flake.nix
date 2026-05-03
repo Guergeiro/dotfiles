@@ -98,6 +98,7 @@
 
         ./cli/ansible.nix
         ./cli/bash.nix
+        ./cli/bitwarden.nix
         ./cli/colima.nix
         ./cli/direnv.nix
         ./cli/git.nix
