@@ -15,7 +15,8 @@ in
   };
 
   services.clipcat.enable = pkgs.stdenv.isLinux;
-  services.blueman-applet.enable = pkgs.stdenv.isLinux;
+  services.blueman-applet.enable = false;
+
   home.packages =
     with pkgs;
     lib.mkIf pkgs.stdenv.isLinux [
