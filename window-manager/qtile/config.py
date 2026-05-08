@@ -65,7 +65,7 @@ keys = [
     # Toggle between different layouts as defined below
     Key([alt], "F4", lazy.window.kill(), desc="Kill focused window"),
     Key(
-        [mod],
+        [],
         "F11",
         lazy.window.toggle_fullscreen(),
         desc="Toggle fullscreen on the focused window",
