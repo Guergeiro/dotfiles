@@ -13,7 +13,7 @@
   launchd.agents.mos = {
     enable = pkgs.stdenv.isDarwin;
     config = {
-      Program = "${pkgs.mos}/Applications/AeroSpace.app/Contents/MacOS/AeroSpace";
+      Program = "${pkgs.mos}/Applications/Mos.app/Contents/MacOS/Mos";
       KeepAlive = true;
       RunAtLoad = true;
       StandardOutPath = "/tmp/mos.log";
