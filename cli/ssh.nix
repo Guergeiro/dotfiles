@@ -5,7 +5,7 @@
   ...
 }:
 let
-  matchBlocks = builtins.listToAttrs (
+  settings = builtins.listToAttrs (
     map (config: {
       name = config.hostname;
       value = config;
@@ -19,8 +19,8 @@ in
     includes = [
       "~/.colima/ssh_config"
     ];
-    matchBlocks = lib.mkMerge [
-      matchBlocks
+    settings = lib.mkMerge [
+      settings
       {
         "*" = {
           forwardAgent = false;
