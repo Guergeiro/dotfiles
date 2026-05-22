@@ -56,4 +56,10 @@ in
 
   targets.darwin.copyApps.enable = pkgs.stdenv.isDarwin;
   targets.darwin.linkApps.enable = false;
+
+  # Packages that I always want to use regardless if the system has it or not
+  home.packages = with pkgs; [
+    gnused
+    coreutils
+  ];
 }
