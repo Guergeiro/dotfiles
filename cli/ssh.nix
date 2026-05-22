@@ -1,5 +1,4 @@
 {
-  pkgs,
   sshConfig,
   lib,
   sshKeys,
