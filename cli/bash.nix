@@ -83,6 +83,8 @@ in
     '';
   };
 
+  programs.zsh.enable = pkgs.stdenv.isDarwin;
+
   programs.bat = {
     enable = true;
     config = {
