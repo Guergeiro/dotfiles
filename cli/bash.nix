@@ -85,6 +85,8 @@ in
 
   programs.zsh.enable = pkgs.stdenv.isDarwin;
 
+  home.shell.enableBashIntegration = true;
+
   programs.bat = {
     enable = true;
     config = {

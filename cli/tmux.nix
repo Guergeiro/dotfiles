@@ -25,7 +25,6 @@
       tmuxPlugins.yank
     ];
     extraConfig = ''
-      set-option -g update-environment "PATH"
       unbind C-a
       unbind C-b
       unbind C-w
