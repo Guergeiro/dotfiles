@@ -2,17 +2,15 @@
   description = "Dotfiles flake";
 
   inputs = {
+    self.submodules = true;
+
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     nur.url = "github:nix-community/NUR";
     nur.inputs.nixpkgs.follows = "nixpkgs";
-
-    nix-secrets = {
-      url = "git+file:./nix-secrets";
-      flake = false;
-    };
 
     starship-dracula = {
       url = "github:dracula/starship";
@@ -43,6 +41,11 @@
       url = "github:k-takata/minpac";
       flake = false;
     };
+
+    nix-secrets = {
+      url = "./nix-secrets";
+      flake = false;
+    };
   };
 
   outputs =
@@ -51,17 +54,17 @@
       nixpkgs,
       nur,
       home-manager,
-      nix-secrets,
       starship-dracula,
       rofi-dracula,
       sublime-dracula,
       opencode-dracula,
       obra-superpowers,
       minpac,
+      nix-secrets,
       ...
     }:
     let
-      secrets = builtins.fromJSON (builtins.readFile nix-secrets);
+      secrets = builtins.fromJSON (builtins.readFile "${nix-secrets}/vars.json");
 
       opencode-plugins = {
         superpowers = obra-superpowers;
@@ -208,6 +211,7 @@
             packages = with pkgs; [
               nixfmt
               nixd
+              git-crypt
             ];
 
             GIT_CONFIG_COUNT = "1";

@@ -60,18 +60,14 @@
     "nix-secrets": {
       "flake": false,
       "locked": {
-        "lastModified": 1779729454,
-        "narHash": "sha256-sg9BgHJz0xt5RpD0sYQFFpp675v+6F55ahQ0oPL9xXA=",
-        "ref": "refs/heads/master",
-        "rev": "de36997067a7fcd68e0ed94d9b55b4120d3e7cde",
-        "revCount": 32,
-        "type": "git",
-        "url": "file:./nix-secrets"
+        "path": "./nix-secrets",
+        "type": "path"
       },
       "original": {
-        "type": "git",
-        "url": "file:./nix-secrets"
-      }
+        "path": "./nix-secrets",
+        "type": "path"
+      },
+      "parent": []
     },
     "nixpkgs": {
       "locked": {
@@ -97,11 +93,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1779728153,
-        "narHash": "sha256-sMmohUBAn/E1n9gSxuD2YUXNmKzUp6Zwt76w1nBScOg=",
+        "lastModified": 1779790326,
+        "narHash": "sha256-AkTMG0XWIKOpMu250gZndgdU4SGXCqix3XGTtH6zGMU=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "ead36afc355f9307ce0e4fd664ea9161075470e9",
+        "rev": "89deeb94cd29881f6540a0d9568fb0ffa8744437",
         "type": "github"
       },
       "original": {
