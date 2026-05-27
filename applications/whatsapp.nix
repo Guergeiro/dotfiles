@@ -18,8 +18,5 @@ in
     };
   };
 
-  programs.chromium = {
-    enable = enable;
-    package = pkgs.ungoogled-chromium;
-  };
+  home.packages = lib.optionals enable [ pkgs.ungoogled-chromium ];
 }

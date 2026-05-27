@@ -85,6 +85,7 @@
         ./applications/bruno.nix
         ./applications/discord.nix
         ./applications/gimp.nix
+        ./applications/google-messages.nix
         ./applications/keepassxc.nix
         ./applications/librewolf.nix
         ./applications/localsend.nix
