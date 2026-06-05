@@ -62,7 +62,7 @@
   };
 
   # https://wiki.nixos.org/wiki/Default_applications
-  xdg.mimeApps.defaultApplications = {
+  xdg.mimeApps.defaultApplications = lib.mkIf pkgs.stdenv.isLinux {
     "default-web-browser" = "librewolf.desktop";
     "text/html" = "librewolf.desktop";
     "x-scheme-handler/http" = "librewolf.desktop";

@@ -49,7 +49,7 @@ in
   programs.home-manager.enable = true;
 
   home.preferXdgDirectories = true;
-  xdg.mimeApps.enable = true;
+  xdg.mimeApps.enable = pkgs.stdenv.isLinux;
 
   home.shellAliases = lib.mkIf standalone {
     "dotfiles-update" = dotfilesUpdate;
