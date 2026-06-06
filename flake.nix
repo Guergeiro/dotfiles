@@ -41,11 +41,6 @@
       url = "github:k-takata/minpac";
       flake = false;
     };
-
-    nix-secrets = {
-      url = "./nix-secrets";
-      flake = false;
-    };
   };
 
   outputs =
@@ -60,11 +55,12 @@
       opencode-dracula,
       obra-superpowers,
       minpac,
-      nix-secrets,
       ...
     }:
     let
-      secrets = builtins.fromJSON (builtins.readFile "${nix-secrets}/vars.json");
+      parseSecretVars =
+        pkgs: secretsLocation:
+        builtins.fromJSON (builtins.readFile pkgs.lib.path.append secretsLocation "vars.json");
 
       opencode-plugins = {
         superpowers = obra-superpowers;
@@ -123,12 +119,12 @@
       ];
 
       generateSshKeyMap =
-        secretsLocation: filenames:
+        pkgs: secretsLocation: filenames:
         builtins.listToAttrs (
           map (name: {
             name = name;
             value = {
-              source = "${secretsLocation}/${name}";
+              source = pkgs.path.append secretsLocation name;
               target = "./.ssh/${name}";
               force = true;
             };
@@ -136,10 +132,13 @@
         );
 
       createExtraSpecialArgs =
-        pkgs: system: secrets: secretsLocation: sshKeyFiles: dotfilesDir:
+        pkgs: system: secretsLocation: sshKeyFiles: dotfilesDir:
+        let
+          secrets = parseSecretVars secretsLocation;
+        in
         pkgs.lib.mkMerge [
           {
-            sshKeys = generateSshKeyMap secretsLocation sshKeyFiles;
+            sshKeys = generateSshKeyMap pkgs secretsLocation sshKeyFiles;
           }
           {
             dotfilesDir = dotfilesDir;
@@ -164,10 +163,10 @@
         ];
     in
     {
-      mkHomeModules = pkgs: system: secrets: secretsLocation: dotfilesDir: {
+      mkHomeModules = pkgs: system: secretsLocation: dotfilesDir: {
         modules = homeModules;
         extraSpecialArgs = pkgs.lib.mkMerge [
-          (createExtraSpecialArgs pkgs system secrets secretsLocation sshKeyFiles dotfilesDir)
+          (createExtraSpecialArgs pkgs system secretsLocation sshKeyFiles dotfilesDir)
           {
             standalone = false;
           }
@@ -179,7 +178,7 @@
           inherit pkgs;
           modules = homeModules;
           extraSpecialArgs = pkgs.lib.mkMerge [
-            (createExtraSpecialArgs pkgs pkgs.system secrets nix-secrets sshKeyFiles self)
+            (createExtraSpecialArgs pkgs pkgs.system (pkgs.lib.path.append self "nix-secrets") sshKeyFiles self)
             {
               standalone = true;
             }
