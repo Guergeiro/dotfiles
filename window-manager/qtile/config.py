@@ -24,109 +24,41 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import os
 import subprocess
 
-import libqtile.resources
-from libqtile import bar, layout, qtile, hook
-from libqtile.config import Click, Drag, Group, Key, Match, Screen
+from libqtile import layout, qtile, hook
+from libqtile.config import Match, Screen, Output
 from libqtile.lazy import lazy
-from libqtile.utils import guess_terminal
 from libqtile.backend.wayland import InputConfig
-from qtile_extras import widget
+
+from groups import create_groups
+from binds import create_keymaps, create_mousemaps
+from screens import create_screens
+from constants import MONITORS
 
 @hook.subscribe.startup_once
 def autostart():
-    os.system("systemctl --user restart blueman-applet.service")
-    os.system("systemctl --user restart nm-applet.service")
-
-mod = "mod4"
-alt = "mod1"
-lshift = "shift"
-terminal = guess_terminal()
-rofi = "rofi -show drun"
-screenshooter = "xfce4-screenshooter"
-monitortool = "xfce4-display-settings"
-
-keys = [
-    # A list of available commands that can be bound to keys can be found
-    # at https://docs.qtile.org/en/latest/manual/config/lazy.html
-    # Switch between windows
-    Key([alt], "Tab", lazy.group.next_window(), desc="Move window focus to other window"),
-    Key([alt, lshift], "Tab", lazy.group.prev_window(), desc="Move window focus to other window"),
-    # Move windows between left/right columns or move up/down in current stack.
-    # Moving out of range in Columns layout will create new column.
-    Key([mod, lshift], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),
-    Key([mod, lshift], "l", lazy.layout.shuffle_right(), desc="Move window to the right"),
-    Key([mod, lshift], "j", lazy.layout.shuffle_down(), desc="Move window down"),
-    Key([mod, lshift], "k", lazy.layout.shuffle_up(), desc="Move window up"),
-
-    Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
-    # Toggle between different layouts as defined below
-    Key([alt], "F4", lazy.window.kill(), desc="Kill focused window"),
-    Key(
-        [],
-        "F11",
-        lazy.window.toggle_fullscreen(),
-        desc="Toggle fullscreen on the focused window",
-    ),
-    Key([mod], "f", lazy.window.toggle_floating(), desc="Toggle floating on the focused window"),
-    Key([alt, lshift], "r", lazy.reload_config(), desc="Reload the config"),
-    Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
-    Key([mod], "s", lazy.spawn(rofi), desc="Spawn rofi in drun mode"),
-    Key([mod], "space", lazy.widget["keyboardlayout"].next_keyboard(), desc="Next keyboard layout"),
-    Key([], "XF86AudioRaiseVolume", lazy.widget["pulsevolume"].increase_vol(), desc="Increase volume" ),
-    Key([], "XF86AudioLowerVolume", lazy.widget["pulsevolume"].decrease_vol(), desc="Decrease volume" ),
-    Key([], "XF86AudioMute", lazy.widget["pulsevolume"].mute(), desc="Mute volume" ),
-    Key([], "XF86MonBrightnessUp", lazy.widget["brightness"].brightness_up(), desc="Increase brightness" ),
-    Key([], "XF86MonBrightnessDown", lazy.widget["brightness"].brightness_down(), desc="Decrease brightness" ),
-    Key([], "Print", lazy.spawn(screenshooter), desc="Spawn screenshooter"),
-    Key([mod], "p", lazy.spawn(monitortool), desc="Spawn monitor tool"),
-]
-
-# Add key bindings to switch VTs in Wayland.
-# We can't check qtile.core.name in default config as it is loaded before qtile is started
-# We therefore defer the check until the key binding is run by using .when(func=...)
-for vt in range(1, 8):
-    keys.append(
-        Key(
-            ["control", "mod1"],
-            f"f{vt}",
-            lazy.core.change_vt(vt).when(func=lambda: qtile.core.name == "wayland"),
-            desc=f"Switch to VT{vt}",
+    if qtile.core.name == "wayland":
+        subprocess.run(
+            [
+                "systemctl",
+                "--user",
+                "import-environment",
+                "WAYLAND_DISPLAY",
+                "DISPLAY",
+                "XDG_SESSION_TYPE",
+                "XDG_SESSION_DESKTOP",
+            ],
+            check=False,
         )
-    )
+        subprocess.run(["systemctl", "--user", "start", "kanshi.service"], check=False)
 
-
-groups = [Group(i) for i in "123456789"]
-
-for i in groups:
-    keys.extend(
-        [
-            # mod + group number = switch to group
-            Key(
-                [mod],
-                i.name,
-                lazy.group[i.name].toscreen(),
-                desc=f"Switch to group {i.name}",
-            ),
-            # mod + shift + group number = switch to & move focused window to group
-            # Key(
-            #     [mod, "shift"],
-            #     i.name,
-            #     lazy.window.togroup(i.name, switch_group=True),
-            #     desc=f"Switch to & move focused window to group {i.name}",
-            # ),
-            # Or, use below if you prefer not to switch to that group.
-            # # mod + shift + group number = move focused window to group
-            Key([mod, lshift], i.name, lazy.window.togroup(i.name),
-                desc=f"move focused window to group {i.name}"),
-        ]
-    )
+    subprocess.run(["systemctl", "--user", "restart", "blueman-applet.service"], check=False)
+    subprocess.run(["systemctl", "--user", "restart", "nm-applet.service"], check=False)
 
 layouts = [
     layout.Max(),
-    layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=2, fair=True),
+    # layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=2, fair=True),
     # Try more layouts by unleashing below layouts.
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
@@ -147,49 +79,14 @@ widget_defaults = dict(
 )
 extension_defaults = widget_defaults.copy()
 
-logo = os.path.join(os.path.dirname(libqtile.resources.__file__), "logo.png")
-screens = [
-    Screen(
-        top=bar.Bar(
-            [
-                widget.QuickExit(),
-                widget.GroupBox(),
-                widget.WindowName(),
-                widget.Prompt(),
-                widget.Chord(
-                    chords_colors={
-                        "launch": ("#ff0000", "#ffffff"),
-                    },
-                    name_transform=lambda name: name.upper(),
-                ),
-                widget.KeyboardLayout(configured_keyboards=["us", "us(intl)"]),
-                widget.StatusNotifier(),
-                widget.UPowerWidget(),
-                widget.BrightnessControl(name="brightness"),
-                widget.PulseVolumeExtra(name="pulsevolume"),
-                widget.Clock(format="%Y-%m-%d %a %H:%M"),
-                widget.CurrentLayout(mode="icon"),
-            ],
-            24,
-            # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
-            # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
-        ),
-        background="#000000",
-        wallpaper=logo,
-        wallpaper_mode="center",
-        # You can uncomment this variable if you see that on X11 floating resize/moving is laggy
-        # By default we handle these events delayed to already improve performance, however your system might still be struggling
-        # This variable is set to None (no cap) by default, but you can set it to 60 to indicate that you limit it to 60 events per second
-        # x11_drag_polling_rate = 60,
-    ),
-]
+groups = create_groups()
 
-# Drag floating layouts.
-mouse = [
-    Drag([mod], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position()),
-    Drag([mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
-    Click([mod], "Button2", lazy.window.bring_to_front()),
-]
+def generate_screens(outputs: list[Output]) -> list[Screen]:
+    return create_screens(outputs)
+
+keys = create_keymaps(groups)
+
+mouse = create_mousemaps()
 
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: list
