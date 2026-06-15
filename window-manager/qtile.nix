@@ -16,6 +16,41 @@ in
 
   services.clipcat.enable = pkgs.stdenv.isLinux;
   services.blueman-applet.enable = pkgs.stdenv.isLinux;
+  services.kanshi = {
+    enable = pkgs.stdenv.isLinux;
+    systemdTarget = "";
+    settings = [
+      {
+        profile.name = "undocked";
+        profile.outputs = [
+          {
+            criteria = "eDP-1";
+          }
+        ];
+      }
+      {
+        profile.name = "docked";
+        profile.outputs = [
+          {
+            criteria = "eDP-1";
+            status = "disable";
+          }
+          {
+            criteria = "HP Inc. HP E27 G4 CNK107263B";
+            status = "enable";
+            mode = "1920x1080@60";
+            position = "1920,0";
+          }
+          {
+            criteria = "HP Inc. HP E27 G4 CNK107262X";
+            status = "enable";
+            mode = "1920x1080@60";
+            position = "0,0";
+          }
+        ];
+      }
+    ];
+  };
 
   home.packages =
     with pkgs;

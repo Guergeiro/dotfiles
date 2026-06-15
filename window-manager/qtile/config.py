@@ -29,7 +29,7 @@ import subprocess
 
 import libqtile.resources
 from libqtile import bar, layout, qtile, hook
-from libqtile.config import Click, Drag, Group, Key, Match, Screen
+from libqtile.config import Click, Drag, Group, Key, Match, Screen, Output
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from libqtile.backend.wayland import InputConfig
@@ -37,8 +37,23 @@ from qtile_extras import widget
 
 @hook.subscribe.startup_once
 def autostart():
-    os.system("systemctl --user restart blueman-applet.service")
-    os.system("systemctl --user restart nm-applet.service")
+    if qtile.core.name == "wayland":
+        subprocess.run(
+            [
+                "systemctl",
+                "--user",
+                "import-environment",
+                "WAYLAND_DISPLAY",
+                "DISPLAY",
+                "XDG_SESSION_TYPE",
+                "XDG_SESSION_DESKTOP",
+            ],
+            check=False,
+        )
+        subprocess.run(["systemctl", "--user", "start", "kanshi.service"], check=False)
+
+    subprocess.run(["systemctl", "--user", "restart", "blueman-applet.service"], check=False)
+    subprocess.run(["systemctl", "--user", "restart", "nm-applet.service"], check=False)
 
 mod = "mod4"
 alt = "mod1"
@@ -148,41 +163,75 @@ widget_defaults = dict(
 extension_defaults = widget_defaults.copy()
 
 logo = os.path.join(os.path.dirname(libqtile.resources.__file__), "logo.png")
-screens = [
-    Screen(
-        top=bar.Bar(
-            [
-                widget.QuickExit(),
-                widget.GroupBox(),
-                widget.WindowName(),
-                widget.Prompt(),
-                widget.Chord(
-                    chords_colors={
-                        "launch": ("#ff0000", "#ffffff"),
-                    },
-                    name_transform=lambda name: name.upper(),
-                ),
-                widget.KeyboardLayout(configured_keyboards=["us", "us(intl)"]),
-                widget.StatusNotifier(),
-                widget.UPowerWidget(),
-                widget.BrightnessControl(name="brightness"),
-                widget.PulseVolumeExtra(name="pulsevolume"),
-                widget.Clock(format="%Y-%m-%d %a %H:%M"),
-                widget.CurrentLayout(mode="icon"),
-            ],
-            24,
-            # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
-            # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
-        ),
-        background="#000000",
-        wallpaper=logo,
-        wallpaper_mode="center",
-        # You can uncomment this variable if you see that on X11 floating resize/moving is laggy
-        # By default we handle these events delayed to already improve performance, however your system might still be struggling
-        # This variable is set to None (no cap) by default, but you can set it to 60 to indicate that you limit it to 60 events per second
-        # x11_drag_polling_rate = 60,
+
+main_screen = Screen(
+    top=bar.Bar(
+        [
+            widget.QuickExit(),
+            widget.GroupBox(),
+            widget.WindowName(),
+            widget.Prompt(),
+            widget.Chord(
+                chords_colors={
+                    "launch": ("#ff0000", "#ffffff"),
+                },
+                name_transform=lambda name: name.upper(),
+            ),
+            widget.KeyboardLayout(configured_keyboards=["us", "us(intl)"]),
+            widget.StatusNotifier(),
+            widget.UPowerWidget(),
+            widget.BrightnessControl(name="brightness"),
+            widget.PulseVolumeExtra(name="pulsevolume"),
+            widget.Clock(format="%Y-%m-%d %a %H:%M"),
+            widget.CurrentLayout(mode="icon"),
+        ],
+        24,
+        # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
+        # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
     ),
-]
+    background="#000000",
+    wallpaper=logo,
+    wallpaper_mode="center",
+    # You can uncomment this variable if you see that on X11 floating resize/moving is laggy
+    # By default we handle these events delayed to already improve performance, however your system might still be struggling
+    # This variable is set to None (no cap) by default, but you can set it to 60 to indicate that you limit it to 60 events per second
+    # x11_drag_polling_rate = 60,
+)
+
+secondary_screen = Screen(
+    top=bar.Bar(
+        [
+            widget.QuickExit(),
+            widget.GroupBox(),
+            widget.WindowName(),
+            widget.Prompt(),
+            widget.Chord(
+                chords_colors={
+                    "launch": ("#ff0000", "#ffffff"),
+                },
+                name_transform=lambda name: name.upper(),
+            ),
+            widget.CurrentLayout(mode="icon"),
+        ],
+        24,
+    ),
+    background="#000000",
+    wallpaper=logo,
+    wallpaper_mode="center",
+)
+
+def generate_screens(outputs: list[Output]) -> list[Screen]:
+    screens = []
+
+    for output in outputs:
+        if output.port == "eDP-1":
+            screens.append(main_screen)
+        elif output.serial == "CNK107263B":
+            screens.append(main_screen)
+        else:
+            screens.append(secondary_screen)
+
+    return screens
 
 # Drag floating layouts.
 mouse = [
