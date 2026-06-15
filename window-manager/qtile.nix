@@ -7,6 +7,22 @@
 }:
 let
   qtileDir = "${dotfilesDir}/window-manager/qtile";
+  kanshi_exec = [ "qtile cmd-obj -o cmd -f reconfigure_screens" ];
+
+  output_laptop = {
+    criteria = "eDP-1";
+    mode = "1920x1200@60";
+  };
+
+  output_external_1 = {
+    criteria = "HP Inc. HP E27 G4 CNK107263B";
+    mode = "1920x1080@60";
+  };
+
+  output_external_2 = {
+    criteria = "HP Inc. HP E27 G4 CNK107262X";
+    mode = "1920x1080@60";
+  };
 in
 {
   home.file.".config/qtile/config.py" = lib.mkIf pkgs.stdenv.isLinux {
@@ -16,6 +32,36 @@ in
 
   services.clipcat.enable = pkgs.stdenv.isLinux;
   services.blueman-applet.enable = pkgs.stdenv.isLinux;
+  services.kanshi = {
+    enable = pkgs.stdenv.isLinux;
+    systemdTarget = "";
+    settings = [
+      {
+        profile.name = "undocked";
+        profile.exec = kanshi_exec;
+        profile.outputs = [
+          (lib.mergeAttrs output_laptop { position = "0,0"; })
+        ];
+      }
+      {
+        profile.name = "docked";
+        profile.exec = kanshi_exec;
+        profile.outputs = [
+          (lib.mergeAttrs output_laptop { status = "disable"; })
+          (lib.mergeAttrs output_external_1 { position = "1920,0"; })
+          (lib.mergeAttrs output_external_2 { position = "0,0"; })
+        ];
+      }
+      {
+        profile.name = "laptop_monitor";
+        profile.exec = kanshi_exec;
+        profile.outputs = [
+          (lib.mergeAttrs output_laptop { position = "0,1080"; })
+          (lib.mergeAttrs output_external_1 { position = "0,0"; })
+        ];
+      }
+    ];
+  };
 
   home.packages =
     with pkgs;

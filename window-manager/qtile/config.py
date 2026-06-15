@@ -29,7 +29,7 @@ import subprocess
 
 import libqtile.resources
 from libqtile import bar, layout, qtile, hook
-from libqtile.config import Click, Drag, Group, Key, Match, Screen
+from libqtile.config import Click, Drag, Group, Key, Match, Screen, Output
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from libqtile.backend.wayland import InputConfig
@@ -37,8 +37,23 @@ from qtile_extras import widget
 
 @hook.subscribe.startup_once
 def autostart():
-    os.system("systemctl --user restart blueman-applet.service")
-    os.system("systemctl --user restart nm-applet.service")
+    if qtile.core.name == "wayland":
+        subprocess.run(
+            [
+                "systemctl",
+                "--user",
+                "import-environment",
+                "WAYLAND_DISPLAY",
+                "DISPLAY",
+                "XDG_SESSION_TYPE",
+                "XDG_SESSION_DESKTOP",
+            ],
+            check=False,
+        )
+        subprocess.run(["systemctl", "--user", "start", "kanshi.service"], check=False)
+
+    subprocess.run(["systemctl", "--user", "restart", "blueman-applet.service"], check=False)
+    subprocess.run(["systemctl", "--user", "restart", "nm-applet.service"], check=False)
 
 mod = "mod4"
 alt = "mod1"
@@ -62,7 +77,6 @@ keys = [
     Key([mod, lshift], "k", lazy.layout.shuffle_up(), desc="Move window up"),
 
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
-    # Toggle between different layouts as defined below
     Key([alt], "F4", lazy.window.kill(), desc="Kill focused window"),
     Key(
         [],
@@ -97,36 +111,9 @@ for vt in range(1, 8):
         )
     )
 
-
-groups = [Group(i) for i in "123456789"]
-
-for i in groups:
-    keys.extend(
-        [
-            # mod + group number = switch to group
-            Key(
-                [mod],
-                i.name,
-                lazy.group[i.name].toscreen(),
-                desc=f"Switch to group {i.name}",
-            ),
-            # mod + shift + group number = switch to & move focused window to group
-            # Key(
-            #     [mod, "shift"],
-            #     i.name,
-            #     lazy.window.togroup(i.name, switch_group=True),
-            #     desc=f"Switch to & move focused window to group {i.name}",
-            # ),
-            # Or, use below if you prefer not to switch to that group.
-            # # mod + shift + group number = move focused window to group
-            Key([mod, lshift], i.name, lazy.window.togroup(i.name),
-                desc=f"move focused window to group {i.name}"),
-        ]
-    )
-
 layouts = [
     layout.Max(),
-    layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=2, fair=True),
+    # layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=2, fair=True),
     # Try more layouts by unleashing below layouts.
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
@@ -148,41 +135,118 @@ widget_defaults = dict(
 extension_defaults = widget_defaults.copy()
 
 logo = os.path.join(os.path.dirname(libqtile.resources.__file__), "logo.png")
-screens = [
-    Screen(
+
+MAX_SIZE = 9
+
+def get_screen_group(screen_idx: int, tag: int) -> str:
+    return f"{screen_idx}:{tag}"
+
+# Create default groups
+groups = [
+    Group(name=get_screen_group(screen, tag), screen_affinity=screen, label=str(tag + 1))
+    for screen in range(MAX_SIZE)
+    for tag in range(MAX_SIZE)
+]
+
+# Add key bindings to switch to each group and move windows to each group
+# https://docs.qtile.org/en/stable/manual/faq.html#how-can-i-get-my-groups-to-stick-to-screens
+@lazy.function
+def go_to_group(qtile, tag: int):
+    screen_group = get_screen_group(qtile.current_screen.index, tag)
+    qtile.groups_map[screen_group].toscreen()
+
+@lazy.function
+def move_to_group(qtile, tag: int):
+    screen_group = get_screen_group(qtile.current_screen.index, tag)
+    qtile.current_window.togroup(screen_group)
+
+for i in range(MAX_SIZE):
+    keys.extend(
+        [
+            # mod + group number = switch to group
+            Key(
+                [mod],
+                str(i + 1),
+                go_to_group(i),
+                desc=f"Switch to group {i} of current screen",
+            ),
+            # mod + shift + group number = move focused window to group
+            Key(
+                [mod, lshift],
+                str(i + 1),
+                move_to_group(i),
+                desc=f"move focused window to group {i} of current screen",
+            )
+        ]
+    )
+
+def create_groupbox(screen_idx: int) -> widget.GroupBox:
+    return widget.GroupBox(
+        visible_groups=[get_screen_group(screen_idx, tag) for tag in range(MAX_SIZE)],
+        disable_drag=True,
+        toggle=False,
+        mouse_callbacks={
+            "Button1": lambda: None,
+        }
+    )
+
+def create_screen(screen_idx: int, is_main: bool) -> Screen:
+    top_widgets = [
+        widget.QuickExit(),
+        create_groupbox(screen_idx),
+    ]
+    if is_main:
+        top_widgets.extend([
+            widget.KeyboardLayout(configured_keyboards=["us", "us(intl)"]),
+            widget.StatusNotifier(),
+            widget.UPowerWidget(),
+            widget.BrightnessControl(name="brightness"),
+            widget.PulseVolumeExtra(name="pulsevolume"),
+            widget.Clock(format="%Y-%m-%d %a %H:%M"),
+        ])
+
+    top_widgets.append(widget.CurrentLayout(mode="icon"))
+
+    return Screen(
         top=bar.Bar(
-            [
-                widget.QuickExit(),
-                widget.GroupBox(),
-                widget.WindowName(),
-                widget.Prompt(),
-                widget.Chord(
-                    chords_colors={
-                        "launch": ("#ff0000", "#ffffff"),
-                    },
-                    name_transform=lambda name: name.upper(),
-                ),
-                widget.KeyboardLayout(configured_keyboards=["us", "us(intl)"]),
-                widget.StatusNotifier(),
-                widget.UPowerWidget(),
-                widget.BrightnessControl(name="brightness"),
-                widget.PulseVolumeExtra(name="pulsevolume"),
-                widget.Clock(format="%Y-%m-%d %a %H:%M"),
-                widget.CurrentLayout(mode="icon"),
-            ],
+            top_widgets,
             24,
-            # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
-            # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
         ),
         background="#000000",
         wallpaper=logo,
         wallpaper_mode="center",
-        # You can uncomment this variable if you see that on X11 floating resize/moving is laggy
-        # By default we handle these events delayed to already improve performance, however your system might still be struggling
-        # This variable is set to None (no cap) by default, but you can set it to 60 to indicate that you limit it to 60 events per second
-        # x11_drag_polling_rate = 60,
-    ),
+    )
+
+@hook.subscribe.client_mouse_enter
+def client_mouse_enter(client):
+    if client.screen is not qtile.current_screen:
+        qtile.focus_screen(client.screen.index)
+        client.focus(warp=False)
+
+SCREEN_PRIORITY = [
+    ("serial", "CNK107263B"),
+    ("port", "eDP-1"),
 ]
+
+def output_priority(output: Output) -> int:
+    for priority, (field, value) in enumerate(SCREEN_PRIORITY):
+        if getattr(output, field, None) == value:
+            return priority
+    return len(SCREEN_PRIORITY)
+
+
+def generate_screens(outputs: list[Output]) -> list[Screen]:
+    highest_priority_output = min(outputs, key=output_priority)
+
+    screens = []
+
+    for idx, output in enumerate(outputs):
+        if output == highest_priority_output:
+            screens.append(create_screen(idx, is_main=True))
+        else:
+            screens.append(create_screen(idx, is_main=False))
+
+    return screens
 
 # Drag floating layouts.
 mouse = [
