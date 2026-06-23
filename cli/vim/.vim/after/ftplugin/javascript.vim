@@ -15,11 +15,3 @@ let g:smartpairs_pairs[&filetype] = get(g:smartpairs_pairs, &filetype, get(g:, "
 let g:smartpairs_pairs[&filetype] = extendnew(g:smartpairs_pairs[&filetype], {
 			\ '`': '`',
 			\ })
-
-if has('nvim')
-lua << EOF
-vim.lsp.enable({
-	'denols',
-})
-EOF
-endif

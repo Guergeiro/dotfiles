@@ -5,6 +5,18 @@ endif
 if has('nvim')
 
 lua << EOF
+vim.lsp.enable({
+	'gopls',
+	'jdtls',
+	'denols',
+	'jdtls',
+	'kotlin_language_server',
+	'nixd',
+	'pyright',
+	'pylsp',
+	'terraformls',
+})
+
 _G.custom_lsp_hover = function()
 	vim.lsp.buf.hover()
 end

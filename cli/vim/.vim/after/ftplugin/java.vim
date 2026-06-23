@@ -6,11 +6,3 @@ if !exists('*s:getFormatter')
 endif
 
 let &l:formatprg=<sid>getFormatter()
-
-if has('nvim')
-lua << EOF
-vim.lsp.enable({
-	'jdtls',
-})
-EOF
-endif
