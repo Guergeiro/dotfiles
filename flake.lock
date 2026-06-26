@@ -41,6 +41,22 @@
         "type": "github"
       }
     },
+    "mattpocock-skills": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1782388103,
+        "narHash": "sha256-efsb/AXAmEvcjoknbExBeEHFB28o2c2Nk8muWwNNQFQ=",
+        "owner": "mattpocock",
+        "repo": "skills",
+        "rev": "5d78bd0903420f97c791f834201e550c765699f8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mattpocock",
+        "repo": "skills",
+        "type": "github"
+      }
+    },
     "minpac": {
       "flake": false,
       "locked": {
@@ -106,22 +122,6 @@
         "type": "github"
       }
     },
-    "obra-superpowers": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1781822662,
-        "narHash": "sha256-+lT2a/qq0SF4k0PgnEDKiuidVlZX2p0vEso4d/5T1os=",
-        "owner": "obra",
-        "repo": "superpowers",
-        "rev": "896224c4b1879920ab573417e68fd51d2ccc9072",
-        "type": "github"
-      },
-      "original": {
-        "owner": "obra",
-        "repo": "superpowers",
-        "type": "github"
-      }
-    },
     "opencode-dracula": {
       "flake": false,
       "locked": {
@@ -157,11 +157,11 @@
     "root": {
       "inputs": {
         "home-manager": "home-manager",
+        "mattpocock-skills": "mattpocock-skills",
         "minpac": "minpac",
         "nix-secrets": "nix-secrets",
         "nixpkgs": "nixpkgs",
         "nur": "nur",
-        "obra-superpowers": "obra-superpowers",
         "opencode-dracula": "opencode-dracula",
         "rofi-dracula": "rofi-dracula",
         "starship-dracula": "starship-dracula",

@@ -1,9 +1,8 @@
 {
-  pkgs,
   lib,
   isPersonal,
   envVars,
-  opencode-plugins,
+  opencode-skills,
   opencode-dracula,
   ...
 }:
@@ -98,6 +97,10 @@ in
       dracula = builtins.fromJSON (builtins.readFile "${opencode-dracula}/dracula.json");
     };
     tui.theme = "dracula";
+    skills = {
+      tdd = "${opencode-skills.mattpocock}/skills/engineering/tdd";
+      codebase-design = "${opencode-skills.mattpocock}/skills/engineering/codebase-design";
+    };
     settings = {
       autoshare = false;
       autoupdate = false;
@@ -106,9 +109,6 @@ in
         bash = "allow";
       };
       mcp = mcpServers;
-      plugin = with opencode-plugins; [
-        superpowers
-      ];
     };
   };
 }
