@@ -138,13 +138,24 @@ logo = os.path.join(os.path.dirname(libqtile.resources.__file__), "logo.png")
 
 MAX_SIZE = 9
 
-def get_screen_group(screen_idx: int, tag: int) -> str:
-    return f"{screen_idx}:{tag}"
+MONITORS = [
+    ("serial", "CNK107263B"),
+    ("port", "eDP-1"),
+]
+
+def get_monitor_id(output: Output) -> str:
+    for field, value in MONITORS:
+        if getattr(output, field) == value:
+            return value
+    return output.serial or output.port
+
+def get_screen_group(monitor_id: str, tag: int) -> str:
+    return f"{monitor_id}:{tag}"
 
 # Create default groups
 groups = [
-    Group(name=get_screen_group(screen, tag), screen_affinity=screen, label=str(tag + 1))
-    for screen in range(MAX_SIZE)
+    Group(name=get_screen_group(monitor_id, tag), label=str(tag + 1))
+    for _, monitor_id in MONITORS
     for tag in range(MAX_SIZE)
 ]
 
@@ -152,12 +163,14 @@ groups = [
 # https://docs.qtile.org/en/stable/manual/faq.html#how-can-i-get-my-groups-to-stick-to-screens
 @lazy.function
 def go_to_group(qtile, tag: int):
-    screen_group = get_screen_group(qtile.current_screen.index, tag)
+    monitor_id = get_monitor_id(qtile.current_screen.output)
+    screen_group = get_screen_group(monitor_id, tag)
     qtile.groups_map[screen_group].toscreen()
 
 @lazy.function
 def move_to_group(qtile, tag: int):
-    screen_group = get_screen_group(qtile.current_screen.index, tag)
+    monitor_id = get_monitor_id(qtile.current_screen.output)
+    screen_group = get_screen_group(monitor_id, tag)
     qtile.current_window.togroup(screen_group)
 
 for i in range(MAX_SIZE):
@@ -180,9 +193,9 @@ for i in range(MAX_SIZE):
         ]
     )
 
-def create_groupbox(screen_idx: int) -> widget.GroupBox:
+def create_groupbox(monitor_id: str) -> widget.GroupBox:
     return widget.GroupBox(
-        visible_groups=[get_screen_group(screen_idx, tag) for tag in range(MAX_SIZE)],
+        visible_groups=[get_screen_group(monitor_id, tag) for tag in range(MAX_SIZE)],
         disable_drag=True,
         toggle=False,
         mouse_callbacks={
@@ -190,10 +203,11 @@ def create_groupbox(screen_idx: int) -> widget.GroupBox:
         }
     )
 
-def create_screen(screen_idx: int, is_main: bool) -> Screen:
+def create_screen(monitor_id: str, is_main: bool) -> Screen:
     top_widgets = [
         widget.QuickExit(),
-        create_groupbox(screen_idx),
+        create_groupbox(monitor_id),
+        widget.Spacer()
     ]
     if is_main:
         top_widgets.extend([
@@ -217,22 +231,11 @@ def create_screen(screen_idx: int, is_main: bool) -> Screen:
         wallpaper_mode="center",
     )
 
-@hook.subscribe.client_mouse_enter
-def client_mouse_enter(client):
-    if client.screen is not qtile.current_screen:
-        qtile.focus_screen(client.screen.index)
-        client.focus(warp=False)
-
-SCREEN_PRIORITY = [
-    ("serial", "CNK107263B"),
-    ("port", "eDP-1"),
-]
-
 def output_priority(output: Output) -> int:
-    for priority, (field, value) in enumerate(SCREEN_PRIORITY):
+    for priority, (field, value) in enumerate(MONITORS):
         if getattr(output, field, None) == value:
             return priority
-    return len(SCREEN_PRIORITY)
+    return len(MONITORS)
 
 
 def generate_screens(outputs: list[Output]) -> list[Screen]:
@@ -240,13 +243,22 @@ def generate_screens(outputs: list[Output]) -> list[Screen]:
 
     screens = []
 
-    for idx, output in enumerate(outputs):
-        if output == highest_priority_output:
-            screens.append(create_screen(idx, is_main=True))
-        else:
-            screens.append(create_screen(idx, is_main=False))
+    for output in outputs:
+        monitor_id = get_monitor_id(output)
+        screens.append(
+            create_screen(
+                monitor_id,
+                is_main=(output == highest_priority_output)
+            )
+        )
 
     return screens
+
+@hook.subscribe.client_mouse_enter
+def client_mouse_enter(client):
+    if client.screen is not qtile.current_screen:
+        qtile.focus_screen(client.screen.index)
+        client.focus(warp=False)
 
 # Drag floating layouts.
 mouse = [
