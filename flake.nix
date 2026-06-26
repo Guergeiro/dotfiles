@@ -105,6 +105,7 @@
         ./cli/bash.nix
         ./cli/bitwarden.nix
         ./cli/colima.nix
+        ./cli/darkman.nix
         ./cli/direnv.nix
         ./cli/git.nix
         ./cli/gradle.nix
