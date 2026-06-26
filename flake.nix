@@ -32,8 +32,8 @@
       flake = false;
     };
 
-    obra-superpowers = {
-      url = "github:obra/superpowers";
+    mattpocock-skills = {
+      url = "github:mattpocock/skills";
       flake = false;
     };
 
@@ -58,7 +58,7 @@
       rofi-dracula,
       sublime-dracula,
       opencode-dracula,
-      obra-superpowers,
+      mattpocock-skills,
       minpac,
       nix-secrets,
       ...
@@ -66,8 +66,8 @@
     let
       secrets = builtins.fromJSON (builtins.readFile "${nix-secrets}/vars.json");
 
-      opencode-plugins = {
-        superpowers = obra-superpowers;
+      opencode-skills = {
+        mattpocock = mattpocock-skills;
       };
 
       # Define forAllSystems to generate Nixpkgs instances for each system
@@ -159,7 +159,7 @@
               rofi-dracula
               sublime-dracula
               opencode-dracula
-              opencode-plugins
+              opencode-skills
               minpac
               ;
           }
