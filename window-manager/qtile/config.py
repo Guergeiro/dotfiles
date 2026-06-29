@@ -140,6 +140,7 @@ MAX_SIZE = 9
 
 MONITORS = [
     ("serial", "CNK107263B"),
+    ("serial", "CNK107262X"),
     ("port", "eDP-1"),
 ]
 
@@ -147,6 +148,7 @@ def get_monitor_id(output: Output) -> str:
     for field, value in MONITORS:
         if getattr(output, field) == value:
             return value
+    # We exhausted all monitors
     return output.serial or output.port
 
 def get_screen_group(monitor_id: str, tag: int) -> str:
