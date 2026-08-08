@@ -64,7 +64,7 @@
       ...
     }:
     let
-      secrets = builtins.fromJSON (builtins.readFile "${nix-secrets}/vars.json");
+      hosts = builtins.fromJSON (builtins.readFile "${nix-secrets}/hosts.json");
 
       opencode-skills = {
         mattpocock = mattpocock-skills;
@@ -138,22 +138,22 @@
         );
 
       createExtraSpecialArgs =
-        pkgs: system: secrets: secretsLocation: sshKeyFiles: dotfilesDir:
+        pkgs: hostname: hosts: secretsLocation: sshKeyFiles: dotfilesDir:
         pkgs.lib.mkMerge [
           {
             sshKeys = generateSshKeyMap secretsLocation sshKeyFiles;
           }
           {
             dotfilesDir = dotfilesDir;
-            username = secrets.${system}.username;
-            isPersonal = secrets.${system}.personal;
-            isWork = secrets.${system}.personal == false;
-            envVars = secrets.${system}.environment or { };
-            gradleProperties = secrets.${system}.gradle or { };
+            username = hosts.${hostname}.username;
+            isPersonal = hosts.${hostname}.personal;
+            isWork = hosts.${hostname}.personal == false;
+            envVars = hosts.${hostname}.environment or { };
+            gradleProperties = hosts.${hostname}.gradle or { };
             system = pkgs.system;
-            sshConfig = secrets.${system}.sshConfig;
-            gitConfig = secrets.${system}.gitConfig;
-            nur = nur.legacyPackages.${system};
+            sshConfig = hosts.${hostname}.sshConfig;
+            gitConfig = hosts.${hostname}.gitConfig;
+            nur = nur.legacyPackages.${pkgs.system};
             inherit
               starship-dracula
               rofi-dracula
@@ -166,28 +166,31 @@
         ];
     in
     {
-      mkHomeModules = pkgs: system: secrets: secretsLocation: dotfilesDir: {
+      mkHomeModules = pkgs: hostname: hosts: secretsLocation: dotfilesDir: {
         modules = homeModules;
         extraSpecialArgs = pkgs.lib.mkMerge [
-          (createExtraSpecialArgs pkgs system secrets secretsLocation sshKeyFiles dotfilesDir)
+          (createExtraSpecialArgs pkgs hostname hosts secretsLocation sshKeyFiles dotfilesDir)
           {
             standalone = false;
           }
         ];
       };
-      homeConfigurations = forAllSystems (
-        pkgs:
+      homeConfigurations = builtins.mapAttrs (
+        hostname:
+        let
+          pkgs = nixpkgs.legacyPackages.${hosts.${hostname}.system};
+        in
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = homeModules;
           extraSpecialArgs = pkgs.lib.mkMerge [
-            (createExtraSpecialArgs pkgs pkgs.system secrets nix-secrets sshKeyFiles self)
+            (createExtraSpecialArgs pkgs hostname hosts nix-secrets sshKeyFiles self)
             {
               standalone = true;
             }
           ];
         }
-      );
+      ) hosts;
       devShells = forAllSystems (
         pkgs:
         let
