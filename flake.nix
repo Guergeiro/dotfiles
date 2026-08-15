@@ -5,6 +5,9 @@
     self.submodules = true;
 
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    dracula-nixpkgs.url = "github:nixos/nixpkgs?ref=pull/548380/head";
+
+    systems.url = "github:nix-systems/default";
 
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -52,6 +55,8 @@
     {
       self,
       nixpkgs,
+      dracula-nixpkgs,
+      systems,
       nur,
       home-manager,
       starship-dracula,
@@ -70,13 +75,8 @@
         mattpocock = mattpocock-skills;
       };
 
-      # Define forAllSystems to generate Nixpkgs instances for each system
       forAllSystems =
-        function:
-        nixpkgs.lib.genAttrs [
-          "x86_64-linux"
-          "aarch64-darwin"
-        ] (system: function nixpkgs.legacyPackages.${system});
+        function: nixpkgs.lib.genAttrs (import systems) (system: function nixpkgs.legacyPackages.${system});
 
       homeModules = [
         ./home.nix
@@ -150,10 +150,10 @@
             isWork = hosts.${hostname}.personal == false;
             envVars = hosts.${hostname}.environment or { };
             gradleProperties = hosts.${hostname}.gradle or { };
-            system = pkgs.system;
             sshConfig = hosts.${hostname}.sshConfig;
             gitConfig = hosts.${hostname}.gitConfig;
-            nur = nur.legacyPackages.${pkgs.system};
+            nur = nur.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+            draculaNixpkgs = dracula-nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
             inherit
               starship-dracula
               rofi-dracula

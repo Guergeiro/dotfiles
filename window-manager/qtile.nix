@@ -3,6 +3,7 @@
   pkgs,
   dotfilesDir,
   lib,
+  draculaNixpkgs,
   ...
 }:
 let
@@ -23,6 +24,13 @@ let
     criteria = "HP Inc. HP E27 G4 CNK107262X";
     mode = "1920x1080@60";
   };
+
+  # Example: https://jezenthomas.com/2026/07/nix-overrides-that-expire-themselves/
+  draculaTheme = lib.warnIf (
+    builtins.hasAttr "dracula-theme" pkgs
+    && pkgs."dracula-theme".version == draculaNixpkgs.dracula-theme.version
+    && pkgs."dracula-theme".src == draculaNixpkgs.dracula-theme.src
+  ) "dracula-theme is back in nixos-unstable; remove nixpkgs-fix." draculaNixpkgs.dracula-theme;
 in
 {
   home.file.".config/qtile/" = lib.mkIf pkgs.stdenv.isLinux {
@@ -90,21 +98,21 @@ in
   home.pointerCursor = {
     enable = pkgs.stdenv.isLinux;
     name = "Dracula-cursors";
-    package = pkgs.dracula-theme;
+    package = draculaTheme;
     size = 16;
   };
   gtk =
     let
       theme = {
         name = "Dracula";
-        package = pkgs.dracula-theme;
+        package = draculaTheme;
       };
     in
     {
       enable = pkgs.stdenv.isLinux;
       cursorTheme = {
         name = "Dracula-cursors";
-        package = pkgs.dracula-theme;
+        package = draculaTheme;
       };
       iconTheme = {
         name = "Dracula";

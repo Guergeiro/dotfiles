@@ -1,7 +1,7 @@
 {
   pkgs,
   username,
-  system,
+  hostname,
   lib,
   standalone,
   ...
@@ -9,7 +9,7 @@
 let
   dotfilesBaseCmd = "home-manager switch --flake $HOME/Documents/guergeiro/dotfiles";
 
-  dotfilesUpdate = "${dotfilesBaseCmd}/.#${system}";
+  dotfilesUpdate = "${dotfilesBaseCmd}/.#${hostname}";
 in
 {
   # Home Manager needs a bit of information about you and the paths it should
