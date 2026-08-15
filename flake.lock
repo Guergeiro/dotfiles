@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "dracula-nixpkgs": {
+      "locked": {
+        "lastModified": 1785866385,
+        "narHash": "sha256-szDxasa3Npg6B5NL0PpX1xDeanleQfMLDfeYqE9j3zA=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "7d5335b38ff8f52b596ab58a0e84b58eb9a22e27",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "pull/548380/head",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -28,11 +44,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1786031233,
-        "narHash": "sha256-TIDlLTLI1/pB7IqgjzcKQjpODQsZE2oII4XGG9B6KjI=",
+        "lastModified": 1786719456,
+        "narHash": "sha256-B74DLQs/VjlqyhnnX3tguWwghqJHWSJX30TKZuAljIg=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "7834e82588860aaf780cec1366524456a70898d7",
+        "rev": "83b7606dcf44abe3a94b86e8bb2b3355d22e8797",
         "type": "github"
       },
       "original": {
@@ -44,11 +60,11 @@
     "mattpocock-skills": {
       "flake": false,
       "locked": {
-        "lastModified": 1786045791,
-        "narHash": "sha256-pseSJJb5nBBGPzpxA1GzjGLB9OrT+u0At1saJ4NqZ1E=",
+        "lastModified": 1786611981,
+        "narHash": "sha256-jsXcMkhu15MxR0zXnLLJeni0q0Aew2UxUSojl6zmOvg=",
         "owner": "mattpocock",
         "repo": "skills",
-        "rev": "84fdeffd12f2ee307994d1eb6feb48173b6e0502",
+        "rev": "8b78b531ab965735c5dc74f6f7a219e1e37326df",
         "type": "github"
       },
       "original": {
@@ -87,11 +103,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1786106723,
-        "narHash": "sha256-zDSUbpoeo/9ZmD2+wXnzxoo1+uhL8vxc0b8yuYMKYq0=",
+        "lastModified": 1786599213,
+        "narHash": "sha256-yNJd40f11EzXBjSByCB7IPpeFFAdeoSKKM67dGkfFoU=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "f13ff45afd1bb73e640eaa08a7066dbed07e3238",
+        "rev": "0e251e24a4f24e036a084b6b4b2d2491af4167f4",
         "type": "github"
       },
       "original": {
@@ -109,11 +125,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1786227941,
-        "narHash": "sha256-dYJYY5vj1Htq1Z1HIBhIkoxkyIp10Z0oeInMhNvU3ic=",
+        "lastModified": 1786724461,
+        "narHash": "sha256-78u3J1DdLfDlRpCa90/hr3rIk/5qxEEOiImTsSGapt8=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "f7a00558b209aa646eedaaa7effccbdedb749dcc",
+        "rev": "cf04806cf04209fbc3991b5fdc3c61ea4c551787",
         "type": "github"
       },
       "original": {
@@ -156,6 +172,7 @@
     },
     "root": {
       "inputs": {
+        "dracula-nixpkgs": "dracula-nixpkgs",
         "home-manager": "home-manager",
         "mattpocock-skills": "mattpocock-skills",
         "minpac": "minpac",
@@ -165,7 +182,8 @@
         "opencode-dracula": "opencode-dracula",
         "rofi-dracula": "rofi-dracula",
         "starship-dracula": "starship-dracula",
-        "sublime-dracula": "sublime-dracula"
+        "sublime-dracula": "sublime-dracula",
+        "systems": "systems"
       }
     },
     "starship-dracula": {
@@ -197,6 +215,21 @@
       "original": {
         "owner": "dracula",
         "repo": "sublime",
+        "type": "github"
+      }
+    },
+    "systems": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
         "type": "github"
       }
     }
