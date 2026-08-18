@@ -103,7 +103,6 @@
 
         ./cli/ansible.nix
         ./cli/bash.nix
-        ./cli/bitwarden.nix
         ./cli/colima.nix
         ./cli/darkman.nix
         ./cli/direnv.nix
