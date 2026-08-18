@@ -1,22 +1,11 @@
 {
   pkgs,
-  lib,
   isPersonal,
   ...
 }:
 let
-  browser = lib.getExe pkgs.ungoogled-chromium;
-  enable = pkgs.stdenv.isLinux && isPersonal;
+  enable = pkgs.stdenv.hostPlatform.isLinux && isPersonal;
 in
 {
-  xdg.desktopEntries.whatsapp = lib.mkIf enable {
-    name = "WhatsApp";
-    exec = "${browser} --app=https://web.whatsapp.com/";
-    icon = pkgs.fetchurl {
-      url = "https://static.whatsapp.net/rsrc.php/yp/r/iBj9rlryvZv.svg";
-      sha256 = "sha256-QmNVdkQ5QwVITocMZ8Hlf26P559OdrCJO6ezPoMKUeI=";
-    };
-  };
-
-  home.packages = lib.optionals enable [ pkgs.ungoogled-chromium ];
+  programs.zapzap.enable = enable;
 }

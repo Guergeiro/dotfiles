@@ -15,7 +15,8 @@ in
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = username;
-  home.homeDirectory = if pkgs.stdenv.isDarwin then "/Users/${username}" else "/home/${username}";
+  home.homeDirectory =
+    if pkgs.stdenv.hostPlatform.isDarwin then "/Users/${username}" else "/home/${username}";
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -49,13 +50,13 @@ in
   programs.home-manager.enable = true;
 
   home.preferXdgDirectories = true;
-  xdg.mimeApps.enable = pkgs.stdenv.isLinux;
+  xdg.mimeApps.enable = pkgs.stdenv.hostPlatform.isLinux;
 
   home.shellAliases = lib.mkIf standalone {
     "dotfiles-update" = dotfilesUpdate;
   };
 
-  targets.darwin.copyApps.enable = pkgs.stdenv.isDarwin;
+  targets.darwin.copyApps.enable = pkgs.stdenv.hostPlatform.isDarwin;
   targets.darwin.linkApps.enable = false;
 
   # Packages that I always want to use regardless if the system has it or not

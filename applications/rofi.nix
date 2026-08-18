@@ -1,7 +1,7 @@
 { pkgs, rofi-dracula, ... }:
 {
   programs.rofi = {
-    enable = pkgs.stdenv.isLinux;
+    enable = pkgs.stdenv.hostPlatform.isLinux;
     theme = "${rofi-dracula}/theme/config1.rasi";
     font = "FantasqueSansM Nerd Font";
     extraConfig = {

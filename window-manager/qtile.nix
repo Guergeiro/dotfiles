@@ -32,16 +32,16 @@ let
       draculaNixpkgs.dracula-theme;
 in
 {
-  home.file.".config/qtile/" = lib.mkIf pkgs.stdenv.isLinux {
+  home.file.".config/qtile/" = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
     source = config.lib.file.mkOutOfStoreSymlink "${qtileDir}/";
     force = true;
     recursive = true;
   };
 
-  services.clipcat.enable = pkgs.stdenv.isLinux;
-  services.blueman-applet.enable = pkgs.stdenv.isLinux;
+  services.clipcat.enable = pkgs.stdenv.hostPlatform.isLinux;
+  services.blueman-applet.enable = pkgs.stdenv.hostPlatform.isLinux;
   services.kanshi = {
-    enable = pkgs.stdenv.isLinux;
+    enable = pkgs.stdenv.hostPlatform.isLinux;
     systemdTarget = "";
     settings = [
       {
@@ -76,7 +76,7 @@ in
 
   home.packages =
     with pkgs;
-    lib.mkIf pkgs.stdenv.isLinux [
+    lib.mkIf pkgs.stdenv.hostPlatform.isLinux [
       python3Packages.dbus-fast
       python3Packages.iwlib
       python3Packages.pulsectl-asyncio
@@ -89,13 +89,13 @@ in
       xfce4-settings
     ];
 
-  dconf.settings = lib.mkIf pkgs.stdenv.isLinux {
+  dconf.settings = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
     };
   };
   home.pointerCursor = {
-    enable = pkgs.stdenv.isLinux;
+    enable = pkgs.stdenv.hostPlatform.isLinux;
     name = "Dracula-cursors";
     package = draculaTheme;
     size = 16;
@@ -108,7 +108,7 @@ in
       };
     in
     {
-      enable = pkgs.stdenv.isLinux;
+      enable = pkgs.stdenv.hostPlatform.isLinux;
       cursorTheme = {
         name = "Dracula-cursors";
         package = draculaTheme;
@@ -129,7 +129,7 @@ in
     };
 
   xdg.portal = {
-    enable = pkgs.stdenv.isLinux;
+    enable = pkgs.stdenv.hostPlatform.isLinux;
     extraPortals = [
       pkgs.xdg-desktop-portal-gtk
       pkgs.xdg-desktop-portal-wlr

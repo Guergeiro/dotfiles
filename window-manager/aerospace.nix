@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
   programs.aerospace = {
-    enable = pkgs.stdenv.isDarwin;
+    enable = pkgs.stdenv.hostPlatform.isDarwin;
     launchd.enable = true;
     settings = {
       mode.main.binding = {

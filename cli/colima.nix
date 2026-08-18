@@ -6,7 +6,7 @@
 }:
 {
   services.colima = {
-    enable = pkgs.stdenv.isDarwin;
+    enable = pkgs.stdenv.hostPlatform.isDarwin;
     # profiles.default = {
     #   isActive = true;
     #   isService = true;
@@ -68,14 +68,14 @@
     };
   };
 
-  home.sessionVariables = lib.mkIf pkgs.stdenv.isDarwin {
+  home.sessionVariables = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
     DOCKER_HOST = "unix://${config.home.homeDirectory}/.colima/default/docker.sock";
 
     TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE = "/var/run/docker.sock";
   };
 
   # Colima-specific bash initialization
-  programs.bash.initExtra = lib.mkIf pkgs.stdenv.isDarwin ''
+  programs.bash.initExtra = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin ''
     # Set TESTCONTAINERS_HOST_OVERRIDE dynamically from running Colima instance
     if ${pkgs.colima}/bin/colima status &> /dev/null; then
       export TESTCONTAINERS_HOST_OVERRIDE=$(${pkgs.colima}/bin/colima ls -j | ${pkgs.jq}/bin/jq -r '.address')

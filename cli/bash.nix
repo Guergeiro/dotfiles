@@ -30,11 +30,11 @@ let
     pkgs.trash-cli
 
     # Create a new copy/paste command that allows too feed/read content directly to/from clipboard
-    (if pkgs.stdenv.isDarwin then darwinCopy else linuxCopy)
-    (if pkgs.stdenv.isDarwin then darwinPaste else linuxPaste)
+    (if pkgs.stdenv.hostPlatform.isDarwin then darwinCopy else linuxCopy)
+    (if pkgs.stdenv.hostPlatform.isDarwin then darwinPaste else linuxPaste)
   ]
   ++ (
-    if pkgs.stdenv.isLinux then
+    if pkgs.stdenv.hostPlatform.isLinux then
       [
         pkgs.xclip
         pkgs.wl-clipboard
@@ -83,7 +83,7 @@ in
     '';
   };
 
-  programs.zsh.enable = pkgs.stdenv.isDarwin;
+  programs.zsh.enable = pkgs.stdenv.hostPlatform.isDarwin;
 
   home.shell.enableBashIntegration = true;
 

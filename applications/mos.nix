@@ -6,12 +6,12 @@
 {
   home.packages =
     with pkgs;
-    lib.mkIf pkgs.stdenv.isDarwin [
+    lib.mkIf pkgs.stdenv.hostPlatform.isDarwin [
       mos
     ];
 
   launchd.agents.mos = {
-    enable = pkgs.stdenv.isDarwin;
+    enable = pkgs.stdenv.hostPlatform.isDarwin;
     config = {
       Program = "${pkgs.mos}/Applications/Mos.app/Contents/MacOS/Mos";
       KeepAlive = true;

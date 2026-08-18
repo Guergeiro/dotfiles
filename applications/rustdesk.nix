@@ -6,7 +6,7 @@
   ...
 }:
 let
-  enable = pkgs.stdenv.isLinux && isPersonal;
+  enable = pkgs.stdenv.hostPlatform.isLinux && isPersonal;
 in
 {
   home.packages =

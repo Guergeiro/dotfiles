@@ -6,7 +6,7 @@
 }:
 let
   browser = lib.getExe pkgs.ungoogled-chromium;
-  enable = pkgs.stdenv.isLinux && isPersonal;
+  enable = pkgs.stdenv.hostPlatform.isLinux && isPersonal;
 in
 {
   xdg.desktopEntries.google-messages = lib.mkIf enable {
