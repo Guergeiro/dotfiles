@@ -5,7 +5,6 @@
     self.submodules = true;
 
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    dracula-nixpkgs.url = "github:nixos/nixpkgs?ref=pull/548380/head";
 
     systems.url = "github:nix-systems/default";
 
@@ -55,7 +54,6 @@
     {
       self,
       nixpkgs,
-      dracula-nixpkgs,
       systems,
       nur,
       home-manager,
@@ -152,7 +150,6 @@
             sshConfig = hosts.${hostname}.sshConfig;
             gitConfig = hosts.${hostname}.gitConfig;
             nur = nur.legacyPackages.${pkgs.stdenv.hostPlatform.system};
-            draculaNixpkgs = dracula-nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
             inherit
               starship-dracula
               rofi-dracula
