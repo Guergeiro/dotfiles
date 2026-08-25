@@ -147,8 +147,8 @@
             isWork = hosts.${hostname}.personal == false;
             envVars = hosts.${hostname}.environment or { };
             gradleProperties = hosts.${hostname}.gradle or { };
-            sshConfig = hosts.${hostname}.sshConfig;
-            gitConfig = hosts.${hostname}.gitConfig;
+            sshConfig = hosts.${hostname}.sshConfig or [ ];
+            gitConfig = hosts.${hostname}.gitConfig or [ ];
             nur = nur.legacyPackages.${pkgs.stdenv.hostPlatform.system};
             inherit
               starship-dracula

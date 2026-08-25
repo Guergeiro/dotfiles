@@ -2,13 +2,24 @@
   sshConfig,
   lib,
   sshKeys,
+  pkgs,
   ...
 }:
 let
   settings = builtins.listToAttrs (
     map (config: {
       name = config.hostname;
-      value = config;
+      value =
+        let
+          expandedAttrs = builtins.mapAttrs (
+            key: value:
+            if builtins.isString value then
+              builtins.replaceStrings [ "cloudflared" ] [ "${pkgs.cloudflared}/bin/cloudflared" ] value
+            else
+              value
+          ) config;
+        in
+        expandedAttrs;
     }) sshConfig
   );
 in
