@@ -8,7 +8,7 @@
 let
   settings = builtins.listToAttrs (
     map (config: {
-      name = config.hostname;
+      name = config.Hostname;
       value =
         let
           expandedAttrs = builtins.mapAttrs (
@@ -34,17 +34,17 @@ in
       settings
       {
         "*" = {
-          forwardAgent = false;
-          compression = false;
-          serverAliveInterval = 0;
-          serverAliveCountMax = 3;
-          hashKnownHosts = false;
-          userKnownHostsFile = "~/.ssh/known_hosts";
-          controlMaster = "no";
-          controlPath = "~/.ssh/master-%r@%n:%p";
-          controlPersist = "no";
+          ForwardAgent = false;
+          Compression = false;
+          ServerAliveInterval = 0;
+          ServerAliveCountMax = 3;
+          HashKnownHosts = false;
+          UserKnownHostsFile = "~/.ssh/known_hosts";
+          ControlMaster = "no";
+          ControlPath = "~/.ssh/master-%r@%n:%p";
+          ControlPersist = "no";
 
-          addKeysToAgent = "yes";
+          AddKeysToAgent = "yes";
         };
       }
     ];
