@@ -3,5 +3,6 @@ if get(g:, 'loaded_copilot', 0) != 0
 endif
 
 let g:copilot_no_tab_map = v:true
+let g:copilot_enterprise_uri = getenv('COPILOT_ENTERPRISE_URI')
 packadd copilot.vim
 imap <silent><script><expr> <c-y> copilot#Accept()
