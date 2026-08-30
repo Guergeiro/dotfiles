@@ -100,6 +100,7 @@
         ./window-manager/qtile.nix
 
         ./cli/ansible.nix
+        ./cli/aws.nix
         ./cli/bash.nix
         ./cli/colima.nix
         ./cli/darkman.nix
@@ -149,6 +150,7 @@
             gradleProperties = hosts.${hostname}.gradle or { };
             sshConfig = hosts.${hostname}.sshConfig or [ ];
             gitConfig = hosts.${hostname}.gitConfig or [ ];
+            awsCli = hosts.${hostname}.awscli or { };
             nur = nur.legacyPackages.${pkgs.stdenv.hostPlatform.system};
             inherit
               starship-dracula
