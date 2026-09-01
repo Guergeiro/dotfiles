@@ -39,6 +39,11 @@
       flake = false;
     };
 
+    superpowers-skills = {
+      url = "github:obra/superpowers";
+      flake = false;
+    };
+
     minpac = {
       url = "github:k-takata/minpac";
       flake = false;
@@ -62,6 +67,7 @@
       sublime-dracula,
       opencode-dracula,
       mattpocock-skills,
+      superpowers-skills,
       minpac,
       nix-secrets,
       ...
@@ -71,6 +77,7 @@
 
       opencode-skills = {
         mattpocock = mattpocock-skills;
+        superpowers = superpowers-skills;
       };
 
       forAllSystems =

@@ -113,10 +113,32 @@ in
       dracula = builtins.fromJSON (builtins.readFile "${opencode-dracula}/dracula.json");
     };
     tui.theme = "dracula";
-    skills = {
-      tdd = "${opencode-skills.mattpocock}/skills/engineering/tdd";
-      codebase-design = "${opencode-skills.mattpocock}/skills/engineering/codebase-design";
-    };
+    skills =
+      let
+        superpowers-selected-skills = [
+          "brainstorming"
+          "dispatching-parallel-agents"
+          "executing-plans"
+          "receiving-code-review"
+          "receiving-code-review"
+          "subagent-driven-development"
+          "systematic-debugging"
+          "verification-before-completion"
+          "writing-plans"
+        ];
+      in
+      lib.mkMerge [
+        {
+          mattpocock-tdd = "${opencode-skills.mattpocock}/skills/engineering/tdd";
+          mattpocock-diagnosing-bugs = "${opencode-skills.mattpocock}/skills/engineering/diagnosing-bugs";
+        }
+        (builtins.listToAttrs (
+          map (name: {
+            name = "superpowers-${name}";
+            value = "${opencode-skills.superpowers}/skills/${name}";
+          }) superpowers-selected-skills
+        ))
+      ];
     settings = {
       autoshare = false;
       autoupdate = false;

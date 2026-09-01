@@ -166,6 +166,7 @@
         "rofi-dracula": "rofi-dracula",
         "starship-dracula": "starship-dracula",
         "sublime-dracula": "sublime-dracula",
+        "superpowers-skills": "superpowers-skills",
         "systems": "systems"
       }
     },
@@ -198,6 +199,22 @@
       "original": {
         "owner": "dracula",
         "repo": "sublime",
+        "type": "github"
+      }
+    },
+    "superpowers-skills": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786553601,
+        "narHash": "sha256-EsGNO0dULWf5Bx6bGrCv2kI2Z8aKH0kRvGiuN23wChQ=",
+        "owner": "obra",
+        "repo": "superpowers",
+        "rev": "b36e0829c6d0140e93cfef2ca599b1b07d4a7797",
+        "type": "github"
+      },
+      "original": {
+        "owner": "obra",
+        "repo": "superpowers",
         "type": "github"
       }
     },
