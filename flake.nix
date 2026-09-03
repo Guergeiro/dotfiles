@@ -113,6 +113,7 @@
         ./cli/darkman.nix
         ./cli/direnv.nix
         ./cli/git.nix
+        ./cli/gomi.nix
         ./cli/gradle.nix
         ./cli/opencode.nix
         ./cli/readline.nix

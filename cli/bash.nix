@@ -27,7 +27,6 @@ let
   '';
 
   packages = [
-    pkgs.gomi
     # Create a new copy/paste command that allows too feed/read content directly to/from clipboard
     (if pkgs.stdenv.hostPlatform.isDarwin then darwinCopy else linuxCopy)
     (if pkgs.stdenv.hostPlatform.isDarwin then darwinPaste else linuxPaste)
@@ -125,9 +124,6 @@ in
     # Fuck Python2... Sorry :(
     python = "python3";
     pip = "pip3";
-    # Security stuff
-    del = "${pkgs.gomi}/bin/gomi";
-    rm = "${pkgs.coreutils}/bin/echo Use \"del\", or the full path i.e. \"/bin/rm\"";
     mv = "${pkgs.coreutils}/bin/mv -i";
     cp = "${pkgs.coreutils}/bin/cp -i";
     ln = "${pkgs.coreutils}/bin/ln -i";
@@ -149,21 +145,5 @@ in
     cat = "${pkgs.bat}/bin/bat";
     man = "${pkgs.bat-extras.batman}/bin/batman";
     diff = "${pkgs.bat-extras.batdiff}/bin/batdiff";
-  };
-
-  xdg.configFile."gomi/config.yaml" = {
-    text = ''
-      core:
-        trash:
-          strategy: ${if pkgs.stdenv.hostPlatform.isDarwin then "legacy" else "xdg"}
-          gomi_dir: ~/.Trash
-
-      ui:
-        density: compact
-        preview:
-          syntax_highlight: true
-          colorscheme: dracula
-    '';
-    force = true;
   };
 }
