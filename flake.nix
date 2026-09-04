@@ -53,6 +53,63 @@
       url = "./nix-secrets";
       flake = false;
     };
+
+    clean-path-vim = {
+      url = "github:Guergeiro/clean-path.vim";
+      flake = false;
+    };
+    vim-altscreen = {
+      url = "github:fcpg/vim-altscreen";
+      flake = false;
+    };
+    vim-fern = {
+      url = "github:lambdalisue/vim-fern";
+      flake = false;
+    };
+    vim-fern-git-status = {
+      url = "github:lambdalisue/vim-fern-git-status";
+      flake = false;
+    };
+    vim-fern-hijack = {
+      url = "github:lambdalisue/vim-fern-hijack";
+      flake = false;
+    };
+    vim-fern-renderer-nerdfont = {
+      url = "github:lambdalisue/vim-fern-renderer-nerdfont";
+      flake = false;
+    };
+    vim-nerdfont = {
+      url = "github:lambdalisue/vim-nerdfont";
+      flake = false;
+    };
+    vim-smartpairs = {
+      url = "github:gosukiwi/vim-smartpairs";
+      flake = false;
+    };
+    diffconflicts = {
+      url = "github:whiteinge/diffconflicts";
+      flake = false;
+    };
+    ddc-source-rg = {
+      url = "github:Shougo/ddc-source-rg";
+      flake = false;
+    };
+    ddc-filter-converter_remove_overlap = {
+      url = "github:Shougo/ddc-filter-converter_remove_overlap";
+      flake = false;
+    };
+    ddc-source-vsnip = {
+      url = "github:uga-rosa/ddc-source-vsnip";
+      flake = false;
+    };
+    ddc-buffer = {
+      url = "github:matsui54/ddc-buffer";
+      flake = false;
+    };
+    scalpel = {
+      url = "github:wincent/scalpel";
+      flake = false;
+    };
   };
 
   outputs =
@@ -71,7 +128,7 @@
       minpac,
       nix-secrets,
       ...
-    }:
+    }@inputs:
     let
       hosts = builtins.fromJSON (builtins.readFile "${nix-secrets}/hosts.json");
 
@@ -167,6 +224,7 @@
               opencode-dracula
               opencode-skills
               minpac
+              inputs
               ;
           }
         ];
