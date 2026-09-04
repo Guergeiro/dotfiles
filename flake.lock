@@ -1,5 +1,101 @@
 {
   "nodes": {
+    "clean-path-vim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1681499152,
+        "narHash": "sha256-4MZfnFxjBOxKaZG77ns9ILy0VaR8NmBmgbmEGTgSacA=",
+        "owner": "Guergeiro",
+        "repo": "clean-path.vim",
+        "rev": "1b703a93861c2242fd66170ba6b98ea8898acb79",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Guergeiro",
+        "repo": "clean-path.vim",
+        "type": "github"
+      }
+    },
+    "ddc-buffer": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1757898436,
+        "narHash": "sha256-snNlvHeIGsi7Iz36AWItf7IsVHopvrsEmDTf0MR8mUw=",
+        "owner": "matsui54",
+        "repo": "ddc-buffer",
+        "rev": "bc2416de3629693f88e66870ca11090571f265ec",
+        "type": "github"
+      },
+      "original": {
+        "owner": "matsui54",
+        "repo": "ddc-buffer",
+        "type": "github"
+      }
+    },
+    "ddc-filter-converter_remove_overlap": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1781941427,
+        "narHash": "sha256-CcJT/jHCuBTNtpQ3lVtF/K0mb2GS7G6UkC8k04cDqc8=",
+        "owner": "Shougo",
+        "repo": "ddc-filter-converter_remove_overlap",
+        "rev": "685ab33137e50d2c3e7a0f0beb89fd1b2ae81168",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Shougo",
+        "repo": "ddc-filter-converter_remove_overlap",
+        "type": "github"
+      }
+    },
+    "ddc-source-rg": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1783820682,
+        "narHash": "sha256-X+DG8mpn49DQ1nBW3rRoj/XBNsFvU+EnJ2w255BKTB4=",
+        "owner": "Shougo",
+        "repo": "ddc-source-rg",
+        "rev": "de4f4db7fcb981683ef51c1e5816ba7411f4ec65",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Shougo",
+        "repo": "ddc-source-rg",
+        "type": "github"
+      }
+    },
+    "ddc-source-vsnip": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1691755351,
+        "narHash": "sha256-OIJIm5fufxXiOWqY0u/4njIaSw0DrHkOERQLYZMNl48=",
+        "owner": "uga-rosa",
+        "repo": "ddc-source-vsnip",
+        "rev": "81483f0d0e218193388e6bbc9b5ec6c3ceed1308",
+        "type": "github"
+      },
+      "original": {
+        "owner": "uga-rosa",
+        "repo": "ddc-source-vsnip",
+        "type": "github"
+      }
+    },
+    "diffconflicts": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1706629035,
+        "narHash": "sha256-JrJOm7dxTO7s8AKIlxFzYFOpoK7vCSgQwKpV3XnKDIM=",
+        "owner": "whiteinge",
+        "repo": "diffconflicts",
+        "rev": "4972d1401e008c5e9afeb703eddd1b2c2a1d1199",
+        "type": "github"
+      },
+      "original": {
+        "owner": "whiteinge",
+        "repo": "diffconflicts",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -156,6 +252,12 @@
     },
     "root": {
       "inputs": {
+        "clean-path-vim": "clean-path-vim",
+        "ddc-buffer": "ddc-buffer",
+        "ddc-filter-converter_remove_overlap": "ddc-filter-converter_remove_overlap",
+        "ddc-source-rg": "ddc-source-rg",
+        "ddc-source-vsnip": "ddc-source-vsnip",
+        "diffconflicts": "diffconflicts",
         "home-manager": "home-manager",
         "mattpocock-skills": "mattpocock-skills",
         "minpac": "minpac",
@@ -164,10 +266,34 @@
         "nur": "nur",
         "opencode-dracula": "opencode-dracula",
         "rofi-dracula": "rofi-dracula",
+        "scalpel": "scalpel",
         "starship-dracula": "starship-dracula",
         "sublime-dracula": "sublime-dracula",
         "superpowers-skills": "superpowers-skills",
-        "systems": "systems"
+        "systems": "systems",
+        "vim-altscreen": "vim-altscreen",
+        "vim-fern": "vim-fern",
+        "vim-fern-git-status": "vim-fern-git-status",
+        "vim-fern-hijack": "vim-fern-hijack",
+        "vim-fern-renderer-nerdfont": "vim-fern-renderer-nerdfont",
+        "vim-nerdfont": "vim-nerdfont",
+        "vim-smartpairs": "vim-smartpairs"
+      }
+    },
+    "scalpel": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1696776753,
+        "narHash": "sha256-NQQYPJtKmvadYaPerHO3hI9UrmOg1PMQTSRWFv0y+Q0=",
+        "owner": "wincent",
+        "repo": "scalpel",
+        "rev": "25147091c1c2a6475b0cef93ed38fee575fcffb5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wincent",
+        "repo": "scalpel",
+        "type": "github"
       }
     },
     "starship-dracula": {
@@ -230,6 +356,118 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "vim-altscreen": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1545229173,
+        "narHash": "sha256-NH7Vt5yTxOKC9dQkeg/joFYUq0IMZd1BOvX3nN7wjps=",
+        "owner": "fcpg",
+        "repo": "vim-altscreen",
+        "rev": "127fc8ec2b450fe41ee207c06b126ebedcbbbf3e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "fcpg",
+        "repo": "vim-altscreen",
+        "type": "github"
+      }
+    },
+    "vim-fern": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788578959,
+        "narHash": "sha256-IYjqaTbSzLSyQ1X+JOkPvIg2DpUPzWVXMXtT0+zQrts=",
+        "owner": "lambdalisue",
+        "repo": "vim-fern",
+        "rev": "fd039979718b608a7c5912f163a07b230da1b5f4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lambdalisue",
+        "repo": "vim-fern",
+        "type": "github"
+      }
+    },
+    "vim-fern-git-status": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1626311991,
+        "narHash": "sha256-9N+T/MB+4hKcxoKRwY8F7iwmTsMtNmHCHiVZfcsADcc=",
+        "owner": "lambdalisue",
+        "repo": "vim-fern-git-status",
+        "rev": "151336335d3b6975153dad77e60049ca7111da8e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lambdalisue",
+        "repo": "vim-fern-git-status",
+        "type": "github"
+      }
+    },
+    "vim-fern-hijack": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1694443850,
+        "narHash": "sha256-mtGg1rUif5pl/PvFUOJImHQ/Zde/Vr0VOSeDJXmkDPk=",
+        "owner": "lambdalisue",
+        "repo": "vim-fern-hijack",
+        "rev": "f65524899231b15528066744e714fb344abf0892",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lambdalisue",
+        "repo": "vim-fern-hijack",
+        "type": "github"
+      }
+    },
+    "vim-fern-renderer-nerdfont": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1720849033,
+        "narHash": "sha256-bcFIyPHxdckmmEGSCr9F5hLGTENF+KgRoz2BK49rGv4=",
+        "owner": "lambdalisue",
+        "repo": "vim-fern-renderer-nerdfont",
+        "rev": "325629c68eb543229715b68920fbcb92b206beb6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lambdalisue",
+        "repo": "vim-fern-renderer-nerdfont",
+        "type": "github"
+      }
+    },
+    "vim-nerdfont": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1782706084,
+        "narHash": "sha256-CtUQsuIgyW42aymUhKltVs6OWv24H+k3W03zaTjqD2c=",
+        "owner": "lambdalisue",
+        "repo": "vim-nerdfont",
+        "rev": "3a28b3f061a8b6de751175cc3f91f072d4bfc811",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lambdalisue",
+        "repo": "vim-nerdfont",
+        "type": "github"
+      }
+    },
+    "vim-smartpairs": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1681489505,
+        "narHash": "sha256-DbKAp42VPmW1CGXEjXNniIhu9w66jQTV4iqOnfkmWZM=",
+        "owner": "gosukiwi",
+        "repo": "vim-smartpairs",
+        "rev": "6c7e873a1cdf55307fc6d641a4113cc79609fa35",
+        "type": "github"
+      },
+      "original": {
+        "owner": "gosukiwi",
+        "repo": "vim-smartpairs",
         "type": "github"
       }
     }
