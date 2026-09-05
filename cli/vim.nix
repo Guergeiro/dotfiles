@@ -53,6 +53,10 @@ in
       vim.opt.packpath = vim.opt.runtimepath:get()
       vim.cmd.source(vim.fn.expand("$HOME/.vimrc"))
     '';
+    extraPackages = [
+      pkgs.nodejs
+      pkgs.deno
+    ];
     plugins =
       (with pkgs.vimPlugins; [
         {
