@@ -5,6 +5,7 @@
     self.submodules = true;
 
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-26.05";
+    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-26.05-darwin";
 
     systems.url = "github:nix-systems/default";
 
@@ -116,6 +117,7 @@
     {
       self,
       nixpkgs,
+      nixpkgs-darwin,
       systems,
       nur,
       home-manager,
@@ -138,7 +140,18 @@
       };
 
       forAllSystems =
-        function: nixpkgs.lib.genAttrs (import systems) (system: function nixpkgs.legacyPackages.${system});
+        function:
+        nixpkgs.lib.genAttrs (import systems) (
+          system:
+          let
+            pkgs =
+              if builtins.match ".*-darwin" system != null then
+                nixpkgs-darwin.legacyPackages.${system}
+              else
+                nixpkgs.legacyPackages.${system};
+          in
+          function pkgs
+        );
 
       homeModules = [
         ./home.nix
