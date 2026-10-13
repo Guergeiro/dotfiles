@@ -154,7 +154,6 @@
         ./applications/mos.nix
         ./applications/obs.nix
         ./applications/rofi.nix
-        ./applications/rustdesk.nix
         ./applications/signal.nix
         ./applications/spotify.nix
         ./applications/thunderbird.nix
