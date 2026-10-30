@@ -184,6 +184,7 @@
         ./cli/git.nix
         ./cli/gomi.nix
         ./cli/gradle.nix
+        ./cli/karabiner.nix
         ./cli/opencode.nix
         ./cli/readline.nix
         ./cli/ssh.nix
