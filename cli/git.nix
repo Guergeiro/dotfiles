@@ -3,6 +3,7 @@
   lib,
   gitConfig,
   isWork,
+  config,
   ...
 }:
 {
@@ -11,7 +12,7 @@
     signing = {
       signByDefault = true;
       format = "ssh";
-      key = "~/.ssh/sign_key.pub";
+      key = "${config.home.homeDirectory}/.ssh/sign_key";
     };
     settings = {
       user.email = "git@brenosalles.com";
