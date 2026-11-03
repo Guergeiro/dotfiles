@@ -3,6 +3,7 @@
   lib,
   pkgs,
   config,
+  nix-secrets,
   ...
 }:
 let
@@ -28,7 +29,7 @@ in
     enable = true;
     enableDefaultConfig = false;
     includes = [
-      "~/.colima/ssh_config"
+      "${config.home.homeDirectory}/.colima/ssh_config"
     ];
     settings = lib.mkMerge [
       settings
@@ -39,9 +40,9 @@ in
           ServerAliveInterval = 0;
           ServerAliveCountMax = 3;
           HashKnownHosts = false;
-          UserKnownHostsFile = "~/.ssh/known_hosts";
+          UserKnownHostsFile = "${config.home.homeDirectory}/.ssh/known_hosts";
           ControlMaster = "no";
-          ControlPath = "~/.ssh/master-%r@%n:%p";
+          ControlPath = "${config.home.homeDirectory}/.ssh/master-%r@%n:%p";
           ControlPersist = "no";
 
           AddKeysToAgent = "yes";
@@ -49,6 +50,12 @@ in
       }
     ];
   };
+
+  home.file = lib.genAttrs [ "id_ed25519.pub" "sign_key.pub" ] (name: {
+    source = "${nix-secrets}/${name}";
+    target = "./.ssh/${name}";
+    force = true;
+  });
 
   programs.keychain = {
     enable = true;

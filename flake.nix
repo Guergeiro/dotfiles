@@ -199,60 +199,34 @@
         ./cli/vim.nix
       ];
 
-      sshKeyFiles = [
-        "sign_key"
-        "sign_key.pub"
-        "id_ed25519"
-        "id_ed25519.pub"
-      ];
-
-      generateSshKeyMap =
-        secretsLocation: filenames:
-        builtins.listToAttrs (
-          map (name: {
-            name = name;
-            value = {
-              source = "${secretsLocation}/${name}";
-              target = "./.ssh/${name}";
-              force = true;
-            };
-          }) filenames
-        );
-
-      createExtraSpecialArgs =
-        pkgs: hostname: hosts: secretsLocation: sshKeyFiles: dotfilesDir:
-        pkgs.lib.mkMerge [
-          {
-            sshKeys = generateSshKeyMap secretsLocation sshKeyFiles;
-          }
-          {
-            dotfilesDir = dotfilesDir;
-            username = hosts.${hostname}.username;
-            isPersonal = hosts.${hostname}.personal;
-            isWork = hosts.${hostname}.personal == false;
-            envVars = hosts.${hostname}.environment or { };
-            gradleProperties = hosts.${hostname}.gradle or { };
-            sshConfig = hosts.${hostname}.sshConfig or [ ];
-            gitConfig = hosts.${hostname}.gitConfig or [ ];
-            awsCli = hosts.${hostname}.awscli or { };
-            nur = nur.legacyPackages.${pkgs.stdenv.hostPlatform.system};
-            inherit
-              starship-dracula
-              rofi-dracula
-              sublime-dracula
-              opencode-dracula
-              opencode-skills
-              minpac
-              inputs
-              ;
-          }
-        ];
+      createExtraSpecialArgs = pkgs: hostname: hosts: nix-secrets: dotfilesDir: {
+        dotfilesDir = dotfilesDir;
+        username = hosts.${hostname}.username;
+        isPersonal = hosts.${hostname}.personal;
+        isWork = hosts.${hostname}.personal == false;
+        envVars = hosts.${hostname}.environment or { };
+        gradleProperties = hosts.${hostname}.gradle or { };
+        sshConfig = hosts.${hostname}.sshConfig or [ ];
+        gitConfig = hosts.${hostname}.gitConfig or [ ];
+        awsCli = hosts.${hostname}.awscli or { };
+        nur = nur.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+        inherit
+          starship-dracula
+          rofi-dracula
+          sublime-dracula
+          opencode-dracula
+          opencode-skills
+          minpac
+          nix-secrets
+          inputs
+          ;
+      };
     in
     {
-      mkHomeModules = pkgs: hostname: hosts: secretsLocation: dotfilesDir: {
+      mkHomeModules = pkgs: hostname: hosts: nix-secrets: dotfilesDir: {
         modules = homeModules;
         extraSpecialArgs = pkgs.lib.mkMerge [
-          (createExtraSpecialArgs pkgs hostname hosts secretsLocation sshKeyFiles dotfilesDir)
+          (createExtraSpecialArgs pkgs hostname hosts nix-secrets dotfilesDir)
           {
             standalone = false;
           }
@@ -267,7 +241,7 @@
           inherit pkgs;
           modules = homeModules;
           extraSpecialArgs = pkgs.lib.mkMerge [
-            (createExtraSpecialArgs pkgs hostname hosts nix-secrets sshKeyFiles self)
+            (createExtraSpecialArgs pkgs hostname hosts nix-secrets self)
             {
               standalone = true;
             }

@@ -48,10 +48,10 @@ in
     withPerl = true;
     withRuby = true;
     initLua = ''
-      vim.opt.runtimepath:prepend(vim.fn.expand("~/.vim"))
-      vim.opt.runtimepath:append(vim.fn.expand("~/.vim/after"))
+      vim.opt.runtimepath:prepend(vim.fn.expand("${config.home.homeDirectory}/.vim"))
+      vim.opt.runtimepath:append(vim.fn.expand("${config.home.homeDirectory}/.vim/after"))
       vim.opt.packpath = vim.opt.runtimepath:get()
-      vim.cmd.source(vim.fn.expand("$HOME/.vimrc"))
+      vim.cmd.source(vim.fn.expand("${config.home.homeDirectory}/.vimrc"))
     '';
     extraPackages = [
       pkgs.nodejs
