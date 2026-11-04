@@ -1,6 +1,9 @@
 {
   pkgs,
   sublime-dracula,
+  lib,
+  config,
+  hostname,
   ...
 }:
 let
@@ -78,6 +81,11 @@ in
           command ping "www.brenosalles.com"
         fi
       }
+
+      # Load the environment variables from the nix-secrets
+      if [ -f "${config.age.secrets."${hostname}/env".path}" ]; then
+        source "${config.age.secrets."${hostname}/env".path}"
+      fi
     '';
   };
 

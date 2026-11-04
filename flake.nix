@@ -211,6 +211,7 @@
         awsCli = hosts.${hostname}.awscli or { };
         nur = nur.legacyPackages.${pkgs.stdenv.hostPlatform.system};
         inherit
+          hostname
           starship-dracula
           rofi-dracula
           sublime-dracula
