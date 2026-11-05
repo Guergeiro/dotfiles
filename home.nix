@@ -1,9 +1,11 @@
 {
+  config,
   pkgs,
   username,
   hostname,
   lib,
   standalone,
+  nix-secrets,
   ...
 }:
 let
@@ -63,5 +65,19 @@ in
   home.packages = with pkgs; [
     gnused
     coreutils
+  ];
+
+  age.identityPaths = [
+    "${config.home.homeDirectory}/Documents/guergeiro/iac/nix-secrets/root"
+  ];
+
+  age.secrets = lib.mkMerge [
+    (lib.genAttrs [ "id_ed25519" "sign_key" ] (name: {
+      file = "${nix-secrets}/${name}.age";
+      path = "${config.home.homeDirectory}/.ssh/${name}";
+    }))
+    {
+      "${hostname}/env".file = "${nix-secrets}/${hostname}/env.age";
+    }
   ];
 }

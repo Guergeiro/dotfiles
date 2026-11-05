@@ -1,7 +1,6 @@
 {
   pkgs,
   sublime-dracula,
-  lib,
   config,
   hostname,
   ...

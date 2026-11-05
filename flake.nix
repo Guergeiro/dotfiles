@@ -159,7 +159,6 @@
 
       homeModules = [
         agenix.homeManagerModules.default
-        ./nix-secrets/agenix-secrets.nix
         ./home.nix
 
         ./applications/alacritty.nix
@@ -199,29 +198,35 @@
         ./cli/vim.nix
       ];
 
-      createExtraSpecialArgs = pkgs: hostname: hosts: nix-secrets: dotfilesDir: {
-        dotfilesDir = dotfilesDir;
-        username = hosts.${hostname}.username;
-        isPersonal = hosts.${hostname}.personal;
-        isWork = hosts.${hostname}.personal == false;
-        envVars = hosts.${hostname}.environment or { };
-        gradleProperties = hosts.${hostname}.gradle or { };
-        sshConfig = hosts.${hostname}.sshConfig or [ ];
-        gitConfig = hosts.${hostname}.gitConfig or [ ];
-        awsCli = hosts.${hostname}.awscli or { };
-        nur = nur.legacyPackages.${pkgs.stdenv.hostPlatform.system};
-        inherit
-          hostname
-          starship-dracula
-          rofi-dracula
-          sublime-dracula
-          opencode-dracula
-          opencode-skills
-          minpac
-          nix-secrets
-          inputs
-          ;
-      };
+      createExtraSpecialArgs =
+        pkgs: hostname: hosts: nix-secrets: dotfilesDir:
+        let
+          host = builtins.fromJSON (builtins.readFile "${nix-secrets}/${hostname}/host.json");
+        in
+        {
+          dotfilesDir = dotfilesDir;
+          username = host.username;
+          isPersonal = host.personal or false;
+          isWork = host.personal == false;
+          isWorkstation = host.workstation or false;
+          envVars = host.environment or { };
+          gradleProperties = host.gradle or { };
+          sshConfig = host.sshConfig or [ ];
+          gitConfig = host.gitConfig or [ ];
+          awsCli = host.awscli or { };
+          nur = nur.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+          inherit
+            hostname
+            starship-dracula
+            rofi-dracula
+            sublime-dracula
+            opencode-dracula
+            opencode-skills
+            minpac
+            nix-secrets
+            inputs
+            ;
+        };
     in
     {
       mkHomeModules = pkgs: hostname: hosts: nix-secrets: dotfilesDir: {
@@ -233,10 +238,11 @@
           }
         ];
       };
-      homeConfigurations = builtins.mapAttrs (
+      homeConfigurations = map (
         hostname:
         let
-          pkgs = nixpkgs.legacyPackages.${hosts.${hostname}.system};
+          host = builtins.fromJSON (builtins.readFile "${nix-secrets}/${hostname}/host.json");
+          pkgs = nixpkgs.legacyPackages.${host.system};
         in
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
