@@ -3,10 +3,18 @@
   ...
 }:
 let
-  adv360 = {
+  adv360bt = {
     identifiers.is_keyboard = true;
     identifiers.vendor_id = 7504;
     identifiers.product_id = 24926;
+    identifiers.is_pointing_device = true;
+    ignore = false;
+    ignore_vendor_events = true;
+  };
+  adv360 = {
+    identifiers.is_keyboard = true;
+    identifiers.vendor_id = 10730;
+    identifiers.product_id = 866;
     identifiers.is_pointing_device = true;
     ignore = false;
     ignore_vendor_events = true;
@@ -57,6 +65,7 @@ in
           keyboard_type_v2 = "ansi";
         };
         devices = [
+          adv360bt
           adv360
           internal
         ];
