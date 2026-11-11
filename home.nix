@@ -69,6 +69,7 @@ in
 
   age.identityPaths = [
     "${config.home.homeDirectory}/Documents/guergeiro/iac/nix-secrets/root"
+    "${config.home.homeDirectory}/.ssh/id_ed25519"
   ];
 
   age.secrets = lib.mkMerge [
