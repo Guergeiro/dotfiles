@@ -16,6 +16,47 @@ let
   dotfilesUpdate = "${dotfilesBaseCmd}/.#${hostname}";
 in
 {
+  imports = [
+    inputs.agenix.homeManagerModules.default
+
+    ./applications/alacritty.nix
+    ./applications/bruno.nix
+    ./applications/discord.nix
+    ./applications/gimp.nix
+    ./applications/google-messages.nix
+    ./applications/keepassxc.nix
+    ./applications/librewolf.nix
+    ./applications/localsend.nix
+    ./applications/mos.nix
+    ./applications/obs.nix
+    ./applications/rofi.nix
+    ./applications/signal.nix
+    ./applications/spotify.nix
+    ./applications/thunderbird.nix
+    ./applications/whatsapp.nix
+    ./applications/zmk.nix
+
+    ./window-manager/aerospace.nix
+    ./window-manager/qtile.nix
+
+    ./cli/ansible.nix
+    ./cli/aws.nix
+    ./cli/bash.nix
+    ./cli/colima.nix
+    ./cli/darkman.nix
+    ./cli/direnv.nix
+    ./cli/git.nix
+    ./cli/gomi.nix
+    ./cli/gradle.nix
+    ./cli/karabiner.nix
+    ./cli/opencode.nix
+    ./cli/readline.nix
+    ./cli/ssh.nix
+    ./cli/starship.nix
+    ./cli/tmux.nix
+    ./cli/vim.nix
+  ];
+
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = username;

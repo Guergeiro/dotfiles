@@ -121,7 +121,6 @@
       nixpkgs,
       nixpkgs-darwin,
       systems,
-      agenix,
       home-manager,
       nix-secrets,
       ...
@@ -144,44 +143,7 @@
         );
 
       homeModules = [
-        agenix.homeManagerModules.default
         ./home.nix
-
-        ./applications/alacritty.nix
-        ./applications/bruno.nix
-        ./applications/discord.nix
-        ./applications/gimp.nix
-        ./applications/google-messages.nix
-        ./applications/keepassxc.nix
-        ./applications/librewolf.nix
-        ./applications/localsend.nix
-        ./applications/mos.nix
-        ./applications/obs.nix
-        ./applications/rofi.nix
-        ./applications/signal.nix
-        ./applications/spotify.nix
-        ./applications/thunderbird.nix
-        ./applications/whatsapp.nix
-
-        ./window-manager/aerospace.nix
-        ./window-manager/qtile.nix
-
-        ./cli/ansible.nix
-        ./cli/aws.nix
-        ./cli/bash.nix
-        ./cli/colima.nix
-        ./cli/darkman.nix
-        ./cli/direnv.nix
-        ./cli/git.nix
-        ./cli/gomi.nix
-        ./cli/gradle.nix
-        ./cli/karabiner.nix
-        ./cli/opencode.nix
-        ./cli/readline.nix
-        ./cli/ssh.nix
-        ./cli/starship.nix
-        ./cli/tmux.nix
-        ./cli/vim.nix
       ];
 
       createExtraSpecialArgs =
@@ -248,7 +210,7 @@
               nixfmt
               nixd
               git-crypt
-              agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
+              inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
             ];
 
             GIT_CONFIG_COUNT = "1";
