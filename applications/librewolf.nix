@@ -1,10 +1,14 @@
 {
+  inputs,
   lib,
-  username,
-  nur,
   pkgs,
+  host,
   ...
 }:
+let
+  nur = inputs.nur.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+  inherit (host) username;
+in
 {
   programs.librewolf = {
     enable = true;

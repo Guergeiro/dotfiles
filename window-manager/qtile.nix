@@ -1,12 +1,12 @@
 {
+  inputs,
   config,
   pkgs,
-  dotfilesDir,
   lib,
   ...
 }:
 let
-  qtileDir = "${dotfilesDir}/window-manager/qtile";
+  qtileDir = "${inputs.self}/window-manager/qtile";
   kanshi_exec = [ "qtile cmd-obj -o cmd -f reconfigure_screens" ];
 
   output_laptop = {

@@ -1,6 +1,6 @@
 {
+  inputs,
   pkgs,
-  sublime-dracula,
   config,
   hostname,
   ...
@@ -99,7 +99,7 @@ in
     };
     themes = {
       Dracula = {
-        src = sublime-dracula;
+        src = inputs.sublime-dracula;
         file = "Dracula.tmTheme";
       };
     };

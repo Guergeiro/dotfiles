@@ -1,11 +1,11 @@
 {
   pkgs,
-  config,
   lib,
-  isPersonal,
+  host,
   ...
 }:
 let
+  isPersonal = host.personal or false;
   enable = pkgs.stdenv.hostPlatform.isLinux && isPersonal;
 in
 {

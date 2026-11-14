@@ -1,11 +1,14 @@
 {
   pkgs,
   lib,
-  gitConfig,
-  isWork,
+  host,
   config,
   ...
 }:
+let
+  isWork = host.personal == false;
+  gitConfig = host.gitConfig or [ ];
+in
 {
   programs.git = {
     enable = true;

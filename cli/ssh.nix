@@ -1,12 +1,15 @@
 {
-  sshConfig,
+  inputs,
+  host,
   lib,
   pkgs,
   config,
-  nix-secrets,
   ...
 }:
 let
+  inherit (inputs) nix-secrets;
+  sshConfig = host.sshConfig or [ ];
+
   settings = builtins.listToAttrs (
     map (config: {
       name = config.Hostname;

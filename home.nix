@@ -1,14 +1,16 @@
 {
+  inputs,
   config,
   pkgs,
-  username,
   hostname,
   lib,
+  host,
   standalone,
-  nix-secrets,
   ...
 }:
 let
+  inherit (host) username;
+
   dotfilesBaseCmd = "home-manager switch --flake $HOME/Documents/guergeiro/dotfiles";
 
   dotfilesUpdate = "${dotfilesBaseCmd}/.#${hostname}";
@@ -74,11 +76,11 @@ in
 
   age.secrets = lib.mkMerge [
     (lib.genAttrs [ "id_ed25519" "sign_key" ] (name: {
-      file = "${nix-secrets}/${name}.age";
+      file = "${inputs.nix-secrets}/${name}.age";
       path = "${config.home.homeDirectory}/.ssh/${name}";
     }))
     {
-      "${hostname}/env".file = "${nix-secrets}/${hostname}/env.age";
+      "${hostname}/env".file = "${inputs.nix-secrets}/${hostname}/env.age";
     }
   ];
 }

@@ -118,30 +118,16 @@
 
   outputs =
     {
-      self,
       nixpkgs,
       nixpkgs-darwin,
       systems,
       agenix,
-      nur,
       home-manager,
-      starship-dracula,
-      rofi-dracula,
-      sublime-dracula,
-      opencode-dracula,
-      mattpocock-skills,
-      superpowers-skills,
-      minpac,
       nix-secrets,
       ...
     }@inputs:
     let
       hosts = builtins.fromJSON (builtins.readFile "${nix-secrets}/hosts.json");
-
-      opencode-skills = {
-        mattpocock = mattpocock-skills;
-        superpowers = superpowers-skills;
-      };
 
       forAllSystems =
         function:
@@ -199,43 +185,24 @@
       ];
 
       createExtraSpecialArgs =
-        pkgs: hostname: hosts: nix-secrets: dotfilesDir:
+        hostname: standalone:
         let
           host = builtins.fromJSON (builtins.readFile "${nix-secrets}/${hostname}/host.json");
         in
         {
-          dotfilesDir = dotfilesDir;
-          username = host.username;
-          isPersonal = host.personal or false;
-          isWork = host.personal == false;
-          isWorkstation = host.workstation or false;
-          envVars = host.environment or { };
-          gradleProperties = host.gradle or { };
-          sshConfig = host.sshConfig or [ ];
-          gitConfig = host.gitConfig or [ ];
-          awsCli = host.awscli or { };
-          nur = nur.legacyPackages.${pkgs.stdenv.hostPlatform.system};
           inherit
-            hostname
-            starship-dracula
-            rofi-dracula
-            sublime-dracula
-            opencode-dracula
-            opencode-skills
-            minpac
-            nix-secrets
             inputs
+            hostname
+            host
+            standalone
             ;
         };
     in
     {
-      mkHomeModules = pkgs: hostname: hosts: nix-secrets: dotfilesDir: {
+      mkHomeModules = pkgs: hostname: standalone: {
         modules = homeModules;
         extraSpecialArgs = pkgs.lib.mkMerge [
-          (createExtraSpecialArgs pkgs hostname hosts nix-secrets dotfilesDir)
-          {
-            standalone = false;
-          }
+          (createExtraSpecialArgs hostname standalone)
         ];
       };
       homeConfigurations = map (
@@ -243,16 +210,13 @@
         let
           host = builtins.fromJSON (builtins.readFile "${nix-secrets}/${hostname}/host.json");
           pkgs = nixpkgs.legacyPackages.${host.system};
+
+          homeCfg = inputs.self.mkHomeModules pkgs hostname true;
         in
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          modules = homeModules;
-          extraSpecialArgs = pkgs.lib.mkMerge [
-            (createExtraSpecialArgs pkgs hostname hosts nix-secrets self)
-            {
-              standalone = true;
-            }
-          ];
+          modules = homeCfg.modules;
+          extraSpecialArgs = homeCfg.extraSpecialArgs;
         }
       ) hosts;
       devShells = forAllSystems (

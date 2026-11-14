@@ -1,11 +1,12 @@
 {
   pkgs,
   lib,
-  isPersonal,
+  host,
   ...
 }:
 let
   browser = lib.getExe pkgs.ungoogled-chromium;
+  isPersonal = host.personal or false;
   enable = pkgs.stdenv.hostPlatform.isLinux && isPersonal;
 in
 {

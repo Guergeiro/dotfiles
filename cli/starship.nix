@@ -1,6 +1,6 @@
-{ lib, starship-dracula, ... }:
+{ lib, inputs, ... }:
 let
-  draculaPalette = builtins.fromTOML (builtins.readFile "${starship-dracula}/starship.toml");
+  draculaPalette = fromTOML (builtins.readFile "${inputs.starship-dracula}/starship.toml");
 in
 {
   programs.starship = {

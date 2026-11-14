@@ -1,13 +1,14 @@
 {
+  inputs,
   lib,
-  isPersonal,
-  envVars,
-  opencode-skills,
-  opencode-dracula,
+  host,
   pkgs,
   ...
 }:
 let
+  isPersonal = host.personal or false;
+  envVars = host.environment or { };
+
   mcpServers = lib.mkMerge [
     {
       "sequential" = {
@@ -110,7 +111,7 @@ in
   programs.opencode = {
     enable = true;
     themes = {
-      dracula = builtins.fromJSON (builtins.readFile "${opencode-dracula}/dracula.json");
+      dracula = builtins.fromJSON (builtins.readFile "${inputs.opencode-dracula}/dracula.json");
     };
     tui.theme = "dracula";
     skills =
@@ -129,13 +130,13 @@ in
       in
       lib.mkMerge [
         {
-          mattpocock-tdd = "${opencode-skills.mattpocock}/skills/engineering/tdd";
-          mattpocock-diagnosing-bugs = "${opencode-skills.mattpocock}/skills/engineering/diagnosing-bugs";
+          mattpocock-tdd = "${inputs.mattpocock-skills}/skills/engineering/tdd";
+          mattpocock-diagnosing-bugs = "${inputs.mattpocock-skills}/skills/engineering/diagnosing-bugs";
         }
         (builtins.listToAttrs (
           map (name: {
             name = "superpowers-${name}";
-            value = "${opencode-skills.superpowers}/skills/${name}";
+            value = "${inputs.superpowers-skills}/skills/${name}";
           }) superpowers-selected-skills
         ))
       ];

@@ -1,9 +1,12 @@
 {
   pkgs,
   lib,
-  isPersonal,
+  host,
   ...
 }:
+let
+  isPersonal = host.personal or false;
+in
 {
   home.packages =
     with pkgs;

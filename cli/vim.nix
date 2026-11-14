@@ -1,13 +1,11 @@
 {
   pkgs,
   config,
-  dotfilesDir,
-  minpac,
   inputs,
   ...
 }:
 let
-  vimDir = "${dotfilesDir}/cli/vim";
+  vimDir = "${inputs.self}/cli/vim";
 
   unpackedVimPlugins =
     pkgs.lib.genAttrs
@@ -287,7 +285,7 @@ in
     force = true;
   };
   home.file.".vim/pack/minpac/opt/minpac" = {
-    source = config.lib.file.mkOutOfStoreSymlink minpac;
+    source = config.lib.file.mkOutOfStoreSymlink inputs.minpac;
     recursive = true;
     force = true;
   };

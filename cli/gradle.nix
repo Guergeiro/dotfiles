@@ -1,4 +1,7 @@
-{ gradleProperties, lib, ... }:
+{ host, lib, ... }:
+let
+  gradleProperties = host.gradle or { };
+in
 {
   programs.gradle = {
     enable = true;

@@ -1,9 +1,12 @@
 {
-  isWork,
-  awsCli,
+  host,
   lib,
   ...
 }:
+let
+  isWork = host.personal == false;
+  awsCli = host.awscli or { };
+in
 {
   programs.awscli = {
     enable = isWork;
