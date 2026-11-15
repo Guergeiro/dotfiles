@@ -7,6 +7,8 @@
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-26.05";
     nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-26.05-darwin";
 
+    import-tree.url = "github:denful/import-tree";
+    flake-parts.url = "github:hercules-ci/flake-parts";
     systems.url = "github:nix-systems/default";
 
     home-manager.url = "github:nix-community/home-manager?ref=release-26.05";
@@ -117,107 +119,18 @@
   };
 
   outputs =
-    {
-      nixpkgs,
-      nixpkgs-darwin,
-      systems,
-      home-manager,
-      nix-secrets,
-      ...
-    }@inputs:
-    let
-      hosts = builtins.fromJSON (builtins.readFile "${nix-secrets}/hosts.json");
+    inputs:
 
-      forAllSystems =
-        function:
-        nixpkgs.lib.genAttrs (import systems) (
-          system:
-          let
-            pkgs =
-              if builtins.match ".*-darwin" system != null then
-                nixpkgs-darwin.legacyPackages.${system}
-              else
-                nixpkgs.legacyPackages.${system};
-          in
-          function pkgs
-        );
-
-      homeModules = [
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = import inputs.systems;
+      imports = [
+        inputs.home-manager.flakeModules.home-manager
         ./home.nix
+        (inputs.import-tree [
+          ./hosts
+          ./modules
+          ./shells
+        ])
       ];
-
-      createExtraSpecialArgs =
-        hostname: standalone:
-        let
-          host = builtins.fromJSON (builtins.readFile "${nix-secrets}/${hostname}/host.json");
-        in
-        {
-          inherit
-            inputs
-            hostname
-            host
-            standalone
-            ;
-        };
-    in
-    {
-      mkHomeModules = pkgs: hostname: standalone: {
-        modules = homeModules;
-        extraSpecialArgs = pkgs.lib.mkMerge [
-          (createExtraSpecialArgs hostname standalone)
-        ];
-      };
-      homeConfigurations = map (
-        hostname:
-        let
-          host = builtins.fromJSON (builtins.readFile "${nix-secrets}/${hostname}/host.json");
-          pkgs = nixpkgs.legacyPackages.${host.system};
-
-          homeCfg = inputs.self.mkHomeModules pkgs hostname true;
-        in
-        home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          modules = homeCfg.modules;
-          extraSpecialArgs = homeCfg.extraSpecialArgs;
-        }
-      ) hosts;
-      devShells = forAllSystems (
-        pkgs:
-        let
-          hookScripts = {
-            pre-commit = pkgs.writeShellScript "pre-commit" ''
-              format_staged_nix_files() {
-                files=$(${pkgs.git}/bin/git diff --cached --name-only --diff-filter=ACMR -- '*.nix')
-                [ -z "$files" ] && return 0
-                ${pkgs.coreutils}/bin/echo "$files" | ${pkgs.findutils}/bin/xargs ${pkgs.nixfmt}/bin/nixfmt
-                ${pkgs.coreutils}/bin/echo "$files" | ${pkgs.findutils}/bin/xargs ${pkgs.git}/bin/git add
-              }
-              format_staged_nix_files
-            '';
-            post-commit = pkgs.writeShellScript "post-commit" ''
-              exec ${pkgs.git}/bin/git update-index -g
-            '';
-          };
-          hooksDir = pkgs.linkFarm "git-hooks" (
-            pkgs.lib.mapAttrsToList (name: path: {
-              inherit name path;
-            }) hookScripts
-          );
-        in
-        {
-          default = pkgs.mkShell {
-            packages = with pkgs; [
-              nixfmt
-              nixd
-              git-crypt
-              inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
-            ];
-
-            GIT_CONFIG_COUNT = "1";
-            GIT_CONFIG_KEY_0 = "core.hooksPath";
-            GIT_CONFIG_VALUE_0 = hooksDir;
-          };
-        }
-      );
     };
 }
