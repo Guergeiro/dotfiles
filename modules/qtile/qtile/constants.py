@@ -12,6 +12,7 @@ MONITORS = [
 MOD = "mod4"
 ALT = "mod1"
 LSHIFT = "shift"
+CTRL = "control"
 ROFI = "rofi -show drun"
 SCREENSHOOTER = "xfce4-screenshooter"
 MONITORTOOL = "xfce4-display-settings"

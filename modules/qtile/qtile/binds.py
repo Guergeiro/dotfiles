@@ -1,7 +1,7 @@
 from libqtile.config import Key, Group, Click, Drag
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
-from constants import MOD, ALT, LSHIFT, ROFI, SCREENSHOOTER, MONITORTOOL, MAIN_KEYS
+from constants import MOD, ALT, LSHIFT, CTRL, ROFI, SCREENSHOOTER, MONITORTOOL, MAIN_KEYS
 
 terminal = guess_terminal()
 
@@ -47,8 +47,8 @@ def create_keymaps(groups: list[Group] = []) -> list[Key]:
         Key([ALT], "F4", lazy.window.kill(), desc="Kill focused window"),
         Key([], "F11", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen"),
         Key([MOD], "f", lazy.window.toggle_floating(), desc="Toggle floating"),
-        Key([ALT, LSHIFT], "r", lazy.reload_config(), desc="Reload the config"),
-        Key([MOD, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
+        Key([MOD, LSHIFT], "r", lazy.reload_config(), desc="Reload the config"),
+        Key([MOD, CTRL], "q", lazy.shutdown(), desc="Shutdown Qtile"),
         Key([MOD], "s", lazy.spawn(ROFI), desc="Spawn Rofi"),
         Key([MOD], "space", lazy.widget["keyboardlayout"].next_keyboard(), desc="Next keyboard"),
 
