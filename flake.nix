@@ -19,6 +19,7 @@
 
     nur.url = "github:nix-community/NUR";
     nur.inputs.nixpkgs.follows = "nixpkgs";
+    nur.inputs.flake-parts.follows = "flake-parts";
 
     starship-dracula = {
       url = "github:dracula/starship";
