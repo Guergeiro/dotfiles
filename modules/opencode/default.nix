@@ -49,8 +49,6 @@
         (lib.mkIf
           (lib.all (attr: envVars ? ${attr}) [
             "JENKINS_URL"
-            "JENKINS_USERNAME"
-            "JENKINS_PASSWORD"
           ])
           {
             "jenkins" = {
@@ -71,8 +69,8 @@
               ];
               environment = {
                 JENKINS_URL = envVars.JENKINS_URL;
-                JENKINS_USERNAME = envVars.JENKINS_USERNAME;
-                JENKINS_PASSWORD = envVars.JENKINS_PASSWORD;
+                JENKINS_USERNAME = "{env:JENKINS_USERNAME}";
+                JENKINS_PASSWORD = "{env:JENKINS_PASSWORD}";
               };
               enabled = true;
             };
@@ -80,7 +78,6 @@
         )
         (lib.mkIf
           (lib.all (attr: envVars ? ${attr}) [
-            "SONARQUBE_TOKEN"
             "SONARQUBE_URL"
           ])
           {
@@ -100,7 +97,7 @@
                 "mcp/sonarqube:latest"
               ];
               environment = {
-                SONARQUBE_TOKEN = envVars.SONARQUBE_TOKEN;
+                SONARQUBE_TOKEN = "{env:SONARQUBE_TOKEN}";
                 SONARQUBE_URL = envVars.SONARQUBE_URL;
               };
               enabled = true;
